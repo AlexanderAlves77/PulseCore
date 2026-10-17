@@ -18,20 +18,30 @@ int VitalSignsGenerator::GenerateNextValue(int currentValue, int minimum,
     return std::clamp(nextValue, variation, maximum);
 }
 
-VitalSigns VitalSignsGenerator::GenerateNext(const VitalSigns & currentVitalSigns) const
+VitalSigns VitalSignsGenerator::GenerateNext(const VitalSigns & currentVitalSigns,
+    const SimulationConfig& config) const
 {
     VitalSigns nextVitalSigns = currentVitalSigns;
 
     nextVitalSigns.heartRate = GenerateNextValue(
-        currentVitalSigns.heartRate, 72, 88, 2
+        currentVitalSigns.heartRate,
+        config.heartRate.minimum,
+        config.heartRate.maximum,
+        config.heartRate.maximumVariation
     );
 
     nextVitalSigns.oxygenSaturation = GenerateNextValue(
-        currentVitalSigns.oxygenSaturation, 96, 100, 1
+        currentVitalSigns.oxygenSaturation,
+        config.oxygenSaturation.minimum,
+        config.oxygenSaturation.maximum,
+        config.oxygenSaturation.maximumVariation
     );
 
     nextVitalSigns.respiratoryRate = GenerateNextValue(
-        currentVitalSigns.respiratoryRate, 14, 20, 1
+        currentVitalSigns.respiratoryRate,
+        config.respiratoryRate.minimum,
+        config.respiratoryRate.maximum,
+        config.respiratoryRate.maximumVariation
     );
 
     const int currentTemperatureTenths = static_cast<int>(
@@ -39,7 +49,10 @@ VitalSigns VitalSignsGenerator::GenerateNext(const VitalSigns & currentVitalSign
     );
 
     const int nexttemperatureTenths = GenerateNextValue(
-        currentTemperatureTenths, 365, 372, 1
+        currentTemperatureTenths,
+        config.temperature.minimum,
+        config.temperature.maximum,
+        config.temperature.maximumVariation
     );
 
     nextVitalSigns.temperature = static_cast<double>(nexttemperatureTenths) / 10.0;
