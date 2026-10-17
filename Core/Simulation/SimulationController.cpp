@@ -123,19 +123,7 @@ void SimulationController::UpdateVitalSigns()
         return;
     }
 
-    qDebug() << "Updating vital signs...";
-
-    vitalSigns.heartRate = GenerateNextValue(vitalSigns.heartRate, 72, 88, 2);
-
-    vitalSigns.oxygenSaturation = GenerateNextValue(vitalSigns.oxygenSaturation, 96, 100, 1);
-
-    vitalSigns.respiratoryRate = GenerateNextValue(vitalSigns.respiratoryRate, 14, 20, 1);
-
-    const int currentTemperatureTenths = static_cast<int>(std::lround(vitalSigns.temperature * 10.0));
-
-    const int nexttemperatureTenths = GenerateNextValue(currentTemperatureTenths, 365, 372, 1);
-
-    vitalSigns.temperature = static_cast<double>(nexttemperatureTenths) / 10.0;
+    vitalSigns = vitalSignsGenerator.GenerateNext(vitalSigns);
 
     LogDebugInfo(
         QStringLiteral("HR: %1 | SpO2: %2 | RESP: %3 | TEMP: %4")
@@ -146,21 +134,6 @@ void SimulationController::UpdateVitalSigns()
     );
 
     emit VitalSignsChanged();
-}
-
-int SimulationController::GenerateVariation(int minimum, int maximum) const
-{
-    return QRandomGenerator::global()->bounded(minimum, maximum + 1);
-}
-
-int SimulationController::GenerateNextValue(int currentValue, int minimum,
-    int maximum, int maximumVariation) const
-{
-    const int variation = GenerateVariation(-maximumVariation, maximumVariation);
-
-    const int nextValue = currentValue + variation;
-
-    return std::clamp(nextValue, variation, maximum);
 }
 
 void SimulationController::LogDebugInfo(const QString& message) const
