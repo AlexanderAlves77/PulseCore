@@ -6,6 +6,8 @@
 #include "Core/Models/VitalSigns.h"
 #include "Core/Simulation/VitalSignsGenerator.h"
 #include "Core/Simulation/SimulationConfig.h"
+#include "Core/Enums/SimulationScenario.h"
+#include "Core/Simulation/SimulationScenarioFactory.h"
 
 
 class SimulationController final : public QObject
@@ -48,12 +50,20 @@ class SimulationController final : public QObject
         NOTIFY VitalSignsChanged
     )
 
+    Q_PROPERTY(
+        QString scenario
+        READ GetScenarioName
+        NOTIFY ScenarioChanged
+    )
+
 private:
-    SimulationState currentState = SimulationState::STOPPED;
     VitalSignsGenerator vitalSignsGenerator;
     SimulationConfig simulationConfig;
     VitalSigns vitalSigns;
     QTimer updateTimer;
+
+    SimulationState currentState = SimulationState::STOPPED;
+    SimulationScenario currentScenario = SimulationScenario::NORMAL;
 
     void LogDebugInfo(const QString& message) const;
 
@@ -62,6 +72,7 @@ public:
 
     bool IsRunning() const noexcept;
     QString GetStateName() const;
+    QString GetScenarioName() const;
 
     int GetHeartRate() const noexcept;
     int GetOxygenSaturation() const noexcept;
@@ -71,10 +82,12 @@ public:
     Q_INVOKABLE void Start();
     Q_INVOKABLE void Pause();
     Q_INVOKABLE void Reset();
+    Q_INVOKABLE void SetScenario(const QString& scenarioName);
 
 signals:
     void StateChanged();
     void VitalSignsChanged();
+    void ScenarioChanged();
 
 private slots:
     void UpdateVitalSigns();
