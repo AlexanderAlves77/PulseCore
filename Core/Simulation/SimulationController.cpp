@@ -1,9 +1,22 @@
 #include "Core/Simulation/SimulationController.h"
 #include <QRandomGenerator>
+#include <QDebug>
+#include <algorithm>
+#include <cmath>
 
 
 SimulationController::SimulationController(QObject * parent)
-    : QObject(parent) {}
+    : QObject(parent)
+{
+    updateTimer.setInterval(1000);
+
+    connect(
+        &updateTimer,
+        &QTimer::timeout,
+        this,
+        &SimulationController::UpdateVitalSigns
+    );
+}
 
 bool SimulationController::IsRunning() const noexcept
 {
@@ -16,8 +29,10 @@ QString SimulationController::GetStateName() const
     {
     case SimulationState::RUNNING:
         return QStringLiteral("RUNNING");
+
     case SimulationState::PAUSED:
         return QStringLiteral("PAUSED");
+
     case SimulationState::STOPPED:
     default:
         return QStringLiteral("STOPPED");
@@ -39,7 +54,7 @@ int SimulationController::GetRespiratoryRate() const noexcept
     return vitalSigns.respiratoryRate;
 }
 
-int SimulationController::GetTemperature() const noexcept
+double SimulationController::GetTemperature() const noexcept
 {
     return vitalSigns.temperature;
 }
@@ -53,6 +68,12 @@ void SimulationController::Start()
 
     currentState = SimulationState::RUNNING;
 
+    updateTimer.start();
+
+    qDebug() << "Simulation started."
+             << "Timer active:" << updateTimer.isActive()
+             << "Interval:" << updateTimer.interval();
+
     emit StateChanged();
 }
 
@@ -63,6 +84,8 @@ void SimulationController::Pause()
         return;
     }
 
+    updateTimer.stop();
+
     currentState = SimulationState::PAUSED;
 
     emit StateChanged();
@@ -70,7 +93,10 @@ void SimulationController::Pause()
 
 void SimulationController::Reset()
 {
+    updateTimer.stop();
+
     const bool stateChanged = currentState != SimulationState::STOPPED;
+
     currentState = SimulationState::STOPPED;
 
     vitalSigns = VitalSigns();
@@ -90,15 +116,24 @@ void SimulationController::UpdateVitalSigns()
         return;
     }
 
-    vitalSigns.heartRate = GenerateVariation(72, 88);
+    qDebug() << "Updating vital signs...";
 
-    vitalSigns.oxygenSaturation = GenerateVariation(96, 100);
+    vitalSigns.heartRate = GenerateNextValue(vitalSigns.heartRate, 72, 88, 2);
 
-    vitalSigns.respiratoryRate = GenerateVariation(14, 20);
+    vitalSigns.oxygenSaturation = GenerateNextValue(vitalSigns.oxygenSaturation, 96, 100, 1);
 
-    const int temperatureTenths = GenerateVariation(365, 372);
+    vitalSigns.respiratoryRate = GenerateNextValue(vitalSigns.respiratoryRate, 14, 20, 1);
 
-    vitalSigns.temperature = static_cast<double>(temperatureTenths) / 10.0;
+    const int currentTemperatureTenths = static_cast<int>(std::lround(vitalSigns.temperature * 10.0));
+
+    const int nexttemperatureTenths = GenerateNextValue(currentTemperatureTenths, 365, 372, 1);
+
+    vitalSigns.temperature = static_cast<double>(nexttemperatureTenths) / 10.0;
+
+    qDebug() << "HR:" << vitalSigns.heartRate
+             << "SpO2:" << vitalSigns.oxygenSaturation
+             << "RESP:" << vitalSigns.respiratoryRate
+             << "TEMP:" << vitalSigns.temperature;
 
     emit VitalSignsChanged();
 }
@@ -106,4 +141,14 @@ void SimulationController::UpdateVitalSigns()
 int SimulationController::GenerateVariation(int minimum, int maximum) const
 {
     return QRandomGenerator::global()->bounded(minimum, maximum + 1);
+}
+
+int SimulationController::GenerateNextValue(int currentValue, int minimum,
+    int maximum, int maximumVariation) const
+{
+    const int variation = GenerateVariation(-maximumVariation, maximumVariation);
+
+    const int nextValue = currentValue + variation;
+
+    return std::clamp(nextValue, variation, maximum);
 }
