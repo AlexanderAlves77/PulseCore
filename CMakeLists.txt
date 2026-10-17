@@ -17,6 +17,9 @@ endif()
 
 qt_add_executable(appPulseCore
     main.cpp
+
+    Core/Enums/SimulationState.h
+    Core/Models/VitalSigns.h
 )
 
 # QML components are exposed at the PulseCore module root.
@@ -48,6 +51,7 @@ set_source_files_properties(
 
 qt_add_qml_module(appPulseCore
     URI PulseCore
+
     QML_FILES
         Main.qml
         VitalCard.qml
@@ -61,6 +65,9 @@ qt_add_qml_module(appPulseCore
         Heart3D/Imported/meshes/mesh_mesh.mesh
         Heart3D/Imported/maps/textureData.jpg
         Heart3D/Imported/maps/textureData7.jpg
+        RESOURCES docs/images/pulsecore-dashboard-3d.png
+        SOURCES Core/Enums/SimulationState.h
+        SOURCES Core/Models/VitalSigns.h
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
