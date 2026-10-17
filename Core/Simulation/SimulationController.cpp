@@ -9,7 +9,7 @@
 SimulationController::SimulationController(QObject * parent)
     : QObject(parent)
 {
-    updateTimer.setInterval(1000);
+    updateTimer.setInterval(simulationConfig.updateIntervalMs);
 
     connect(
         &updateTimer,
@@ -123,7 +123,7 @@ void SimulationController::UpdateVitalSigns()
         return;
     }
 
-    vitalSigns = vitalSignsGenerator.GenerateNext(vitalSigns);
+    vitalSigns = vitalSignsGenerator.GenerateNext(vitalSigns, simulationConfig);
 
     LogDebugInfo(
         QStringLiteral("HR: %1 | SpO2: %2 | RESP: %3 | TEMP: %4")
