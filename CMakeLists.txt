@@ -26,7 +26,7 @@ qt_add_qml_module(appPulseCore
         VitalCard.qml
         EcgWaveform.qml
         SimulationControls.qml
-        QML_FILES SimulationButton.qml
+        SimulationButton.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

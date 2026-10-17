@@ -24,79 +24,31 @@ Rectangle {
 
         spacing: 12
 
-        Rectangle {
-            width: 100
-            height: 40
-            radius: 8
+        SimulationButton {
+            label: "Start"
+            textColor: "#40DCA5"
+            backgroundColor: "#273C35"
+            hoverColor: "#35B98C"
 
-            color: startMouseArea.containsMouse ? "#35B98C" : "#273C35"
-
-            Text {
-                anchors.centerIn: parent
-                text: "Start"
-                color: "#40DCA5"
-                font.pixelSize: 14
-                font.bold: true
-            }
-
-            MouseArea {
-                id: startMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-
-                onClicked: simulationControls.startRequested()
-            }
+            onClicked: simulationControls.startRequested()
         }
 
-        Rectangle {
-            width: 100
-            height: 40
-            radius: 8
+        SimulationButton {
+            label: "Pause"
+            textColor: "#F0B75E"
+            backgroundColor: "#302B24"
+            hoverColor: "#51432D"
 
-            color: pauseMouseArea.containsMouse ? "#51432D" : "#302B24"
-
-            Text {
-                anchors.centerIn: parent
-                text: "Pause"
-                color: "#F0B75E"
-                font.pixelSize: 14
-                font.bold: true
-            }
-
-            MouseArea {
-                id: pauseMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-
-                onClicked: simulationControls.pauseRequested()
-            }
+            onClicked: simulationControls.pauseRequested()
         }
 
-        Rectangle {
-            width: 100
-            height: 40
-            radius: 8
+        SimulationButton {
+            label: "Reset"
+            textColor: "#F08A9B"
+            backgroundColor: "#30242A"
+            hoverColor: "#51333A"
 
-            color: resetMouseArea.containsMouse ? "#51333A" : "#30242A"
-
-            Text {
-                anchors.centerIn: parent
-                text: "Reset"
-                color: "#F08A9B"
-                font.pixelSize: 14
-                font.bold: true
-            }
-
-            MouseArea {
-                id: resetMouseArea
-                anchors.fill: parent
-                hoverEnabled: true
-                cursorShape: Qt.PointingHandCursor
-
-                onClicked: simulationControls.resetRequested()
-            }
+            onClicked: simulationControls.resetRequested()
         }
     }
 
@@ -105,8 +57,10 @@ Rectangle {
         anchors.rightMargin: 20
         anchors.verticalCenter: parent.verticalCenter
         text: simulationControls.simulationState
+
         color: simulationControls.simulationState === "RUNNING" ? "#40DCA5"
             : simulationControls.simulationState === "PAUSED" ? "#F0B75E" : "#F08A9B"
+
         font.pixelSize: 13
         font.bold: true
     }
