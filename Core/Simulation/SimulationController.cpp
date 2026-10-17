@@ -1,6 +1,7 @@
 #include "Core/Simulation/SimulationController.h"
 #include <QRandomGenerator>
 #include <QDebug>
+#include <QDateTime>
 #include <algorithm>
 #include <cmath>
 
@@ -70,9 +71,11 @@ void SimulationController::Start()
 
     updateTimer.start();
 
-    qDebug() << "Simulation started."
-             << "Timer active:" << updateTimer.isActive()
-             << "Interval:" << updateTimer.interval();
+    LogDebugInfo(
+        QStringLiteral("Simulation started. Timer active: %1 | Interval: %2 ms")
+            .arg(updateTimer.isActive())
+            .arg(updateTimer.interval())
+    );
 
     emit StateChanged();
 }
@@ -85,6 +88,8 @@ void SimulationController::Pause()
     }
 
     updateTimer.stop();
+
+    LogDebugInfo(QStringLiteral("Simulation paused."));
 
     currentState = SimulationState::PAUSED;
 
@@ -100,6 +105,8 @@ void SimulationController::Reset()
     currentState = SimulationState::STOPPED;
 
     vitalSigns = VitalSigns();
+
+    LogDebugInfo(QStringLiteral("Simulation reset."));
 
     if (stateChanged)
     {
@@ -130,10 +137,13 @@ void SimulationController::UpdateVitalSigns()
 
     vitalSigns.temperature = static_cast<double>(nexttemperatureTenths) / 10.0;
 
-    qDebug() << "HR:" << vitalSigns.heartRate
-             << "SpO2:" << vitalSigns.oxygenSaturation
-             << "RESP:" << vitalSigns.respiratoryRate
-             << "TEMP:" << vitalSigns.temperature;
+    LogDebugInfo(
+        QStringLiteral("HR: %1 | SpO2: %2 | RESP: %3 | TEMP: %4")
+            .arg(vitalSigns.heartRate)
+            .arg(vitalSigns.oxygenSaturation)
+            .arg(vitalSigns.respiratoryRate)
+            .arg(vitalSigns.temperature, 0, 'f', 1)
+    );
 
     emit VitalSignsChanged();
 }
@@ -151,4 +161,16 @@ int SimulationController::GenerateNextValue(int currentValue, int minimum,
     const int nextValue = currentValue + variation;
 
     return std::clamp(nextValue, variation, maximum);
+}
+
+void SimulationController::LogDebugInfo(const QString& message) const
+{
+#ifdef QT_DEBUG
+    qDebug().noquote()
+        << QDateTime::currentDateTime().toString("HH:mm:ss")
+        << "[SimulationController]"
+        << message;
+#else
+    Q_UNUSED(message);
+#endif
 }
