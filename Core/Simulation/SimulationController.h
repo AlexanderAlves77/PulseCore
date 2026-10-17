@@ -53,6 +53,8 @@ private:
     int GenerateVariation(int minimum, int maximum) const;
     int GenerateNextValue(int currentValue, int minimum, int maximum, int maximumVariation) const;
 
+    void LogDebugInfo(const QString& message) const;
+
 public:
     explicit SimulationController(QObject * parent = nullptr);
 
