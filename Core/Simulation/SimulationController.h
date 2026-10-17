@@ -5,6 +5,7 @@
 #include "Core/Enums/SimulationState.h"
 #include "Core/Models/VitalSigns.h"
 #include "Core/Simulation/VitalSignsGenerator.h"
+#include "Core/Simulation/SimulationConfig.h"
 
 
 class SimulationController final : public QObject
@@ -50,6 +51,7 @@ class SimulationController final : public QObject
 private:
     SimulationState currentState = SimulationState::STOPPED;
     VitalSignsGenerator vitalSignsGenerator;
+    SimulationConfig simulationConfig;
     VitalSigns vitalSigns;
     QTimer updateTimer;
 
