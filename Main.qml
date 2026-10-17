@@ -74,6 +74,7 @@ Window {
             id: contentArea
             color: window.backgroundColor
             anchors.top: header.bottom
+            anchors.bottom: footer.top
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.margins: 24
@@ -87,38 +88,60 @@ Window {
                 border.width: 1
                 radius: 12
 
-                Grid {
-                    id: vitalSignsGrid
-                    columns: 2
+                Row {
+                    id: monitoringLayout
                     spacing: 20
-                    anchors.centerIn: parent
+                    anchors.fill: parent
+                    anchors.margins: 20
 
-                    VitalCard {
-                        label: "HR"
-                        value: "78"
-                        unit: "bpm"
-                        accentColor: "#40DCA5"
+                    EcgWaveform {
+                        id: ecgMonitor
+                        width: monitoringLayout.width
+                               - vitalSignsGrid.width - monitoringLayout.spacing
+                        height: monitoringLayout.height
                     }
 
-                    VitalCard {
-                        label: "SpO₂"
-                        value: "98"
-                        unit: "%"
-                        accentColor: "#61B8FA"
-                    }
+                    Grid {
+                        id: vitalSignsGrid
+                        columns: 2
+                        spacing: 16
+                        anchors.verticalCenter: parent.verticalCenter
 
-                    VitalCard {
-                        label: "RESP"
-                        value: "16"
-                        unit: "rpm"
-                        accentColor: "#F0B75E"
-                    }
+                        VitalCard {
+                            width: 180
+                            height: 145
+                            label: "HR"
+                            value: "78"
+                            unit: "bpm"
+                            accentColor: "#40DCA5"
+                        }
 
-                    VitalCard {
-                        label: "TEMP"
-                        value: "36.7"
-                        unit: "°C"
-                        accentColor: "#E9A6F4"
+                        VitalCard {
+                            width: 180
+                            height: 145
+                            label: "SpO₂"
+                            value: "98"
+                            unit: "%"
+                            accentColor: "#61B8FA"
+                        }
+
+                        VitalCard {
+                            width: 180
+                            height: 145
+                            label: "RESP"
+                            value: "16"
+                            unit: "rpm"
+                            accentColor: "#F0B75E"
+                        }
+
+                        VitalCard {
+                            width: 180
+                            height: 145
+                            label: "TEMP"
+                            value: "36.7"
+                            unit: "°C"
+                            accentColor: "#E9A6F4"
+                        }
                     }
                 }
             }
