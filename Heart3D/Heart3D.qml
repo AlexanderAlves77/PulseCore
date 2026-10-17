@@ -19,7 +19,7 @@ Rectangle {
 
     Text {
         id: sceneTitle
-        text: "3D HEART - PREVIEW"
+        text: "3D HEART - SIMULATED"
         color: "#91A3B8"
         font.pixelSize: 15
         font.bold: true
@@ -60,7 +60,7 @@ Rectangle {
             Heart {
                 id: anatomicalHeart
                 position: Qt.vector3d(0, 0, 0)
-                scale: Qt.vector3d(1.8, 1.8, 1.8)
+                scale: Qt.vector3d(3.0, 3.0, 3.0)
             }
 
             NumberAnimation on eulerRotation.y {
