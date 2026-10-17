@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QTimer>
 #include "Core/Enums/SimulationState.h"
 #include "Core/Models/VitalSigns.h"
 
@@ -26,18 +27,41 @@ class SimulationController final : public QObject
         NOTIFY VitalSignsChanged
     )
 
+    Q_PROPERTY(
+        int oxygenSaturation
+        READ GetOxygenSaturation
+        NOTIFY VitalSignsChanged
+    )
+
+    Q_PROPERTY(
+        int respiratoryRate
+        READ GetRespiratoryRate
+        NOTIFY VitalSignsChanged
+    )
+
+    Q_PROPERTY(
+        int temperature
+        READ GetTemperature
+        NOTIFY VitalSignsChanged
+    )
+
 private:
     SimulationState currentState = SimulationState::STOPPED;
     VitalSigns vitalSigns;
+    QTimer updateTimer;
+
+    int GenerateVariation(int minimum, int maximum) const;
 
 public:
     explicit SimulationController(QObject * parent = nullptr);
 
     bool IsRunning() const noexcept;
-
     QString GetStateName() const;
 
     int GetHeartRate() const noexcept;
+    int GetOxygenSaturation() const noexcept;
+    int GetRespiratoryRate() const noexcept;
+    int GetTemperature() const noexcept;
 
     Q_INVOKABLE void Start();
     Q_INVOKABLE void Pause();
@@ -46,4 +70,7 @@ public:
 signals:
     void StateChanged();
     void VitalSignsChanged();
+
+private slots:
+    void UpdateVitalSigns();
 };
