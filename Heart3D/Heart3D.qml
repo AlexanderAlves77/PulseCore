@@ -7,6 +7,9 @@ Rectangle {
     color: "#101A27"
 
     property bool running: true
+    property int heartRate: 78
+
+    readonly property int beatDuration: Math.round(60000 / Math.max(1, heartRate))
 
     implicitWidth: 360
     implicitHeight: 300
@@ -26,6 +29,7 @@ Rectangle {
     }
 
     View3D {
+        id: heartView
         anchors.top: sceneTitle.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -37,32 +41,32 @@ Rectangle {
         }
 
         PerspectiveCamera {
-            z: 350
+            id: heartCamera
+            position: Qt.vector3d(0, 0, 3)
+            clipNear: 0.01
+            clipFar: 1000
         }
 
         DirectionalLight {
             eulerRotation.x: -30
             eulerRotation.y: -40
-            brightness: 1.5
+            brightness: 2.0
+            castsShadow: false
         }
 
         Node {
             id: heartNode
 
-            Model {
-                source: "#Sphere"
-                scale: Qt.vector3d(1.3, 1.5, 1.1)
-                materials: PrincipledMaterial {
-                    baseColor: "#B91C36"
-                    metalness: 0.05
-                    roughness: 0.35
-                }
+            Heart {
+                id: anatomicalHeart
+                position: Qt.vector3d(0, 0, 0)
+                scale: Qt.vector3d(1.8, 1.8, 1.8)
             }
 
             NumberAnimation on eulerRotation.y {
                 from: 0
                 to: 360
-                duration: 12000
+                duration: 16000
                 loops: Animation.Infinite
                 running: heart3D.running
             }
@@ -73,15 +77,15 @@ Rectangle {
 
                 Vector3dAnimation {
                     from: Qt.vector3d(1.0, 1.0, 1.0)
-                    to: Qt.vector3d(1.10, 1.10, 1.10)
-                    duration: 180
+                    to: Qt.vector3d(1.08, 1.08, 1.08)
+                    duration: Math.round(heart3D.beatDuration * 0.20)
                     easing.type: Easing.OutQuad
                 }
 
                 Vector3dAnimation {
                     from: Qt.vector3d(1.10, 1.10, 1.10)
                     to: Qt.vector3d(1.0, 1.0, 1.0)
-                    duration: 600
+                    duration: Math.round(heart3D.beatDuration * 0.80)
                     easing.type: Easing.InOutQuad
                 }
             }
