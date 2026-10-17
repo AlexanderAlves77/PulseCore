@@ -24,6 +24,8 @@ bool SimulationController::IsRunning() const noexcept
     return currentState == SimulationState::RUNNING;
 }
 
+/* ======================================================================================== */
+
 QString SimulationController::GetStateName() const
 {
     switch (currentState)
@@ -40,25 +42,53 @@ QString SimulationController::GetStateName() const
     }
 }
 
+/* ======================================================================================== */
+
+QString SimulationController::GetScenarioName() const
+{
+    switch (currentScenario)
+    {
+    case SimulationScenario::WARNING:
+        return QStringLiteral("WARNING");
+
+    case SimulationScenario::CRITICAL:
+        return QStringLiteral("CRITICAL");
+
+    case SimulationScenario::NORMAL:
+    default:
+        return QStringLiteral("NORMAL");
+    }
+}
+
+/* ======================================================================================== */
+
 int SimulationController::GetHeartRate() const noexcept
 {
     return vitalSigns.heartRate;
 }
+
+/* ======================================================================================== */
 
 int SimulationController::GetOxygenSaturation() const noexcept
 {
     return vitalSigns.oxygenSaturation;
 }
 
+/* ======================================================================================== */
+
 int SimulationController::GetRespiratoryRate() const noexcept
 {
     return vitalSigns.respiratoryRate;
 }
 
+/* ======================================================================================== */
+
 double SimulationController::GetTemperature() const noexcept
 {
     return vitalSigns.temperature;
 }
+
+/* ======================================================================================== */
 
 void SimulationController::Start()
 {
@@ -80,6 +110,8 @@ void SimulationController::Start()
     emit StateChanged();
 }
 
+/* ======================================================================================== */
+
 void SimulationController::Pause()
 {
     if (currentState != SimulationState::RUNNING)
@@ -95,6 +127,8 @@ void SimulationController::Pause()
 
     emit StateChanged();
 }
+
+/* ======================================================================================== */
 
 void SimulationController::Reset()
 {
@@ -116,6 +150,49 @@ void SimulationController::Reset()
     emit VitalSignsChanged();
 }
 
+/* ======================================================================================== */
+
+void SimulationController::SetScenario(const QString& scenarioName)
+{
+    SimulationScenario nextScenario;
+
+    if (scenarioName == QString("NORMAL"))
+    {
+        nextScenario = SimulationScenario::NORMAL;
+    }
+    else if (scenarioName == QString("WARNING"))
+    {
+        nextScenario = SimulationScenario::WARNING;
+    }
+    else if (scenarioName == QString("CRITICAL"))
+    {
+        nextScenario = SimulationScenario::CRITICAL;
+    }
+    else
+    {
+        LogDebugInfo(QStringLiteral("Invalid simulation scenario: %1").arg(scenarioName));
+
+        return;
+    }
+
+    if (currentScenario == nextScenario)
+    {
+        return;
+    }
+
+    currentScenario = nextScenario;
+
+    simulationConfig = SimulationScenarioFactory::Create(currentScenario);
+
+    updateTimer.setInterval(simulationConfig.updateIntervalMs);
+
+    LogDebugInfo(QStringLiteral("Scenario changed to: %1").arg(GetScenarioName()));
+
+    emit ScenarioChanged();
+}
+
+/* ======================================================================================== */
+
 void SimulationController::UpdateVitalSigns()
 {
     if (currentState != SimulationState::RUNNING)
@@ -135,6 +212,8 @@ void SimulationController::UpdateVitalSigns()
 
     emit VitalSignsChanged();
 }
+
+/* ======================================================================================== */
 
 void SimulationController::LogDebugInfo(const QString& message) const
 {
