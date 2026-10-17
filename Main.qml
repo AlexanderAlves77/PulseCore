@@ -38,7 +38,6 @@ Window {
 
             // Application name
             Text {
-                id: applicationTitle
                 text: "PULSECORE"
                 color: window.textColor
                 font.pixelSize: 28
@@ -48,9 +47,7 @@ Window {
                 anchors.verticalCenter: parent.verticalCenter
             }
 
-            // Simulation indicator
             Rectangle {
-                id: simulationIndicator
                 width: 160
                 height: 36
                 radius: 8
@@ -59,8 +56,6 @@ Window {
                 anchors.rightMargin: 32
                 anchors.verticalCenter: parent.verticalCenter
 
-
-                // Application name
                 Text {
                     text: "SIMULATION"
                     color: window.primaryColor
@@ -71,7 +66,25 @@ Window {
             }
         }
 
-        // Main content area
+        // Footer
+        Rectangle {
+            id: footer
+            height: 60
+            color: window.surfaceColor
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            Text {
+                text: "SIMULATION ONLY — NOT FOR CLINICAL USE"
+                color: "#F0B75E"
+                font.pixelSize: 13
+                font.bold: true
+                anchors.centerIn: parent
+            }
+        }
+
+        // Main content
         Rectangle {
             id: contentArea
             color: window.backgroundColor
@@ -81,7 +94,6 @@ Window {
             anchors.right: parent.right
             anchors.margins: 24
 
-            // Header
             Rectangle {
                 id: monitorPanel
                 color: window.surfaceColor
@@ -90,97 +102,89 @@ Window {
                 border.width: 1
                 radius: 12
 
-                Column {
-                        id: mainLayout
+                // Controls
+                SimulationControls {
+                    id: simulationControls
+                    height: 76
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.margins: 20
 
-                        anchors.fill: parent
-                        anchors.margins: 20
+                    simulationState: window.simulationState
 
-                        spacing: 16
-
-                    Row {
-                        id: monitoringLayout
-                        anchors.top: parent.top
-                        anchors.bottom: simulationControls.top
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.margins: 20
-                        spacing: 20
-
-                        EcgWaveform {
-                            id: ecgMonitor
-                            width: monitoringLayout.width
-                                   - vitalSignsGrid.width - monitoringLayout.spacing
-                            height: monitoringLayout.height
-                            running: window.simulationState === "RUNNING"
-                        }
-
-                        Grid {
-                            id: vitalSignsGrid
-                            columns: 2
-                            spacing: 16
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            VitalCard {
-                                width: 180
-                                height: 145
-                                label: "HR"
-                                value: "78"
-                                unit: "bpm"
-                                accentColor: "#40DCA5"
-                            }
-
-                            VitalCard {
-                                width: 180
-                                height: 145
-                                label: "SpO₂"
-                                value: "98"
-                                unit: "%"
-                                accentColor: "#61B8FA"
-                            }
-
-                            VitalCard {
-                                width: 180
-                                height: 145
-                                label: "RESP"
-                                value: "16"
-                                unit: "rpm"
-                                accentColor: "#F0B75E"
-                            }
-
-                            VitalCard {
-                                width: 180
-                                height: 145
-                                label: "TEMP"
-                                value: "36.7"
-                                unit: "°C"
-                                accentColor: "#E9A6F4"
-                            }
-                        }
+                    onStartRequested: {
+                        window.simulationState = "RUNNING";
                     }
 
-                    SimulationControls {
-                        id: simulationControls
-                        width: parent.width
-                        height: 76
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.bottom: parent.bottom
-                        anchors.margins: 20
+                    onPauseRequested: {
+                        window.simulationState = "PAUSED";
+                    }
 
-                        simulationState: window.simulationState
+                    onResetRequested: {
+                        window.simulationState = "STOPPED";
+                        ecgMonitor.animationOffset = 0;
+                    }
+                }
 
-                        onStartRequested: {
-                            window.simulationState = "RUNNING";
+                // Monitoring area
+                Row {
+                    id: monitoringLayout
+                    anchors.top: parent.top
+                    anchors.bottom: simulationControls.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.margins: 20
+                    spacing: 20
+
+                    EcgWaveform {
+                        id: ecgMonitor
+                        width: monitoringLayout.width
+                               - vitalSignsGrid.width - monitoringLayout.spacing
+                        height: monitoringLayout.height
+                        running: window.simulationState === "RUNNING"
+                    }
+
+                    Grid {
+                        id: vitalSignsGrid
+                        columns: 2
+                        spacing: 16
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        VitalCard {
+                            width: 180
+                            height: 145
+                            label: "HR"
+                            value: "78"
+                            unit: "bpm"
+                            accentColor: "#40DCA5"
                         }
 
-                        onPauseRequested: {
-                            window.simulationState = "PAUSED";
+                        VitalCard {
+                            width: 180
+                            height: 145
+                            label: "SpO₂"
+                            value: "98"
+                            unit: "%"
+                            accentColor: "#61B8FA"
                         }
 
-                        onResetRequested: {
-                            window.simulationState = "STOPPED";
-                            ecgMonitor.animationOffset = 0;
+                        VitalCard {
+                            width: 180
+                            height: 145
+                            label: "RESP"
+                            value: "16"
+                            unit: "rpm"
+                            accentColor: "#F0B75E"
+                        }
+
+                        VitalCard {
+                            width: 180
+                            height: 145
+                            label: "TEMP"
+                            value: "36.7"
+                            unit: "°C"
+                            accentColor: "#E9A6F4"
                         }
                     }
                 }
