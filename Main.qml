@@ -11,6 +11,8 @@ Window {
     title: "PulseCore - Medical Device Monitoring Simulator"
     color: "#0B111B"
 
+    property string simulationState: "RUNNING"
+
     // Application colors
     readonly property color backgroundColor: "#0B111B"
     readonly property color surfaceColor: "#141F2E"
@@ -88,80 +90,100 @@ Window {
                 border.width: 1
                 radius: 12
 
-                Row {
-                    id: monitoringLayout
-                    spacing: 20
-                    anchors.fill: parent
-                    anchors.margins: 20
+                Column {
+                        id: mainLayout
 
-                    EcgWaveform {
-                        id: ecgMonitor
-                        width: monitoringLayout.width
-                               - vitalSignsGrid.width - monitoringLayout.spacing
-                        height: monitoringLayout.height
+                        anchors.fill: parent
+                        anchors.margins: 20
+
+                        spacing: 16
+
+                    Row {
+                        id: monitoringLayout
+                        anchors.top: parent.top
+                        anchors.bottom: simulationControls.top
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.margins: 20
+                        spacing: 20
+
+                        EcgWaveform {
+                            id: ecgMonitor
+                            width: monitoringLayout.width
+                                   - vitalSignsGrid.width - monitoringLayout.spacing
+                            height: monitoringLayout.height
+                            running: window.simulationState === "RUNNING"
+                        }
+
+                        Grid {
+                            id: vitalSignsGrid
+                            columns: 2
+                            spacing: 16
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            VitalCard {
+                                width: 180
+                                height: 145
+                                label: "HR"
+                                value: "78"
+                                unit: "bpm"
+                                accentColor: "#40DCA5"
+                            }
+
+                            VitalCard {
+                                width: 180
+                                height: 145
+                                label: "SpO₂"
+                                value: "98"
+                                unit: "%"
+                                accentColor: "#61B8FA"
+                            }
+
+                            VitalCard {
+                                width: 180
+                                height: 145
+                                label: "RESP"
+                                value: "16"
+                                unit: "rpm"
+                                accentColor: "#F0B75E"
+                            }
+
+                            VitalCard {
+                                width: 180
+                                height: 145
+                                label: "TEMP"
+                                value: "36.7"
+                                unit: "°C"
+                                accentColor: "#E9A6F4"
+                            }
+                        }
                     }
 
-                    Grid {
-                        id: vitalSignsGrid
-                        columns: 2
-                        spacing: 16
-                        anchors.verticalCenter: parent.verticalCenter
+                    SimulationControls {
+                        id: simulationControls
+                        width: parent.width
+                        height: 76
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        anchors.margins: 20
 
-                        VitalCard {
-                            width: 180
-                            height: 145
-                            label: "HR"
-                            value: "78"
-                            unit: "bpm"
-                            accentColor: "#40DCA5"
+                        simulationState: window.simulationState
+
+                        onStartRequested: {
+                            window.simulationState = "RUNNING";
                         }
 
-                        VitalCard {
-                            width: 180
-                            height: 145
-                            label: "SpO₂"
-                            value: "98"
-                            unit: "%"
-                            accentColor: "#61B8FA"
+                        onPauseRequested: {
+                            window.simulationState = "PAUSED";
                         }
 
-                        VitalCard {
-                            width: 180
-                            height: 145
-                            label: "RESP"
-                            value: "16"
-                            unit: "rpm"
-                            accentColor: "#F0B75E"
-                        }
-
-                        VitalCard {
-                            width: 180
-                            height: 145
-                            label: "TEMP"
-                            value: "36.7"
-                            unit: "°C"
-                            accentColor: "#E9A6F4"
+                        onResetRequested: {
+                            window.simulationState = "STOPPED";
+                            ecgMonitor.animationOffset = 0;
                         }
                     }
                 }
-            }
-        }
-
-        // Footer
-        Rectangle {
-            id: footer
-            height: 60
-            color: window.surfaceColor
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            Text {
-                text: "SIMULATION ONLY — NOT FOR CLINICAL USE"
-                color: "#F0B75E"
-                font.pixelSize: 13
-                font.bold: true
-                anchors.centerIn: parent
             }
         }
     }
