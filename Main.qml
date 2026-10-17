@@ -196,5 +196,6 @@ Window {
         anchors.fill: parent
         anchors.margins: 20
         running: window.simulationState === "RUNNING"
+        heartRate: 78
     }
 }
