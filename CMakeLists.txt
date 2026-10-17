@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS Quick Quick3D)
 
 qt_standard_project_setup(REQUIRES 6.10)
 
@@ -19,6 +20,11 @@ qt_add_executable(appPulseCore
     main.cpp
 )
 
+set_source_files_properties(
+    Heart3D/Heart3D.qml
+    PROPERTIES QT_RESOURCE_ALIAS Heart3D.qml
+)
+
 qt_add_qml_module(appPulseCore
     URI PulseCore
     QML_FILES
@@ -27,6 +33,8 @@ qt_add_qml_module(appPulseCore
         EcgWaveform.qml
         SimulationControls.qml
         SimulationButton.qml
+        Heart3D/Heart3D.qml
+        QML_FILES Heart3D/Heart3D.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -41,7 +49,9 @@ set_target_properties(appPulseCore PROPERTIES
 )
 
 target_link_libraries(appPulseCore
-    PRIVATE Qt6::Quick
+    PRIVATE
+        Qt6::Quick
+        Qt6::Quick3D
 )
 
 install(TARGETS appPulseCore

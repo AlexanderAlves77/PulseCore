@@ -191,4 +191,10 @@ Window {
             }
         }
     }
+
+    Heart3D {
+        anchors.fill: parent
+        anchors.margins: 20
+        running: window.simulationState === "RUNNING"
+    }
 }
