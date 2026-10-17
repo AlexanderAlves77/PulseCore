@@ -20,6 +20,14 @@ qt_add_executable(appPulseCore
 
     Core/Enums/SimulationState.h
     Core/Models/VitalSigns.h
+
+    Core/Simulation/SimulationController.h
+    Core/Simulation/SimulationController.cpp
+)
+
+target_include_directories(appPulseCore
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # QML components are exposed at the PulseCore module root.
@@ -68,6 +76,7 @@ qt_add_qml_module(appPulseCore
         RESOURCES docs/images/pulsecore-dashboard-3d.png
         SOURCES Core/Enums/SimulationState.h
         SOURCES Core/Models/VitalSigns.h
+        SOURCES Core/Simulation/SimulationController.cpp Core/Simulation/SimulationController.h
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
