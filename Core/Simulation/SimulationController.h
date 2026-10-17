@@ -51,6 +51,7 @@ private:
     QTimer updateTimer;
 
     int GenerateVariation(int minimum, int maximum) const;
+    int GenerateNextValue(int currentValue, int minimum, int maximum, int maximumVariation) const;
 
 public:
     explicit SimulationController(QObject * parent = nullptr);
@@ -61,7 +62,7 @@ public:
     int GetHeartRate() const noexcept;
     int GetOxygenSaturation() const noexcept;
     int GetRespiratoryRate() const noexcept;
-    int GetTemperature() const noexcept;
+    double GetTemperature() const noexcept;
 
     Q_INVOKABLE void Start();
     Q_INVOKABLE void Pause();
