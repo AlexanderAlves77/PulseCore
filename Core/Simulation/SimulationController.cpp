@@ -1,4 +1,6 @@
 #include "Core/Simulation/SimulationController.h"
+#include <QRandomGenerator>
+
 
 SimulationController::SimulationController(QObject * parent)
     : QObject(parent) {}
@@ -25,6 +27,21 @@ QString SimulationController::GetStateName() const
 int SimulationController::GetHeartRate() const noexcept
 {
     return vitalSigns.heartRate;
+}
+
+int SimulationController::GetOxygenSaturation() const noexcept
+{
+    return vitalSigns.oxygenSaturation;
+}
+
+int SimulationController::GetRespiratoryRate() const noexcept
+{
+    return vitalSigns.respiratoryRate;
+}
+
+int SimulationController::GetTemperature() const noexcept
+{
+    return vitalSigns.temperature;
 }
 
 void SimulationController::Start()
@@ -66,3 +83,27 @@ void SimulationController::Reset()
     emit VitalSignsChanged();
 }
 
+void SimulationController::UpdateVitalSigns()
+{
+    if (currentState != SimulationState::RUNNING)
+    {
+        return;
+    }
+
+    vitalSigns.heartRate = GenerateVariation(72, 88);
+
+    vitalSigns.oxygenSaturation = GenerateVariation(96, 100);
+
+    vitalSigns.respiratoryRate = GenerateVariation(14, 20);
+
+    const int temperatureTenths = GenerateVariation(365, 372);
+
+    vitalSigns.temperature = static_cast<double>(temperatureTenths) / 10.0;
+
+    emit VitalSignsChanged();
+}
+
+int SimulationController::GenerateVariation(int minimum, int maximum) const
+{
+    return QRandomGenerator::global()->bounded(minimum, maximum + 1);
+}
