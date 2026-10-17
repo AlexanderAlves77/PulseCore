@@ -4,6 +4,8 @@
 #include <QTimer>
 #include "Core/Enums/SimulationState.h"
 #include "Core/Models/VitalSigns.h"
+#include "Core/Simulation/VitalSignsGenerator.h"
+
 
 class SimulationController final : public QObject
 {
@@ -47,11 +49,9 @@ class SimulationController final : public QObject
 
 private:
     SimulationState currentState = SimulationState::STOPPED;
+    VitalSignsGenerator vitalSignsGenerator;
     VitalSigns vitalSigns;
     QTimer updateTimer;
-
-    int GenerateVariation(int minimum, int maximum) const;
-    int GenerateNextValue(int currentValue, int minimum, int maximum, int maximumVariation) const;
 
     void LogDebugInfo(const QString& message) const;
 
