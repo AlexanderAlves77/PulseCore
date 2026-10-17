@@ -155,7 +155,7 @@ Window {
                             width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
                             height: vitalSignsRow.height
                             label: "SpO₂"
-                            value: "98"
+                            value: simulationController.oxygenSaturation.toFixed(1)
                             unit: "%"
                             accentColor: "#61B8FA"
                         }
@@ -164,7 +164,7 @@ Window {
                             width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
                             height: vitalSignsRow.height
                             label: "RESP"
-                            value: "16"
+                            value: simulationController.respiratoryRate.toFixed(1)
                             unit: "rpm"
                             accentColor: "#F0B75E"
                         }
@@ -173,7 +173,7 @@ Window {
                             width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
                             height: vitalSignsRow.height
                             label: "TEMP"
-                            value: "36.7"
+                            value: simulationController.temperature.toFixed(1)
                             unit: "°C"
                             accentColor: "#E9A6F4"
                         }
