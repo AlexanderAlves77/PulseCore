@@ -87,13 +87,39 @@ Window {
                 border.width: 1
                 radius: 12
 
-                // Application name
-                Text {
-                    text: "MONITORING DASHBOARD"
-                    color: window.mutedTextColor
-                    font.pixelSize: 18
-                    font.bold: true
+                Grid {
+                    id: vitalSignsGrid
+                    columns: 2
+                    spacing: 20
                     anchors.centerIn: parent
+
+                    VitalCard {
+                        label: "HR"
+                        value: "78"
+                        unit: "bpm"
+                        accentColor: "#40DCA5"
+                    }
+
+                    VitalCard {
+                        label: "SpO₂"
+                        value: "98"
+                        unit: "%"
+                        accentColor: "#61B8FA"
+                    }
+
+                    VitalCard {
+                        label: "RESP"
+                        value: "16"
+                        unit: "rpm"
+                        accentColor: "#F0B75E"
+                    }
+
+                    VitalCard {
+                        label: "TEMP"
+                        value: "36.7"
+                        unit: "°C"
+                        accentColor: "#E9A6F4"
+                    }
                 }
             }
         }

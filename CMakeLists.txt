@@ -23,6 +23,7 @@ qt_add_qml_module(appPulseCore
     URI PulseCore
     QML_FILES
         Main.qml
+        QML_FILES VitalCard.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
