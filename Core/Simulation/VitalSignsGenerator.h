@@ -2,6 +2,8 @@
 #define VITALSIGNSGENERATOR_H
 
 #include "Core/Models/VitalSigns.h"
+#include "Core/Simulation/SimulationConfig.h"
+
 
 class VitalSignsGenerator final
 {
@@ -12,7 +14,8 @@ private:
 public:
     VitalSignsGenerator() = default;
 
-    VitalSigns GenerateNext(const VitalSigns & currentVitalSigns) const;
+    VitalSigns GenerateNext(const VitalSigns & currentVitalSigns,
+        const SimulationConfig& config) const;
 };
 
 #endif // VITALSIGNSGENERATOR_H
