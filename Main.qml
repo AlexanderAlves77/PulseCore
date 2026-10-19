@@ -9,12 +9,13 @@ Window {
     id: window    
     width: 1280
     height: 800
-    minimumWidth: 1024
+    minimumWidth: 1100
     minimumHeight: 700
     visible: true
     title: "PulseCore - Medical Device Monitoring Simulator"
 
     property bool hasSimulationData: false
+    readonly property string simulationState: simulationController.state
 
     PulseTheme {
         id: pulseTheme
@@ -25,45 +26,58 @@ Window {
     // Header
     AppHeader {
         id: header
-        height: 90
+        height: 60
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        surfaceColor: window.surfaceColor
-        titleColor: window.textColor
-        accentColor: window.primaryColor
+        surfaceColor: "#0B1621"
+        titleColor: "#F2F7FC"
+        accentColor: "#21F58B"
+        /*
+        surfaceColor: pulseTheme.surfaceColor
+        titleColor: pulseTheme.textColor
+        accentColor: pulseTheme.primaryColor */
     }
 
     AppFooter {
         id: footer
-        height: 60
+        height: 30
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        surfaceColor: window.surfaceColor
+        surfaceColor: "#0B1621"
+     /*   surfaceColor: pulseTheme.surfaceColor */
     }
 
     // Main content
     DashboardPanel {
         id: dashboardPanel
-        anchors.top: header.bottom
-        anchors.bottom: footer.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        backgroundColor: window.backgroundColor
-        surfaceColor: window.surfaceColor
-        borderColor: window.borderColor
+        anchors.fill: parent
 
-        Column {
+        anchors.topMargin: header.height + 2
+        anchors.bottomMargin: footer.height + 2
+        anchors.leftMargin: 2
+        anchors.rightMargin: 2
+
+        backgroundColor: "#050B12"
+        surfaceColor: "#0B1621"
+        borderColor: "#16435A"
+        /*
+        backgroundColor: pulseTheme.backgroundColor
+        surfaceColor: pulseTheme.surfaceColor
+        borderColor: pulseTheme.borderColor */
+
+        ColumnLayout {
             id: dashboardLayout
             anchors.fill: parent
-            spacing: 12
+            spacing: 5
 
             RowLayout {
+                id: monitoringLayout
+
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
-                spacing: 12
+                spacing: 10
 
                 LeftMonitoringPanel {
                     id: leftMonitoringPanel
@@ -71,15 +85,16 @@ Window {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredWidth: 62
+                    Layout.minimumWidth: 350
                 }
 
                 RightMonitoringPanel {
                     id: rightMonitoringPanel
-                    hasData: window.hasSimulationData
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.preferredWidth: 38
+                    Layout.minimumWidth: 280
 
                     heartRate: simulationController.heartRate
                     oxygenSaturation: simulationController.oxygenSaturation
@@ -87,6 +102,7 @@ Window {
                     temperature: simulationController.temperature
 
                     running: window.simulationState === "RUNNING"
+                    hasData: window.hasSimulationData
                 }
             }
 
@@ -94,7 +110,11 @@ Window {
             SimulationControls {
                 id: simulationControls
                 Layout.fillWidth: true
-                Layout.preferredHeight: 76
+                Layout.fillHeight: false
+                Layout.preferredHeight: 60
+                Layout.minimumHeight: 60
+                Layout.maximumHeight: 60
+
                 simulationState: window.simulationState
 
                 onStartRequested: {
@@ -108,8 +128,8 @@ Window {
                 onResetRequested: {
                     simulationController.Reset()
                     window.hasSimulationData = false
-                    monitoringPanel.clearEcgSamples()
-                    monitoringPanel.resetHeartbeat()
+                    leftMonitoringPanel.clearEcgSamples()
+                    rightMonitoringPanel.resetHeartbeat()
                 }
             }
         }
@@ -118,13 +138,20 @@ Window {
     Connections {
         target: simulationController
 
-        function onEcgSampleGenerated(sample) {
-            window.hasSimulationData = true
+        function onEcgSampleGenerated(sample) {            
             leftMonitoringPanel.addEcgSample(sample)
+            window.hasSimulationData = true
         }
 
         function onHeartbeatOccurred() {
-            monitoringPanel.triggerHeartbeat()
+            rightMonitoringPanel.triggerHeartbeat()
         }
+    }
+
+    Component.onCompleted: {
+        console.log("Dashboard:", dashboardPanel.width, dashboardPanel.height)
+        console.log("Monitoring:", monitoringLayout.width, monitoringLayout.height)
+        console.log("Left:", leftMonitoringPanel.width, leftMonitoringPanel.height)
+        console.log("Right:", rightMonitoringPanel.width, rightMonitoringPanel.height)
     }
 }
