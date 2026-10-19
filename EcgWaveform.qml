@@ -7,7 +7,7 @@ Item {
     property int maxSamples: 500
     property color waveformColor: "#00FF88"
 
-    function AddSample(value) {
+    function addSample(value) {
         if (!Number.isFinite(value))
             return
 
@@ -22,7 +22,7 @@ Item {
         waveformCanvas.requestPaint()
     }
 
-    function ClearSamples() {
+    function clearSamples() {
         samples = []
         waveformCanvas.requestPaint()
     }
