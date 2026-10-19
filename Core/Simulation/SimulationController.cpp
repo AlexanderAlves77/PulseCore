@@ -239,14 +239,15 @@ void SimulationController::UpdateVitalSigns()
 
 void SimulationController::UpdateEcgWaveform(double elapsedSeconds)
 {
+    Q_UNUSED(elapsedSeconds);
+
     if (currentState != SimulationState::RUNNING)
     {
         return;
     }
 
-    const double sample = ecgWaveformGenerator.GenerateSample(
-        elapsedSeconds,
-        vitalSigns.heartRate
+    const double sample = ecgWaveformGenerator.GenerateSampleFromPhase(
+        simulationClock.GetBeatPhase()
     );
 
     emit EcgSampleGenerated(sample);
