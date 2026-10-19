@@ -10,7 +10,19 @@ int main(int argc, char *argv[])
 
     SimulationController simulationController;
 
-    QQmlApplicationEngine engine;  
+    QQmlApplicationEngine engine;
+
+    /*
+    const QMetaObject* metaObject = simulationController.metaObject();
+
+    for (int index = metaObject->methodOffset();
+         index < metaObject->methodCount();
+         ++index)
+    {
+        const QMetaMethod method = metaObject->method(index);
+
+        qDebug() << method.methodSignature();
+    } */
 
     engine.rootContext()->setContextProperty(
         "simulationController",
