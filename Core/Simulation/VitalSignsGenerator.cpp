@@ -15,7 +15,7 @@ int VitalSignsGenerator::GenerateNextValue(int currentValue, int minimum,
 
     const int nextValue = currentValue + variation;
 
-    return std::clamp(nextValue, variation, maximum);
+    return std::clamp(nextValue, minimum, maximum);
 }
 
 VitalSigns VitalSignsGenerator::GenerateNext(const VitalSigns & currentVitalSigns,
