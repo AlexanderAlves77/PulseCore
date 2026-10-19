@@ -8,6 +8,8 @@ PulseCard {
     property string unit: "mV"
     property color waveformColor: "#21F58B"
 
+    property Component waveformDelegate: null
+
     property alias waveformContent: waveformContainer.data
 
     cardSize: "MEDIUM"
@@ -39,11 +41,16 @@ PulseCard {
         }
 
         Item {
-            id: waveformContainer
-
             Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.minimumHeight: 24
             clip: true
+
+            Loader {
+                id: waveformLoader
+                anchors.fill: parent
+                sourceComponent: root.waveformDelegate
+            }
         }
     }
 }
