@@ -58,9 +58,13 @@ PulseCard {
         Heart3D {
             id: heart3D
 
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.minimumWidth: 140
+            Layout.preferredWidth: 190
+            Layout.preferredHeight: 170
+
+            Layout.maximumWidth: 190
+            Layout.maximumHeight: 170
+
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
 
             running: root.running
             heartRate: root.heartRate
