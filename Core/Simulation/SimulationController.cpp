@@ -2,7 +2,6 @@
 #include <QRandomGenerator>
 #include <QDebug>
 #include <QDateTime>
-#include <algorithm>
 #include <cmath>
 
 
