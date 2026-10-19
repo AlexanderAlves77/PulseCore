@@ -1,6 +1,7 @@
 import QtQuick
 
 import "Components/Layout"
+import "Components/Monitoring"
 
 Window {
     id: window    
@@ -49,121 +50,71 @@ Window {
             surfaceColor: window.surfaceColor
         }
 
+
         // Main content
-        Rectangle {
-            id: contentArea
-            color: window.backgroundColor
+        DashboardPanel {
+            id: dashboardPanel
+
             anchors.top: header.bottom
             anchors.bottom: footer.top
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.margins: 24
 
-            Rectangle {
-                id: monitorPanel
-                color: window.surfaceColor
+            backgroundColor: window.backgroundColor
+            surfaceColor: window.surfaceColor
+            borderColor: window.borderColor
+
+            Column {
+                id: dashboardLayout
                 anchors.fill: parent
-                border.color: window.borderColor
-                border.width: 1
-                radius: 12
+                spacing: 16
 
-                // Dashboard layout
-                Column {
-                    id: dashboardLayout
-                    anchors.fill: parent
-                    anchors.margins: 20
-                    spacing: 16
+                // ECG and 3D heart
+                MonitoringPanel {
+                    id: monitoringPanel
+                    width: parent.width
 
-                    // ECG and 3D heart
-                    Row {
-                        id: visualizationRow
-                        width: parent.width
-                        height: Math.max(120,
-                            dashboardLayout.height - vitalSignsRow.height
-                            - simulationControls.height - dashboardLayout.spacing * 2
-                        )
-                        spacing: 16
+                    height: Math.max(
+                        120,
+                        dashboardLayout.height
+                        - vitalSignsPanel.height
+                        - simulationControls.height
+                        - dashboardLayout.spacing * 2
+                    )
 
-                        EcgWaveform {
-                            id: ecgMonitor
-                            width: (visualizationRow.width - visualizationRow.spacing) * 0.60
-                            height: visualizationRow.height
-                            running: window.simulationState === "RUNNING"
-                        }
+                    running: window.simulationState === "RUNNING"
+                    heartRate: simulationController.heartRate
+                }
 
-                        Heart3D {
-                            id: heartMonitor
-                            width: (visualizationRow.width - visualizationRow.spacing) * 0.40
-                            height: visualizationRow.height
-                            running: window.simulationState === "RUNNING"
-                            heartRate: simulationController.heartRate
-                        }
+                // Monitoring area
+                VitalSignsPanel {
+                    id: vitalSignsPanel
+                    width: parent.width
+                    height: 145
+                    heartRate: simulationController.heartRate
+                    oxygenSaturation: simulationController.oxygenSaturation
+                    respiratoryRate: simulationController.respiratoryRate
+                    temperature: simulationController.temperature
+                }
+
+                // Controls
+                SimulationControls {
+                    id: simulationControls
+                    width: parent.width
+                    height: 76
+                    simulationState: window.simulationState
+
+                    onStartRequested: {
+                        simulationController.Start()
                     }
 
-                    // Monitoring area
-                    Row {
-                        id: vitalSignsRow
-                        width: parent.width
-                        height: 145
-                        spacing: 16
-
-                        VitalCard {
-                            width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
-                            height: vitalSignsRow.height
-                            label: "HR"
-                            value: simulationController.heartRate.toString()
-                            unit: "bpm"
-                            accentColor: "#40DCA5"
-                        }
-
-                        VitalCard {
-                            width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
-                            height: vitalSignsRow.height
-                            label: "SpO₂"
-                            value: simulationController.oxygenSaturation.toString()
-                            unit: "%"
-                            accentColor: "#61B8FA"
-                        }
-
-                        VitalCard {
-                            width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
-                            height: vitalSignsRow.height
-                            label: "RESP"
-                            value: simulationController.respiratoryRate.toString()
-                            unit: "rpm"
-                            accentColor: "#F0B75E"
-                        }
-
-                        VitalCard {
-                            width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
-                            height: vitalSignsRow.height
-                            label: "TEMP"
-                            value: simulationController.temperature.toFixed(1)
-                            unit: "°C"
-                            accentColor: "#E9A6F4"
-                        }
+                    onPauseRequested: {
+                        simulationController.Pause()
                     }
 
-                    // Controls
-                    SimulationControls {
-                        id: simulationControls
-                        width: parent.width
-                        height: 76
-
-                        simulationState: window.simulationState
-
-                        onStartRequested: {
-                            simulationController.Start();
-                        }
-
-                        onPauseRequested: {
-                            simulationController.Pause();
-                        }
-
-                        onResetRequested: {
-                            simulationController.Reset();
-                            ecgMonitor.animationOffset = 0;
-                        }
+                    onResetRequested: {
+                        simulationController.Reset()
+                        ecgMonitor.animationOffset = 0
                     }
                 }
             }
