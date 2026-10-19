@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 
 import "Components/DesignSystem"
 import "Components/Layout"
@@ -9,138 +10,102 @@ Window {
     width: 1280
     height: 800
     minimumWidth: 1024
-    minimumHeight: 640
+    minimumHeight: 700
     visible: true
     title: "PulseCore - Medical Device Monitoring Simulator"
-    color: "#0B111B"
-
-    readonly property string simulationState: simulationController.state
-
-    // Application colors
-    readonly property color backgroundColor: "#0B111B"
-    readonly property color surfaceColor: "#141F2E"
-    readonly property color borderColor: "#263548"
-    readonly property color primaryColor: "#40DCA5"
-    readonly property color textColor: "#F2F6FC"
-    readonly property color mutedTextColor: "#91A3B8"
 
     PulseTheme {
         id: pulseTheme
     }
 
-    Row {
-        anchors.centerIn: parent
-        spacing: 24
-        z: 100
+    color: pulseTheme.background
 
-        PulseLabel {
-            text: "Heart Rate"
-            labelSize: 20
-        }
-
-        PulseNumber {
-            value: simulationController.heartRate
-            unit: "bpm"
-            valueSize: 64
-        }
-
-        PulseBadge {
-            status: "NORMAL"
-        }
+    // Header
+    AppHeader {
+        id: header
+        height: 90
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        surfaceColor: window.surfaceColor
+        titleColor: window.textColor
+        accentColor: window.primaryColor
     }
 
-    // Main container
-    Rectangle {
-        id: mainContainer
-        anchors.fill: parent
-        color: window.backgroundColor
+    AppFooter {
+        id: footer
+        height: 60
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        surfaceColor: window.surfaceColor
+    }
 
-        // Header
-        AppHeader {
-            id: header
-            height: 90
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            surfaceColor: window.surfaceColor
-            titleColor: window.textColor
-            accentColor: window.primaryColor
-        }
+    // Main content
+    DashboardPanel {
+        id: dashboardPanel
+        anchors.top: header.bottom
+        anchors.bottom: footer.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        backgroundColor: window.backgroundColor
+        surfaceColor: window.surfaceColor
+        borderColor: window.borderColor
 
-        AppFooter {
-            id: footer
-            height: 60
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            surfaceColor: window.surfaceColor
-        }
+        Column {
+            id: dashboardLayout
+            anchors.fill: parent
+            spacing: 12
 
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-        // Main content
-        DashboardPanel {
-            id: dashboardPanel
-            anchors.top: header.bottom
-            anchors.bottom: footer.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            backgroundColor: window.backgroundColor
-            surfaceColor: window.surfaceColor
-            borderColor: window.borderColor
+                spacing: 12
 
-            Column {
-                id: dashboardLayout
-                anchors.fill: parent
-                spacing: 16
+                LeftMonitoringPanel {
+                    id: leftMonitoringPanel
 
-                // ECG and 3D heart
-                MonitoringPanel {
-                    id: monitoringPanel
-                    width: parent.width
-
-                    height: Math.max(
-                        120,
-                        dashboardLayout.height
-                        - vitalSignsPanel.height
-                        - simulationControls.height
-                        - dashboardLayout.spacing * 2
-                    )
-
-                    running: window.simulationState === "RUNNING"
-                    heartRate: simulationController.heartRate
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: 62
                 }
 
-                // Monitoring area
-                VitalSignsPanel {
-                    id: vitalSignsPanel
-                    width: parent.width
-                    height: 145
+                RightMonitoringPanel {
+                    id: rightMonitoringPanel
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: 38
+
                     heartRate: simulationController.heartRate
                     oxygenSaturation: simulationController.oxygenSaturation
                     respiratoryRate: simulationController.respiratoryRate
                     temperature: simulationController.temperature
+
+                    running: window.simulationState === "RUNNING"
+                }
+            }
+
+            // Controls
+            SimulationControls {
+                id: simulationControls
+                Layout.fillWidth: true
+                Layout.preferredHeight: 76
+                simulationState: window.simulationState
+
+                onStartRequested: {
+                    simulationController.Start()
                 }
 
-                // Controls
-                SimulationControls {
-                    id: simulationControls
-                    width: parent.width
-                    height: 76
-                    simulationState: window.simulationState
+                onPauseRequested: {
+                    simulationController.Pause()
+                }
 
-                    onStartRequested: {
-                        simulationController.Start()
-                    }
-
-                    onPauseRequested: {
-                        simulationController.Pause()
-                    }
-
-                    onResetRequested: {
-                        simulationController.Reset()
-                        monitoringPanel.clearEcgSamples()
-                        monitoringPanel.resetHeartbeat()
-                    }
+                onResetRequested: {
+                    simulationController.Reset()
+                    monitoringPanel.clearEcgSamples()
+                    monitoringPanel.resetHeartbeat()
                 }
             }
         }
@@ -150,21 +115,11 @@ Window {
         target: simulationController
 
         function onEcgSampleGenerated(sample) {
-            console.log("ECG sample received:", sample)
             monitoringPanel.addEcgSample(sample)
         }
 
         function onHeartbeatOccurred() {
-            console.log("Heartbeat received")
             monitoringPanel.triggerHeartbeat()
         }
-    }
-
-    Component.onCompleted: {
-        console.log("PulseTheme loaded   :", pulseTheme.green)
-        console.log("Controller          :", simulationController)
-        console.log("Controller state    :", simulationController.state)
-        console.log("Controller heartbeat:", simulationController.HeartbeatOccurred)
-        console.log("Controller ECG      :", simulationController.EcgSampleGenerated)
     }
 }
