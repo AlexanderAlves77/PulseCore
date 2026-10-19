@@ -155,7 +155,7 @@ Window {
                             width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
                             height: vitalSignsRow.height
                             label: "SpO₂"
-                            value: simulationController.oxygenSaturation.toFixed(1)
+                            value: simulationController.oxygenSaturation.toString()
                             unit: "%"
                             accentColor: "#61B8FA"
                         }
@@ -164,7 +164,7 @@ Window {
                             width: (vitalSignsRow.width - vitalSignsRow.spacing * 3) / 4
                             height: vitalSignsRow.height
                             label: "RESP"
-                            value: simulationController.respiratoryRate.toFixed(1)
+                            value: simulationController.respiratoryRate.toString()
                             unit: "rpm"
                             accentColor: "#F0B75E"
                         }
