@@ -27,6 +27,12 @@ Item {
         waveformCanvas.requestPaint()
     }
 
+    Rectangle {
+        anchors.fill: parent
+        color: "#101A27"
+        radius: 12
+    }
+
     Canvas {
         id: waveformCanvas
 
