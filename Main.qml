@@ -14,6 +14,8 @@ Window {
     visible: true
     title: "PulseCore - Medical Device Monitoring Simulator"
 
+    property bool hasSimulationData: false
+
     PulseTheme {
         id: pulseTheme
     }
@@ -73,6 +75,7 @@ Window {
 
                 RightMonitoringPanel {
                     id: rightMonitoringPanel
+                    hasData: window.hasSimulationData
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
@@ -104,6 +107,7 @@ Window {
 
                 onResetRequested: {
                     simulationController.Reset()
+                    window.hasSimulationData = false
                     monitoringPanel.clearEcgSamples()
                     monitoringPanel.resetHeartbeat()
                 }
@@ -115,7 +119,8 @@ Window {
         target: simulationController
 
         function onEcgSampleGenerated(sample) {
-            monitoringPanel.addEcgSample(sample)
+            window.hasSimulationData = true
+            leftMonitoringPanel.addEcgSample(sample)
         }
 
         function onHeartbeatOccurred() {
