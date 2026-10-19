@@ -1,7 +1,5 @@
-
 import QtQuick
-import "../.."
-import "../../Heart3D"
+import PulseCore
 
 Row {
     id: root
@@ -27,11 +25,11 @@ Row {
         heartRate: root.heartRate
     }
 
-    function AddEcgSample(sample) {
+    function addEcgSample(sample) {
         ecgMonitor.addSample(sample)
     }
 
-    function ClearEcgSamples() {
+    function clearEcgSamples() {
         ecgMonitor.clearSamples()
     }
 }

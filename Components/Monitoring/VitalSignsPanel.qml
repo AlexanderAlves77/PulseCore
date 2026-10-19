@@ -1,6 +1,5 @@
-
 import QtQuick
-import "../.."
+import PulseCore
 
 Row {
     id: root

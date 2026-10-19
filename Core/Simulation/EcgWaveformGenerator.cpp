@@ -1,5 +1,6 @@
 
 #include "EcgWaveformGenerator.h"
+#include "Core/Structs/SignalStructs.h"
 #include <algorithm>
 #include <cmath>
 
