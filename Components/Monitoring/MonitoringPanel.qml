@@ -28,10 +28,10 @@ Row {
     }
 
     function AddEcgSample(sample) {
-        ecgMonitor.AddSample(sample)
+        ecgMonitor.addSample(sample)
     }
 
     function ClearEcgSamples() {
-        ecgMonitor.ClearSamples()
+        ecgMonitor.clearSamples()
     }
 }
