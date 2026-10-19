@@ -6,6 +6,8 @@
 #include <cmath>
 
 
+/* ======================================================================================== */
+
 SimulationController::SimulationController(QObject * parent)
     : QObject(parent)
 {
@@ -16,6 +18,13 @@ SimulationController::SimulationController(QObject * parent)
         &QTimer::timeout,
         this,
         &SimulationController::UpdateVitalSigns
+    );
+
+    connect(
+        &simulationClock,
+        &SimulationClock::BeatOccurred,
+        this,
+        &SimulationController::HeartbeatOccurred
     );
 }
 
@@ -101,6 +110,9 @@ void SimulationController::Start()
 
     updateTimer.start();
 
+    simulationClock.SetHeartRate(vitalSigns.heartRate);
+    simulationClock.Start();
+
     LogDebugInfo(
         QStringLiteral("Simulation started. Timer active: %1 | Interval: %2 ms")
             .arg(updateTimer.isActive())
@@ -120,6 +132,7 @@ void SimulationController::Pause()
     }
 
     updateTimer.stop();
+    simulationClock.Pause();
 
     LogDebugInfo(QStringLiteral("Simulation paused."));
 
@@ -133,12 +146,13 @@ void SimulationController::Pause()
 void SimulationController::Reset()
 {
     updateTimer.stop();
+    simulationClock.Reset();
 
     const bool stateChanged = currentState != SimulationState::STOPPED;
 
     currentState = SimulationState::STOPPED;
 
-    vitalSigns = VitalSigns();
+    vitalSigns = VitalSigns{};
 
     LogDebugInfo(QStringLiteral("Simulation reset."));
 
@@ -201,6 +215,8 @@ void SimulationController::UpdateVitalSigns()
     }
 
     vitalSigns = vitalSignsGenerator.GenerateNext(vitalSigns, simulationConfig);
+
+    simulationClock.SetHeartRate(vitalSigns.heartRate);
 
     LogDebugInfo(
         QStringLiteral("HR: %1 | SpO2: %2 | RESP: %3 | TEMP: %4")
