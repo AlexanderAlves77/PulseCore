@@ -8,6 +8,7 @@
 #include "Core/Simulation/SimulationConfig.h"
 #include "Core/Enums/SimulationScenario.h"
 #include "Core/Simulation/SimulationClock.h"
+#include "Core/Simulation/EcgWaveformGenerator.h"
 #include "Core/Simulation/SimulationScenarioFactory.h"
 
 
@@ -61,6 +62,7 @@ private:
     VitalSignsGenerator vitalSignsGenerator;
     SimulationConfig simulationConfig;
     SimulationClock simulationClock;
+    EcgWaveformGenerator ecgWaveformGenerator;
     VitalSigns vitalSigns;
     QTimer updateTimer;
 
@@ -91,7 +93,9 @@ signals:
     void VitalSignsChanged();
     void ScenarioChanged();
     void HeartbeatOccurred();
+    void EcgSampleGenerated(double sample);
 
 private slots:
     void UpdateVitalSigns();
+    void UpdateEcgWaveform(double elapsedSeconds);
 };
