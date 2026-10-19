@@ -33,9 +33,6 @@ struct SignalAmplitude
 class EcgWaveformGenerator final
 {
 private:
-    SignalCenter    signalCenter;
-    SignalWidth     signalWidth;
-    SignalAmplitude signalAmplitude;
     static constexpr double SECONDS_PER_MINUTE = 60.0;
 
     double CalculateGaussian(
@@ -49,6 +46,7 @@ public:
     EcgWaveformGenerator() = default;
 
     double GenerateSample(double elapsedSeconds, int heartRate) const;
+    double GenerateSampleFromPhase(double phase) const;
 };
 
 
