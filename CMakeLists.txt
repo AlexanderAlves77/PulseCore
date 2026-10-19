@@ -87,6 +87,8 @@ qt_add_qml_module(appPulseCore
         Components/Layout/AppHeader.qml
         Components/Layout/AppFooter.qml
         Components/Layout/DashboardPanel.qml
+        Components/Monitoring/MonitoringPanel.qml
+        Components/Monitoring/VitalSignsPanel.qml
 
     RESOURCES
         Heart3D/Imported/meshes/mesh_mesh.mesh
