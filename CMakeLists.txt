@@ -90,6 +90,12 @@ qt_add_qml_module(appPulseCore
         Components/Monitoring/MonitoringPanel.qml
         Components/Monitoring/VitalSignsPanel.qml
         Components/DesignSystem/PulseTheme.qml
+        Components/DesignSystem/PulseLabel.qml
+        Components/DesignSystem/PulseNumber.qml
+        Components/DesignSystem/PulseBadge.qml
+        Components/DesignSystem/PulseCard.qml
+        Components/DesignSystem/VitalSignCard.qml
+        Components/DesignSystem/WaveformCard.qml
 
     RESOURCES
         Heart3D/Imported/meshes/mesh_mesh.mesh
@@ -133,7 +139,7 @@ if(BUILD_TESTING)
     add_executable(PulseCore.Tests
         Tests/SimulationClockTests.cpp
         Core/Simulation/SimulationClock.h
-        Core/Simulation/SimulationClock.cpp        
+        Core/Simulation/SimulationClock.cpp
     )
 
     set_target_properties(PulseCore.Tests PROPERTIES
