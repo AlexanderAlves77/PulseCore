@@ -85,13 +85,17 @@ qt_add_qml_module(appPulseCore
         Heart3D/Heart3D.qml
         Heart3D/Imported/Heart.qml
         Components/Layout/AppHeader.qml
+        Components/Layout/AppFooter.qml
+        Components/Layout/DashboardPanel.qml
 
     RESOURCES
-        Core/Structs/SignalStructs.h
         Heart3D/Imported/meshes/mesh_mesh.mesh
         Heart3D/Imported/maps/textureData.jpg
         Heart3D/Imported/maps/textureData7.jpg
         docs/images/pulsecore-dashboard-3d.png
+
+    SOURCES
+        Core/Structs/SignalStructs.h
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -126,7 +130,7 @@ if(BUILD_TESTING)
     add_executable(PulseCore.Tests
         Tests/SimulationClockTests.cpp
         Core/Simulation/SimulationClock.h
-        Core/Simulation/SimulationClock.cpp
+        Core/Simulation/SimulationClock.cpp        
     )
 
     set_target_properties(PulseCore.Tests PROPERTIES
