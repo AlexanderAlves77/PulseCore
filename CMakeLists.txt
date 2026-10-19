@@ -96,6 +96,9 @@ qt_add_qml_module(appPulseCore
         Components/DesignSystem/PulseCard.qml
         Components/DesignSystem/VitalSignCard.qml
         Components/DesignSystem/WaveformCard.qml
+        Components/DesignSystem/VitalStatus.qml
+        Components/DesignSystem/VitalMetric.qml
+        Components/DesignSystem/VitalSignsGrid.qml
 
     RESOURCES
         Heart3D/Imported/meshes/mesh_mesh.mesh
