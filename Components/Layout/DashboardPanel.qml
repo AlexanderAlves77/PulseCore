@@ -25,7 +25,11 @@ Rectangle {
         Item {
             id: dashboardContent
             anchors.fill: parent
-            anchors.margins: root.panelPadding
+
+            anchors.leftMargin: 8
+            anchors.rightMargin: 8
+            anchors.topMargin: 8
+            anchors.bottomMargin: 8
         }
     }
 }
