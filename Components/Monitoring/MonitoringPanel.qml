@@ -1,6 +1,7 @@
 
 import QtQuick
 import "../.."
+import "../../Heart3D"
 
 Row {
     id: root
@@ -14,10 +15,8 @@ Row {
 
     EcgWaveform {
         id: ecgMonitor
-
         width: (root.width - root.spacing) * 0.60
         height: root.height
-        running: root.running
     }
 
     Heart3D {
