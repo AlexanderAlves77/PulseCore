@@ -84,8 +84,10 @@ qt_add_qml_module(appPulseCore
         SimulationButton.qml
         Heart3D/Heart3D.qml
         Heart3D/Imported/Heart.qml
+        Components/Layout/AppHeader.qml
 
     RESOURCES
+        Core/Structs/SignalStructs.h
         Heart3D/Imported/meshes/mesh_mesh.mesh
         Heart3D/Imported/maps/textureData.jpg
         Heart3D/Imported/maps/textureData7.jpg
