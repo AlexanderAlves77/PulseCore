@@ -18,6 +18,8 @@ Rectangle {
     border.width: 1
 
     function triggerHeartbeat() {
+        console.log("Heart3D heartbeat received:", running)
+
         if (!running)
             return
 
@@ -94,6 +96,8 @@ Rectangle {
                 running: false
 
                 Vector3dAnimation {
+                    target: heartNode
+                    property: "scale"
                     from: Qt.vector3d(1.0, 1.0, 1.0)
                     to: Qt.vector3d(1.08, 1.08, 1.08)
                     duration: Math.round(heart3D.beatDuration * 0.20)
