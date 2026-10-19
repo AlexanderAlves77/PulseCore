@@ -1,129 +1,65 @@
 import QtQuick
 
-Rectangle {
-    id: ecgWaveform
-    radius: 12
-    color: "#101A27"
+Item {
+    id: root
 
-    property color waveColor: "#40DCA5"
-    property color gridColor: "#203447"
-    property real animationOffset: 0
-    property bool running: true
+    property var samples: []
+    property int maxSamples: 500
+    property color waveformColor: "#00FF88"
 
-    implicitWidth: 760
-    implicitHeight: 320
+    function AddSample(value) {
+        if (!Number.isFinite(value))
+            return
 
-    border.color: "#263548"
-    border.width: 1
+        var updatedSamples = samples.slice()
 
-    Text {
-        id: chartTitle
-        text: "ECG — SIMULATED"
-        color: "#91A3B8"
-        font.pixelSize: 15
-        font.bold: true
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.margins: 20
+        updatedSamples.push(value)
+
+        if (updatedSamples.length > maxSamples)
+            updatedSamples.shift()
+
+        samples = updatedSamples
+        waveformCanvas.requestPaint()
+    }
+
+    function ClearSamples() {
+        samples = []
+        waveformCanvas.requestPaint()
     }
 
     Canvas {
-        id: chartCanvas
-        anchors.top: chartTitle.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 20
+        id: waveformCanvas
+
+        anchors.fill: parent
 
         onPaint: {
-            const context = getContext("2d");
-            context.reset();
+            var context = getContext("2d")
 
-            drawGrid(context);
-            drawWaveform(context);
-        }
+            context.reset()
 
-        function drawGrid(context)
-        {
-            const gridSize = 25;
+            if (root.samples.length < 2)
+                return
 
-            context.beginPath();
-            context.strokeStyle = ecgWaveform.gridColor;
-            context.lineWidth = 0.5;
+            context.strokeStyle = root.waveformColor
+            context.lineWidth = 2
+            context.beginPath()
 
-            for (let x = 0; x <= width; x += gridSize)
+            var stepX = width / (root.maxSamples - 1)
+            var centerY = height * 0.5
+            var amplitude = height * 0.4
+
+            for (var index = 0; index < root.samples.length; ++index)
             {
-                context.moveTo(x, 0);
-                context.lineTo(x, height);
+                var x = index * stepX
+                var y = centerY - root.samples[index] * amplitude
+
+                if (index === 0)
+                    context.moveTo(x, y)
+                else
+                    context.lineTo(x, y)
             }
 
-            for (let y = 0; y <= height; y += gridSize)
-            {
-                context.moveTo(0, y);
-                context.lineTo(width, y);
-            }
-
-            context.stroke();
-        }
-
-        function getWaveAmplitude(phase)
-        {
-            if (phase < 0.10) return 0;
-
-            if (phase < 0.18) {
-                return -0.12 * Math.sin(((phase - 0.10) / 0.08) * Math.PI);
-            }
-
-            if (phase < 0.28) return 0;
-
-            if (phase < 0.32) return 0.15;
-
-            if (phase < 0.36) return -0.85;
-
-            if (phase < 0.40) return 0.25;
-
-            if (phase < 0.48) return 0;
-
-            if (phase < 0.65) {
-                return 0.20 * Math.sin(((phase - 0.48) / 0.17) * Math.PI);
-            }
-
-            return 0;
-        }
-
-        function drawWaveform(context)
-        {
-            const centerY = height / 2;
-            const amplitude = height * 0.38;
-            const cycleWidth = 180;
-
-            context.beginPath();
-            context.strokeStyle = ecgWaveform.waveColor;
-            context.lineWidth = 2.5;
-            context.lineJoin = "round";
-
-            for (let x = 0; x < width; x += 2)
-            {
-                const position = (x + ecgWaveform.animationOffset) / cycleWidth;
-                const phase = position - Math.floor(position);
-                const y = centerY + getWaveAmplitude(phase) * amplitude;
-
-                if (x === 0) context.moveTo(x, y);
-                else context.lineTo(x, y);
-            }
-
-            context.stroke();
+            context.stroke()
         }
     }
-
-    NumberAnimation on animationOffset
-    {
-        from: 0
-        to: 180
-        duration: 1800
-        loops: Animation.Infinite
-        running: ecgWaveform.running
-    }
-
-    onAnimationOffsetChanged: chartCanvas.requestPaint();
 }
