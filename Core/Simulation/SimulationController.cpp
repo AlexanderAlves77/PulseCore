@@ -23,7 +23,7 @@ SimulationController::SimulationController(QObject * parent)
         &simulationClock,
         &SimulationClock::BeatOccurred,
         this,
-        &SimulationController::HeartbeatOccurred
+        &SimulationController::heartbeatOccurred
     );
 
     connect(
@@ -250,7 +250,7 @@ void SimulationController::UpdateEcgWaveform(double elapsedSeconds)
         simulationClock.GetBeatPhase()
     );
 
-    emit EcgSampleGenerated(sample);
+    emit ecgSampleGenerated(sample);
 }
 
 /* ======================================================================================== */
