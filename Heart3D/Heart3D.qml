@@ -17,6 +17,23 @@ Rectangle {
     border.color: "#263548"
     border.width: 1
 
+    function triggerHeartbeat() {
+        if (!running)
+            return
+
+        heartbeatAnimation.restart()
+    }
+
+    function resetHeartbeat() {
+        heartbeatAnimation.stop()
+        heartNode.scale = Qt.vector3d(1.0, 1.0, 1.0)
+    }
+
+    onRunningChanged: {
+        if (!running)
+            resetHeartbeat()
+    }
+
     Text {
         id: sceneTitle
         text: "3D HEART - SIMULATED"
@@ -71,9 +88,10 @@ Rectangle {
                 running: heart3D.running
             }
 
-            SequentialAnimation on scale {
-                loops: Animation.Infinite
-                running: heart3D.running
+            SequentialAnimation {
+                id: heartbeatAnimation
+                loops: 1
+                running: false
 
                 Vector3dAnimation {
                     from: Qt.vector3d(1.0, 1.0, 1.0)
@@ -83,7 +101,9 @@ Rectangle {
                 }
 
                 Vector3dAnimation {
-                    from: Qt.vector3d(1.10, 1.10, 1.10)
+                    target: heartNode
+                    property: "scale"
+                    from: Qt.vector3d(1.08, 1.08, 1.08)
                     to: Qt.vector3d(1.0, 1.0, 1.0)
                     duration: Math.round(heart3D.beatDuration * 0.80)
                     easing.type: Easing.InOutQuad
