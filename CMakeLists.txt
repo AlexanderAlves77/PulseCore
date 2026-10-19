@@ -21,15 +21,21 @@ qt_add_executable(appPulseCore
     main.cpp
 
     Core/Enums/SimulationState.h
+    Core/Enums/SimulationScenario.h
+
     Core/Models/VitalSigns.h
 
     Core/Simulation/SimulationConfig.h
+    Core/Simulation/SimulationScenarioFactory.h
 
     Core/Simulation/SimulationController.h
     Core/Simulation/SimulationController.cpp
 
     Core/Simulation/VitalSignsGenerator.h
     Core/Simulation/VitalSignsGenerator.cpp
+
+    Core/Simulation/SimulationClock.h
+    Core/Simulation/SimulationClock.cpp
 
     Core/Simulation/EcgWaveformGenerator.h
     Core/Simulation/EcgWaveformGenerator.cpp
@@ -83,17 +89,7 @@ qt_add_qml_module(appPulseCore
         Heart3D/Imported/meshes/mesh_mesh.mesh
         Heart3D/Imported/maps/textureData.jpg
         Heart3D/Imported/maps/textureData7.jpg
-        RESOURCES docs/images/pulsecore-dashboard-3d.png
-        SOURCES Core/Enums/SimulationState.h
-        SOURCES Core/Models/VitalSigns.h
-        SOURCES Core/Simulation/SimulationController.cpp Core/Simulation/SimulationController.h
-        SOURCES Core/Simulation/VitalSignsGenerator.h
-        SOURCES Core/Simulation/VitalSignsGenerator.cpp
-        SOURCES Core/Simulation/SimulationConfig.h
-        SOURCES Core/Enums/SimulationScenario.h
-        SOURCES Core/Simulation/SimulationScenarioFactory.h
-        SOURCES Core/Simulation/SimulationClock.h
-        SOURCES Core/Simulation/SimulationClock.cpp
+        docs/images/pulsecore-dashboard-3d.png
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
