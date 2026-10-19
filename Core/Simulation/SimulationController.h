@@ -60,6 +60,7 @@ class SimulationController final : public QObject
 private:
     VitalSignsGenerator vitalSignsGenerator;
     SimulationConfig simulationConfig;
+    SimulationClock simulationClock;
     VitalSigns vitalSigns;
     QTimer updateTimer;
 
