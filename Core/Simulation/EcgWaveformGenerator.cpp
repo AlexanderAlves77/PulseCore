@@ -19,44 +19,7 @@ double EcgWaveformGenerator::GenerateSample(double elapsedSeconds, int heartRate
 
     const double phase = beatPosition / beatDuration;
 
-    const double pWave = CalculateGaussian(
-        phase,
-        signalCenter.P_CENTER,
-        signalWidth.P_WIDTH,
-        signalAmplitude.P_AMPLITUDE
-    );
-
-    const double qWave = CalculateGaussian(
-        phase,
-        signalCenter.Q_CENTER,
-        signalWidth.Q_WIDTH,
-        signalAmplitude.Q_AMPLITUDE
-    );
-
-    const double rWave = CalculateGaussian(
-        phase,
-        signalCenter.R_CENTER,
-        signalWidth.R_WIDTH,
-        signalAmplitude.R_AMPLITUDE
-    );
-
-    const double sWave = CalculateGaussian(
-        phase,
-        signalCenter.S_CENTER,
-        signalWidth.S_WIDTH,
-        signalAmplitude.S_AMPLITUDE
-    );
-
-    const double tWave = CalculateGaussian(
-        phase,
-        signalCenter.T_CENTER,
-        signalWidth.T_WIDTH,
-        signalAmplitude.T_AMPLITUDE
-    );
-
-    const double sample = pWave + qWave + rWave + sWave + tWave;
-
-    return std::clamp(sample, -1.0, 1.0);
+    return GenerateSampleFromPhase(phase);
 }
 
 /* ======================================================================================== */
@@ -74,7 +37,7 @@ double EcgWaveformGenerator::CalculateGaussian(
     {
         distance -= 1.0;
     }
-    else if (distance > -0.5)
+    else if (distance < -0.5)
     {
         distance += 1.0;
     }
@@ -82,4 +45,53 @@ double EcgWaveformGenerator::CalculateGaussian(
     const double normalizedDistance = distance / width;
 
     return amplitude * std::exp(-0.5 * normalizedDistance * normalizedDistance);
+}
+
+/* ======================================================================================== */
+
+double EcgWaveformGenerator::GenerateSampleFromPhase(double phase) const
+{
+    if (!std::isfinite(phase) || phase < 0.0 || phase > 1.0)
+    {
+        return 0.0;
+    }
+
+    const double pWave = CalculateGaussian(
+        phase,
+        SignalCenter::P_CENTER,
+        SignalWidth::P_WIDTH,
+        SignalAmplitude::P_AMPLITUDE
+    );
+
+    const double qWave = CalculateGaussian(
+        phase,
+        SignalCenter::Q_CENTER,
+        SignalWidth::Q_WIDTH,
+        SignalAmplitude::Q_AMPLITUDE
+    );
+
+    const double rWave = CalculateGaussian(
+        phase,
+        SignalCenter::R_CENTER,
+        SignalWidth::R_WIDTH,
+        SignalAmplitude::R_AMPLITUDE
+    );
+
+    const double sWave = CalculateGaussian(
+        phase,
+        SignalCenter::S_CENTER,
+        SignalWidth::S_WIDTH,
+        SignalAmplitude::S_AMPLITUDE
+    );
+
+    const double tWave = CalculateGaussian(
+        phase,
+        SignalCenter::T_CENTER,
+        SignalWidth::T_WIDTH,
+        SignalAmplitude::T_AMPLITUDE
+    );
+
+    const double sample = pWave + qWave + rWave + sWave + tWave;
+
+    return std::clamp(sample, -1.0, 1.0);
 }
