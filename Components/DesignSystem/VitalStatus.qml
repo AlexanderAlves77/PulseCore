@@ -3,6 +3,7 @@ import QtQuick
 QtObject {
     id: root
 
+    property bool hasData: false
     property real value: 0
 
     property real minimumCritical: 40
@@ -11,6 +12,9 @@ QtObject {
     property real maximumCritical: 140
 
     readonly property string status: {
+        if (!hasData)
+            return "NO DATA"
+
         if (value < minimumCritical || value > maximumCritical)
             return "CRITICAL"
 
@@ -26,8 +30,10 @@ QtObject {
             return "#FF405D"
         case "WARNING":
             return "#FFB020"
-        default:
+        case "NORMAL":
             return "#21F58B"
+        default:
+            return "#648398"
         }
     }
 }
