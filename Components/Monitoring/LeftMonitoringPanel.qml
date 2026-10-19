@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import "../DesignSystem"
-import "../../"
+import PulseCore
 
 Item {
     id: root
@@ -16,15 +16,14 @@ Item {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredHeight: 2
+            Layout.preferredHeight: 180
+            Layout.minimumHeight: 90
 
             title: "ECG"
             unit: "Lead II · mV"
             waveformColor: "#21F58B"
 
-            EcgWaveform {
-                id: ecgWaveform
-                anchors.fill: parent
+            waveformDelegate: EcgWaveform {
                 waveformColor: ecgCard.waveformColor
             }
         }
@@ -41,27 +40,27 @@ Item {
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.preferredHeight: 1
+                Layout.preferredHeight: 120
+                Layout.minimumHeight: 75
 
                 title: modelData.title
                 unit: modelData.unit
                 waveformColor: modelData.color
 
-                PulseLabel {
-                    anchors.centerIn: parent
-                    text: "SIGNAL NOT IMPLEMENTED"
-                    labelSize: 12
-                    labelColor: "#648398"
+                waveformDelegate: WaveformPlaceholder {
+                    message: "SIGNAL NOT IMPLEMENTED"
                 }
             }
         }
     }
 
     function addEcgSample(sample) {
-        ecgWaveform.addSample(sample)
+        if (ecgCard.waveformItem)
+            ecgCard.waveformItem.addSample(sample)
     }
 
     function clearEcgSamples() {
-        ecgWaveform.clearSamples()
+        if (ecgCard.waveformItem)
+            ecgCard.waveformItem.clearSamples()
     }
 }
