@@ -54,12 +54,10 @@ Window {
         // Main content
         DashboardPanel {
             id: dashboardPanel
-
             anchors.top: header.bottom
             anchors.bottom: footer.top
             anchors.left: parent.left
             anchors.right: parent.right
-
             backgroundColor: window.backgroundColor
             surfaceColor: window.surfaceColor
             borderColor: window.borderColor
@@ -114,7 +112,8 @@ Window {
 
                     onResetRequested: {
                         simulationController.Reset()
-                        ecgMonitor.animationOffset = 0
+                        monitoringPanel.clearEcgSamples()
+                        monitoringPanel.resetHeartbeat()
                     }
                 }
             }
@@ -126,6 +125,10 @@ Window {
 
         function onEcgSampleGenerated(sample) {
             monitoringPanel.addEcgSample(sample)
+        }
+
+        function onHeartbeatOccurred() {
+            monitoringPanel.triggerHeartbeat()
         }
     }
 }
