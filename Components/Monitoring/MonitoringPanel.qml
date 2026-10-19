@@ -32,4 +32,12 @@ Row {
     function clearEcgSamples() {
         ecgMonitor.clearSamples()
     }
+
+    function triggerHeartbeat() {
+        heartMonitor.triggerHeartbeat()
+    }
+
+    function resetHeartbeat() {
+        heartMonitor.resetHeartbeat()
+    }
 }
