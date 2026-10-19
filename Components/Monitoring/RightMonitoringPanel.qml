@@ -20,9 +20,10 @@ Item {
             id: heartRateCard
 
             Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.preferredHeight: 320
-            Layout.minimumHeight: 240
+            Layout.fillHeight: false
+            Layout.preferredHeight: 210
+            Layout.minimumHeight: 210
+            Layout.maximumHeight: 210
 
             heartRate: root.heartRate
             running: root.running
@@ -32,7 +33,9 @@ Item {
         GridLayout {
             Layout.fillWidth: true
             Layout.fillHeight: false
-            Layout.preferredHeight: 220
+            Layout.preferredHeight: 188
+            Layout.minimumHeight: 188
+            Layout.maximumHeight: 188
 
             columns: 2
             rowSpacing: 12
@@ -41,6 +44,7 @@ Item {
             CompactVitalCard {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.preferredHeight: 89
 
                 title: "SpO₂"
                 value: root.oxygenSaturation
@@ -58,6 +62,7 @@ Item {
             CompactVitalCard {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.preferredHeight: 94
 
                 title: "RESP"
                 value: root.respiratoryRate
@@ -75,6 +80,7 @@ Item {
             CompactVitalCard {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                Layout.preferredHeight: 94
 
                 title: "TEMP"
                 value: root.temperature
