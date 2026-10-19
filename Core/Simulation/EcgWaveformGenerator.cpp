@@ -1,31 +1,8 @@
 
 #include "EcgWaveformGenerator.h"
-
 #include <algorithm>
 #include <cmath>
 
-namespace
-{
-constexpr double SECONDS_PER_MINUTE = 60.0;
-
-constexpr double P_CENTER = 0.18;
-constexpr double Q_CENTER = 0.37;
-constexpr double R_CENTER = 0.40;
-constexpr double S_CENTER = 0.43;
-constexpr double T_CENTER = 0.67;
-
-constexpr double P_WIDTH = 0.045;
-constexpr double Q_WIDTH = 0.012;
-constexpr double R_WIDTH = 0.010;
-constexpr double S_WIDTH = 0.014;
-constexpr double T_WIDTH = 0.090;
-
-constexpr double P_AMPLITUDE = 0.12;
-constexpr double Q_AMPLITUDE = -0.15;
-constexpr double R_AMPLITUDE = 1.00;
-constexpr double S_AMPLITUDE = -0.25;
-constexpr double T_AMPLITUDE = 0.30;
-}
 
 /* ======================================================================================== */
 
@@ -42,15 +19,40 @@ double EcgWaveformGenerator::GenerateSample(double elapsedSeconds, int heartRate
 
     const double phase = beatPosition / beatDuration;
 
-    const double pWave = CalculateGaussian(phase, P_CENTER, P_WIDTH, P_AMPLITUDE);
+    const double pWave = CalculateGaussian(
+        phase,
+        signalCenter.P_CENTER,
+        signalWidth.P_WIDTH,
+        signalAmplitude.P_AMPLITUDE
+    );
 
-    const double qWave = CalculateGaussian(phase, Q_CENTER, Q_WIDTH, Q_AMPLITUDE);
+    const double qWave = CalculateGaussian(
+        phase,
+        signalCenter.Q_CENTER,
+        signalWidth.Q_WIDTH,
+        signalAmplitude.Q_AMPLITUDE
+    );
 
-    const double rWave = CalculateGaussian(phase, R_CENTER, R_WIDTH, R_AMPLITUDE);
+    const double rWave = CalculateGaussian(
+        phase,
+        signalCenter.R_CENTER,
+        signalWidth.R_WIDTH,
+        signalAmplitude.R_AMPLITUDE
+    );
 
-    const double sWave = CalculateGaussian(phase, S_CENTER, S_WIDTH, S_AMPLITUDE);
+    const double sWave = CalculateGaussian(
+        phase,
+        signalCenter.S_CENTER,
+        signalWidth.S_WIDTH,
+        signalAmplitude.S_AMPLITUDE
+    );
 
-    const double tWave = CalculateGaussian(phase, T_CENTER, T_WIDTH, T_AMPLITUDE);
+    const double tWave = CalculateGaussian(
+        phase,
+        signalCenter.T_CENTER,
+        signalWidth.T_WIDTH,
+        signalAmplitude.T_AMPLITUDE
+    );
 
     const double sample = pWave + qWave + rWave + sWave + tWave;
 
@@ -66,7 +68,18 @@ double EcgWaveformGenerator::CalculateGaussian(
     double amplitude
     ) const
 {
-    const double distance = (phase - center) / width;
+    double distance = phase - center;
 
-    return amplitude * std::exp(-0.5 * distance * distance);
+    if (distance > 0.5)
+    {
+        distance -= 1.0;
+    }
+    else if (distance > -0.5)
+    {
+        distance += 1.0;
+    }
+
+    const double normalizedDistance = distance / width;
+
+    return amplitude * std::exp(-0.5 * normalizedDistance * normalizedDistance);
 }
