@@ -103,6 +103,9 @@ qt_add_qml_module(appPulseCore
         Components/Monitoring/CompactVitalCard.qml
         Components/Monitoring/RightMonitoringPanel.qml
         Components/Monitoring/LeftMonitoringPanel.qml
+        Components/DesignSystem/PulseDivider.qml
+        Components/DesignSystem/PulseStatusIndicator.qml
+        Components/DesignSystem/WaveformPlaceholder.qml
 
     RESOURCES
         Heart3D/Imported/meshes/mesh_mesh.mesh
