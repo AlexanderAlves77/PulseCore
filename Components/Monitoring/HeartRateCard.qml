@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import "../DesignSystem"
-import "../../Heart3D"
+import PulseCore
 
 PulseCard {
     id: root
