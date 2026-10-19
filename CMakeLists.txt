@@ -89,11 +89,8 @@ qt_add_qml_module(appPulseCore
         SOURCES Core/Simulation/SimulationConfig.h
         SOURCES Core/Enums/SimulationScenario.h
         SOURCES Core/Simulation/SimulationScenarioFactory.h
-        SOURCES
-        SOURCES
         SOURCES Core/Simulation/SimulationClock.h
         SOURCES Core/Simulation/SimulationClock.cpp
-        SOURCES Tests/SimulationClockTests.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
