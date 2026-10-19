@@ -28,6 +28,27 @@ Window {
         id: pulseTheme
     }
 
+    Row {
+        anchors.centerIn: parent
+        spacing: 24
+        z: 100
+
+        PulseLabel {
+            text: "Heart Rate"
+            labelSize: 20
+        }
+
+        PulseNumber {
+            value: simulationController.heartRate
+            unit: "bpm"
+            valueSize: 64
+        }
+
+        PulseBadge {
+            status: "NORMAL"
+        }
+    }
+
     // Main container
     Rectangle {
         id: mainContainer
