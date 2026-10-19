@@ -10,7 +10,7 @@ PulseCard {
 
     property Component waveformDelegate: null
 
-    property alias waveformContent: waveformContainer.data
+    readonly property var waveformItem: waveformLoader.item
 
     cardSize: "MEDIUM"
 
