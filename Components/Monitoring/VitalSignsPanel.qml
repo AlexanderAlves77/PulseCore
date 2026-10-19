@@ -3,7 +3,7 @@ import PulseCore
 
 Row {
     id: root
-    implicitHeight: 145
+    height: 145
     spacing: 16
 
     property int heartRate: 0
