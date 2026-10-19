@@ -21,7 +21,7 @@ Item {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.preferredHeight: 340
+            Layout.preferredHeight: 320
             Layout.minimumHeight: 240
 
             heartRate: root.heartRate
@@ -31,6 +31,7 @@ Item {
 
         GridLayout {
             Layout.fillWidth: true
+            Layout.fillHeight: false
             Layout.preferredHeight: 220
 
             columns: 2
