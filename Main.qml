@@ -120,4 +120,12 @@ Window {
             }
         }
     }
+
+    Connections {
+        target: simulationController
+
+        function onEcgSampleGenerated(sample) {
+            monitoringPanel.addEcgSample(sample)
+        }
+    }
 }

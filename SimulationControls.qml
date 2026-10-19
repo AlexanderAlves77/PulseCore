@@ -64,4 +64,10 @@ Rectangle {
         font.pixelSize: 13
         font.bold: true
     }
+
+    signal onStartRequested()
+
+    signal onPauseRequested()
+
+    signal onResetRequested()
 }
