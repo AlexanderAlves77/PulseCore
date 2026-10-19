@@ -1,5 +1,6 @@
 import QtQuick
 
+import "Components/DesignSystem"
 import "Components/Layout"
 import "Components/Monitoring"
 
@@ -22,6 +23,10 @@ Window {
     readonly property color primaryColor: "#40DCA5"
     readonly property color textColor: "#F2F6FC"
     readonly property color mutedTextColor: "#91A3B8"
+
+    PulseTheme {
+        id: pulseTheme
+    }
 
     // Main container
     Rectangle {
@@ -124,11 +129,21 @@ Window {
         target: simulationController
 
         function onEcgSampleGenerated(sample) {
+            console.log("ECG sample received:", sample)
             monitoringPanel.addEcgSample(sample)
         }
 
         function onHeartbeatOccurred() {
+            console.log("Heartbeat received")
             monitoringPanel.triggerHeartbeat()
         }
+    }
+
+    Component.onCompleted: {
+        console.log("PulseTheme loaded   :", pulseTheme.green)
+        console.log("Controller          :", simulationController)
+        console.log("Controller state    :", simulationController.state)
+        console.log("Controller heartbeat:", simulationController.HeartbeatOccurred)
+        console.log("Controller ECG      :", simulationController.EcgSampleGenerated)
     }
 }
