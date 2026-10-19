@@ -6,9 +6,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick Quick3D)
+find_package(Qt6 REQUIRED COMPONENTS Quick Quick3D Test)
 
 qt_standard_project_setup(REQUIRES 6.10)
+
+include(CTest)
 
 # Content of downloaded design from Figma to Qt or similar
 if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/importedcontent/CMakeLists.txt")
@@ -87,6 +89,11 @@ qt_add_qml_module(appPulseCore
         SOURCES Core/Simulation/SimulationConfig.h
         SOURCES Core/Enums/SimulationScenario.h
         SOURCES Core/Simulation/SimulationScenarioFactory.h
+        SOURCES
+        SOURCES
+        SOURCES Core/Simulation/SimulationClock.h
+        SOURCES Core/Simulation/SimulationClock.cpp
+        SOURCES Tests/SimulationClockTests.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -111,3 +118,38 @@ install(TARGETS appPulseCore
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+
+# ------------------------------------------------------------
+# Automated Tests
+# ------------------------------------------------------------
+if(BUILD_TESTING)
+
+    add_executable(PulseCore.Tests
+        Tests/SimulationClockTests.cpp
+        Core/Simulation/SimulationClock.h
+        Core/Simulation/SimulationClock.cpp
+    )
+
+    set_target_properties(PulseCore.Tests PROPERTIES
+        AUTOMOC ON
+    )
+
+    target_include_directories(PulseCore.Tests
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+
+    target_link_libraries(PulseCore.Tests
+        PRIVATE
+            Qt6::Core
+            Qt6::Test
+    )
+
+    add_test(
+        NAME SimulationClockTests
+        COMMAND PulseCore.Tests
+    )
+
+endif()
+
