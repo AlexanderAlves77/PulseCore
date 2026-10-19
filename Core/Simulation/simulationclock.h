@@ -33,6 +33,7 @@ public:
     void SetHeartRate(int heartRate);
 
     bool IsRunning() const noexcept;
+    double GetBeatPhase() const;
     double GetElapsedSeconds() const noexcept;
 
 signals:
