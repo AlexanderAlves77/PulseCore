@@ -7,6 +7,7 @@
 #include "Core/Simulation/VitalSignsGenerator.h"
 #include "Core/Simulation/SimulationConfig.h"
 #include "Core/Enums/SimulationScenario.h"
+#include "Core/Simulation/SimulationClock.h"
 #include "Core/Simulation/SimulationScenarioFactory.h"
 
 
@@ -45,7 +46,7 @@ class SimulationController final : public QObject
     )
 
     Q_PROPERTY(
-        int temperature
+        double temperature
         READ GetTemperature
         NOTIFY VitalSignsChanged
     )
@@ -88,6 +89,7 @@ signals:
     void StateChanged();
     void VitalSignsChanged();
     void ScenarioChanged();
+    void HeartbeatOccurred();
 
 private slots:
     void UpdateVitalSigns();
