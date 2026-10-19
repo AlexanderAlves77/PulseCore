@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 
 PulseCard {
     id: root
@@ -9,39 +10,40 @@ PulseCard {
 
     property alias waveformContent: waveformContainer.data
 
-    cardSize: "LARGE"
+    cardSize: "MEDIUM"
 
-    Column {
+    ColumnLayout {
         anchors.fill: parent
-        spacing: 12
+        spacing: 8
 
-        Row {
-            width: parent.width
-            height: 28
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 24
+            spacing: 10
 
             PulseLabel {
                 text: root.title
                 labelColor: root.waveformColor
-                labelSize: 20
+                labelSize: 16
                 emphasized: true
-            }
-
-            Item {
-                width: 12
-                height: 1
             }
 
             PulseLabel {
                 text: root.unit
                 labelSize: 12
             }
+
+            Item {
+                Layout.fillWidth: true
+            }
         }
 
         Item {
             id: waveformContainer
 
-            width: parent.width
-            height: Math.max(0, parent.height - 40)
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            clip: true
         }
     }
 }
