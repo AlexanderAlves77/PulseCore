@@ -10,6 +10,7 @@ Item {
     property real temperature: 0
 
     property bool running: false
+    property bool hasData: false
 
     ColumnLayout {
         anchors.fill: parent
@@ -19,15 +20,18 @@ Item {
             id: heartRateCard
 
             Layout.fillWidth: true
-            Layout.preferredHeight: 300
+            Layout.fillHeight: true
+            Layout.preferredHeight: 340
+            Layout.minimumHeight: 240
 
             heartRate: root.heartRate
             running: root.running
+            hasData: root.hasData
         }
 
         GridLayout {
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: 220
 
             columns: 2
             rowSpacing: 12
@@ -41,6 +45,13 @@ Item {
                 value: root.oxygenSaturation
                 unit: "%"
                 accentColor: "#00DDF2"
+
+                hasData: root.hasData
+
+                minimumCritical: 85
+                minimumNormal: 95
+                maximumNormal: 100
+                maximumCritical: 100
             }
 
             CompactVitalCard {
@@ -51,6 +62,13 @@ Item {
                 value: root.respiratoryRate
                 unit: "rpm"
                 accentColor: "#FF405D"
+
+                hasData: root.hasData
+
+                minimumCritical: 8
+                minimumNormal: 12
+                maximumNormal: 20
+                maximumCritical: 30
             }
 
             CompactVitalCard {
@@ -62,6 +80,13 @@ Item {
                 decimals: 1
                 unit: "°C"
                 accentColor: "#FFE34A"
+
+                hasData: root.hasData
+
+                minimumCritical: 35
+                minimumNormal: 36
+                maximumNormal: 37.5
+                maximumCritical: 39.5
             }
         }
     }
