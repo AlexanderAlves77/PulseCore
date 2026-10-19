@@ -1,5 +1,6 @@
 import QtQuick
 
+import "Components/Layout"
 
 Window {
     id: window    
@@ -28,42 +29,13 @@ Window {
         color: window.backgroundColor
 
         // Header
-        Rectangle {
+        AppHeader {
             id: header
-            height: 90
-            color: window.surfaceColor
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-
-            // Application name
-            Text {
-                text: "PULSECORE"
-                color: window.textColor
-                font.pixelSize: 28
-                font.bold: true
-                anchors.left: parent.left
-                anchors.leftMargin: 32
-                anchors.verticalCenter: parent.verticalCenter
-            }
-
-            Rectangle {
-                width: 160
-                height: 36
-                radius: 8
-                color: "#273C35"
-                anchors.right: parent.right
-                anchors.rightMargin: 32
-                anchors.verticalCenter: parent.verticalCenter
-
-                Text {
-                    text: "SIMULATION"
-                    color: window.primaryColor
-                    font.pixelSize: 13
-                    font.bold: true
-                    anchors.centerIn: parent
-                }
-            }
+            titleColor: window.textColor
+            accentColor: window.primaryColor
         }
 
         // Footer
