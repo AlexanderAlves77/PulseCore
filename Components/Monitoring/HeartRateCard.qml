@@ -2,7 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 
 import "../DesignSystem"
-import "../Heart3D"
+import "../../Heart3D"
 
 PulseCard {
     id: root
@@ -60,6 +60,9 @@ PulseCard {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumWidth: 140
+
+            running: root.running
+            heartRate: root.heartRate
         }
     }
 
