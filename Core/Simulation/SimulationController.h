@@ -92,8 +92,8 @@ signals:
     void StateChanged();
     void VitalSignsChanged();
     void ScenarioChanged();
-    void HeartbeatOccurred();
-    void EcgSampleGenerated(double sample);
+    void heartbeatOccurred();
+    void ecgSampleGenerated(double sample);
 
 private slots:
     void UpdateVitalSigns();
