@@ -30,6 +30,9 @@ qt_add_executable(appPulseCore
 
     Core/Simulation/VitalSignsGenerator.h
     Core/Simulation/VitalSignsGenerator.cpp
+
+    Core/Simulation/EcgWaveformGenerator.h
+    Core/Simulation/EcgWaveformGenerator.cpp
 )
 
 target_include_directories(appPulseCore
