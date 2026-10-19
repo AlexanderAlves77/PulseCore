@@ -83,6 +83,18 @@ bool SimulationClock::IsRunning() const noexcept
 
 /* ======================================================================================== */
 
+double SimulationClock::GetBeatPhase() const
+{
+    if (beatIntervalSeconds <= 0.0)
+    {
+        return 0.0;
+    }
+
+    return beatPhaseSeconds / beatIntervalSeconds;
+}
+
+/* ======================================================================================== */
+
 double SimulationClock::GetElapsedSeconds() const noexcept
 {
     if (!running)
