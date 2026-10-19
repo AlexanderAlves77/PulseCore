@@ -9,6 +9,7 @@ PulseCard {
 
     property int heartRate: 0
     property bool running: false
+    property bool hasData: false
 
     readonly property string status: heartRateStatus.status
     readonly property color statusColor: heartRateStatus.statusColor
@@ -17,7 +18,7 @@ PulseCard {
 
     VitalStatus {
         id: heartRateStatus
-
+        hasData: root.hasData
         value: root.heartRate
 
         minimumCritical: 40
