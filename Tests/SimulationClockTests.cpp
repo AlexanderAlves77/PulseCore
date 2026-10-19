@@ -1,7 +1,6 @@
 #include <QtTest/QTest>
 #include <QtTest/QSignalSpy>
 #include "Core/Simulation/SimulationClock.h"
-#include "SimulationClockTests.moc"
 
 /* ======================================================================================== */
 
@@ -18,7 +17,7 @@ private slots:
 
 /* ======================================================================================== */
 
-void SimulationClockTestsShouldStartAndPause()
+void SimulationClockTests::ShouldStartAndPause()
 {
     SimulationClock clock;
 
@@ -33,7 +32,7 @@ void SimulationClockTestsShouldStartAndPause()
 
 /* ======================================================================================== */
 
-void SimulationClockTestsShouldEmitTicks()
+void SimulationClockTests::ShouldEmitTicks()
 {
     SimulationClock clock;
 
@@ -50,7 +49,7 @@ void SimulationClockTestsShouldEmitTicks()
 
 /* ======================================================================================== */
 
-void SimulationClockTestsShouldEmitHeartbeats()
+void SimulationClockTests::ShouldEmitHeartbeats()
 {
     SimulationClock clock;
 
@@ -69,7 +68,7 @@ void SimulationClockTestsShouldEmitHeartbeats()
 
 /* ======================================================================================== */
 
-void SimulationClockTestsShouldResetElapsedTime()
+void SimulationClockTests::ShouldResetElapsedTime()
 {
     SimulationClock clock;
 
@@ -83,6 +82,8 @@ void SimulationClockTestsShouldResetElapsedTime()
 
     QCOMPARE(clock.GetElapsedSeconds(), 0.0);
 }
+
+/* ======================================================================================== */
 
 QTEST_GUILESS_MAIN(SimulationClockTests)
 
