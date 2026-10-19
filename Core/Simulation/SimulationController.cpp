@@ -25,6 +25,13 @@ SimulationController::SimulationController(QObject * parent)
         this,
         &SimulationController::HeartbeatOccurred
     );
+
+    connect(
+        &simulationClock,
+        &SimulationClock::Tick,
+        this,
+        &SimulationController::UpdateEcgWaveform
+    );
 }
 
 bool SimulationController::IsRunning() const noexcept
@@ -226,6 +233,23 @@ void SimulationController::UpdateVitalSigns()
     );
 
     emit VitalSignsChanged();
+}
+
+/* ======================================================================================== */
+
+void SimulationController::UpdateEcgWaveform(double elapsedSeconds)
+{
+    if (currentState != SimulationState::RUNNING)
+    {
+        return;
+    }
+
+    const double sample = ecgWaveformGenerator.GenerateSample(
+        elapsedSeconds,
+        vitalSigns.heartRate
+    );
+
+    emit EcgSampleGenerated(sample);
 }
 
 /* ======================================================================================== */
