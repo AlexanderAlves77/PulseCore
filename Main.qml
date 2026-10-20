@@ -30,13 +30,14 @@ Window {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        surfaceColor: "#0B1621"
-        titleColor: "#F2F7FC"
-        accentColor: "#21F58B"
-        /*
+
+        patientName: "Adult"
+        scenarioName: "Normal"
+        simulationTime: "00:00:00"
+
         surfaceColor: pulseTheme.surfaceColor
         titleColor: pulseTheme.textColor
-        accentColor: pulseTheme.primaryColor */
+        accentColor: pulseTheme.primaryColor
     }
 
     AppFooter {
