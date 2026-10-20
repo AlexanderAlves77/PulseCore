@@ -1,41 +1,48 @@
 import QtQuick
+import QtQuick.Layouts
 
-Row {
+
+RowLayout {
     id: root
 
     property real value: 0
     property int decimals: 0
     property string unit: ""
-    property color valueColor: "#21F58B"
+
+    property color valueColor: "#F2F7FC"
     property color unitColor: "#9AB6C8"
+
     property int valueSize: 64
-    property int unitSize: 16
+    property int unitSize: 14
+    property int numberSpacing: 6
 
-    spacing: 8
+    property string fontFamily: "Segoe UI"
+    property bool emphasized: true
+    property bool hasData: false
 
-    Text {
-        id: numberText
+    spacing: numberSpacing
 
-        text: Number(root.value).toFixed(root.decimals)
-        color: root.valueColor
+    PulseLabel {
+        id: valueLabel
 
-        font.family: "Segoe UI"
-        font.pixelSize: root.valueSize
-        font.bold: true
+        text: root.hasData ? Number(root.value).toFixed(root.decimals) : "--"
+        labelColor: root.valueColor
+        labelSize: root.valueSize
+        fontFamily: root.fontFamily
+        emphasized: root.emphasized
 
-        verticalAlignment: Text.AlignVCenter
+        Layout.alignment: Qt.AlignBaseline
     }
 
-    Text {
-        id: unitText
+    PulseLabel {
+        id: unitLabel
 
         text: root.unit
+        labelColor: root.unitColor
+        labelSize: root.unitSize
+        fontFamily: root.fontFamily
+
+        Layout.alignment: Qt.AlignBaseline
         visible: root.unit.length > 0
-        color: root.unitColor
-
-        font.family: "Segoe UI"
-        font.pixelSize: root.unitSize
-
-        anchors.baseline: numberText.baseline
     }
 }
