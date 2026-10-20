@@ -284,4 +284,54 @@ QtObject {
     readonly property int monitorSignalBarHeight2: 11
     readonly property int monitorSignalBarHeight3: 15
     readonly property int monitorSignalBarHeight4: 19
+
+    // Layout - AppHeader defaults
+    readonly property string appHeaderPatientName: defaultPatientName
+    readonly property string appHeaderScenarioName: defaultScenarioName
+    readonly property string appHeaderSimulationTime: "00:00:00"
+    readonly property string appHeaderSimulationLabel: "Simulation"
+
+    // Layout - AppHeader colors
+    readonly property color appHeaderBackground: surfaceInset
+    readonly property color appHeaderTitleColor: textPrimary
+    readonly property color appHeaderSecondaryColor: textSecondary
+    readonly property color appHeaderAccentColor: cyan
+    readonly property color appHeaderBorderColor: border
+
+    // Layout - AppHeader geometry
+    readonly property int appHeaderHeight: 76
+    readonly property int appHeaderHorizontalPadding: spacingLarge
+    readonly property int appHeaderComponentSpacing: spacingMedium
+    readonly property int appHeaderDividerHeight: dividerHeaderLength
+
+    // Layout - AppHeader component widths
+    readonly property int appHeaderBrandMinimumWidth: 230
+    readonly property int appHeaderPatientWidth: 135
+    readonly property int appHeaderScenarioWidth: 155
+    readonly property int appHeaderClockWidth: 195
+
+    // Layout - AppHeader clock
+    readonly property int appHeaderClockIconSize: 23
+    readonly property int appHeaderClockValueSize: fontSmall
+    readonly property int appHeaderClockSpacing: 7
+    readonly property int appHeaderClockColumnSpacing: spacingTiny
+
+    // Layout - AppHeader simulation
+    readonly property int appHeaderSimulationLeftMargin: 30
+    readonly property int appHeaderSimulationSpacing: spacingCompact
+    readonly property int appHeaderSimulationLabelSize: fontCaption
+    readonly property int appHeaderSimulationValueSize: fontLabel
+
+    // Layout - AppHeader actions
+    readonly property int appHeaderBatteryIconSize: iconLarge
+    readonly property int appHeaderBatteryTextSize: fontBody
+    readonly property int appHeaderBatterySpacing: spacingCompact
+    readonly property int appHeaderSettingsButtonSize: 42
+    readonly property int appHeaderSettingsIconSize: 25
+    readonly property int appHeaderActionsSpacing: 12
+
+    // Layout - AppHeader timing
+    readonly property int appHeaderClockInterval: 1000
+    readonly property string appHeaderDateFormat: "dd/MM/yyyy"
+    readonly property string appHeaderTimeFormat: "HH:mm:ss"
 }
