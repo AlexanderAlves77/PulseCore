@@ -14,51 +14,54 @@ PulseCore is being developed incrementally, with each functional module implemen
 
 ## Application Preview
 
-### Medical Device Monitoring Dashboard
+### Medical Device Monitoring Dashboard — Latest Progress (October 20, 2026)
 
-The current PulseCore interface provides a dark-themed monitoring dashboard that combines synthetic physiological visualizations with interactive simulation controls.
+![PulseCore — Updated monitoring dashboard with simulated waveforms and 3D heart](docs/images/pulsecore-dashboard-3d-02.png)
 
-![PulseCore — Medical Device Monitoring Dashboard](docs/images/pulsecore-dashboard-3d.png)
+*Current work in progress: synthetic ECG, plethysmography (SpO₂), respiration, and capnography waveforms; simulated vital signs; interactive Start/Pause/Reset controls; and an animated anatomical 3D heart.*
 
-*PulseCore dashboard featuring an animated synthetic ECG waveform, simulated vital signs, and a textured anatomical 3D heart with rotation and heartbeat animations.*
+**[▶ Watch the PulseCore development demo (MP4, ~48 seconds)](docs/videos/pulsecore-progress-2026-10-20.mp4)**
 
-The interface is implemented using reusable QML components, while Qt Quick 3D provides real-time rendering of the anatomical heart model.
+[![Watch PulseCore development demo](docs/images/pulsecore-dashboard-3d-02.png)](docs/videos/pulsecore-progress-2026-10-20.mp4)
 
-All displayed measurements and animations are simulated and do not represent actual patient information.
+### Earlier Dashboard Preview
+
+![PulseCore — Earlier medical device monitoring dashboard](docs/images/pulsecore-dashboard-3d.png)
+
+*Earlier iteration showing the initial ECG monitor, vital sign cards, and Qt Quick 3D heart integration.*
+
+All displayed measurements and waveforms are synthetic. PulseCore is not intended for clinical use.
 
 ---
 
 ## Project Status
 
-**Current phase:** Functional QML dashboard and anatomical 3D heart visualization completed.
+**Current phase:** Active development — dashboard layout, C++ simulation integration, and synthetic monitoring signals.
 
-The application currently includes a working desktop interface with animated visual components and basic simulation state controls.
-
-The next development phases will focus on shared simulation data, C++20 application logic, monitoring scenarios, simulated alarms, and automated testing.
+The current prototype demonstrates a working C++/QML monitoring interface with simulated vital sign updates, ECG sampling, three additional demonstration waveforms, a textured anatomical 3D heart, and simulation controls.
 
 ### Implemented Features
 
-- [x] C++20 and Qt 6 project configuration
-- [x] CMake-based build configuration
-- [x] Qt Quick/QML application interface
-- [x] Dark-themed monitoring dashboard
-- [x] Reusable QML visual components
-- [x] Animated synthetic ECG waveform
-- [x] Heart rate (HR) display
-- [x] Oxygen saturation (SpO₂) display
-- [x] Respiratory rate (RESP) display
-- [x] Body temperature (TEMP) display
-- [x] Start, Pause, and Reset controls
-- [x] Basic simulation state management in QML
-- [x] Qt Quick 3D integration
-- [x] Anatomical 3D heart model import
-- [x] Anatomical heart textures and materials
-- [x] Continuous 3D heart rotation
-- [x] Simulated heartbeat animation
-- [x] Integration of the 3D heart into the main dashboard
+- [x] C++20 / Qt 6 project and CMake configuration
+- [x] Dark-themed Qt Quick/QML dashboard and reusable UI components
+- [x] Centralized visual design tokens in `PulseTheme.qml`
+- [x] Synthetic ECG waveform from the simulation layer
+- [x] Demonstration plethysmography (SpO₂), respiration, and capnography waveforms generated in QML
+- [x] Simulated heart rate, SpO₂, respiratory rate, and temperature displays
+- [x] Start, Pause, and Reset simulation controls
+- [x] C++ simulation controller integration with QML
+- [x] Qt Quick 3D anatomical heart model, materials, rotation, and heartbeat animation
 - [x] Educational and non-clinical-use disclaimer
 
-**Current limitation:** The displayed vital signs use predefined demonstration values. A dedicated C++ simulation engine, dynamically generated measurements, and clinically meaningful physiological behavior have not been implemented.
+### Work in Progress
+
+- [ ] Dedicated C++ generators for plethysmography, respiration, and capnography
+- [ ] CO₂ measurement and other unavailable sensor data
+- [ ] Normal, Warning, and Critical scenario selection and behavior
+- [ ] Additional bottom navigation and monitoring screens
+- [ ] Automated tests, robustness, and distribution
+
+**Current limitation:** Plethysmography, respiration, and capnography curves are visual demonstrations, not acquired sensor signals. The displayed CO₂ measurement remains unavailable. Physiological realism and clinical accuracy are not goals of this prototype.
 
 ---
 
@@ -66,7 +69,7 @@ The next development phases will focus on shared simulation data, C++20 applicat
 
 | Technology | Purpose |
 |---|---|
-| C++20 | Application entry point and planned simulation engine |
+| C++20 | Application entry point and simulation controller/generators |
 | Qt 6.12 | Desktop application framework |
 | Qt Quick / QML | User interface and animations |
 | Qt Quick 3D | Anatomical heart visualization |
@@ -106,17 +109,19 @@ The current presentation layer contains reusable components responsible for disp
 
 The anatomical heart visualization uses an imported 3D model, original texture resources, lighting, and QML animations.
 
-**Simulation State — QML**
+**Simulation and State — C++20 + QML**
 
-The current interface manages basic `RUNNING`, `PAUSED`, and `STOPPED` states. These states control the visual animations and simulation controls.
+The simulation controller exposes state and synthetic vital sign data to QML. QML renders the monitoring interface and generates the additional demonstration waveforms.
 
 ### Current QML Components
 
 | Component | Responsibility |
 |---|---|
 | `Main.qml` | Main application window and dashboard composition |
-| `VitalCard.qml` | Reusable simulated vital signs card |
-| `EcgWaveform.qml` | Animated synthetic ECG visualization |
+| `Components/Controls/VitalMonitorCard.qml` | Reusable vital signs monitor card |
+| `EcgWaveform.qml` | Synthetic ECG visualization |
+| `Components/Monitoring/LeftMonitoringPanel.qml` | ECG, plethysmography, respiration, and capnography display |
+| `Components/Monitoring/RightMonitoringPanel.qml` | Heart rate, 3D heart, and vital signs composition |
 | `SimulationControls.qml` | Start, Pause, and Reset controls |
 | `SimulationButton.qml` | Reusable interactive button |
 | `Heart3D/Heart3D.qml` | 3D heart scene, lighting, and animations |
@@ -124,11 +129,11 @@ The current interface manages basic `RUNNING`, `PAUSED`, and `STOPPED` states. T
 
 ### Planned Architecture
 
-Future development will introduce a dedicated C++20 simulation layer responsible for:
+The simulation layer is under development. Remaining or planned responsibilities include:
 
-- Synthetic vital sign generation
-- Centralized simulation state management
-- Heartbeat frequency synchronization
+- Additional synthetic waveform generators
+- Expanded simulation state handling
+- More accurate heartbeat and waveform timing
 - Normal, Warning, and Critical scenarios
 - Simulated sensor connection states
 - Alarm evaluation and notification logic
@@ -141,17 +146,15 @@ The goal is to maintain clear responsibilities, reusable components, and a separ
 
 ## Simulation Controls
 
-PulseCore currently provides three interactive controls.
+PulseCore provides three interactive controls connected to the simulation controller.
 
 | Control | Current Behavior |
 |---|---|
-| Start | Activates the visual simulation animations |
-| Pause | Stops the visual animations |
-| Reset | Changes the simulation state to `STOPPED` and resets the ECG animation offset |
+| Start | Starts or resumes the simulated monitoring updates |
+| Pause | Pauses simulated monitoring updates |
+| Reset | Resets the simulation and clears waveform buffers |
 
-The current controls operate through QML state management.
-
-A future implementation will extend these controls to manage a centralized C++ simulation engine, including more complete pause, resume, and reset behavior.
+The controls are connected to the C++ simulation controller through QML.
 
 ---
 
@@ -175,8 +178,8 @@ The heartbeat animation is a simplified visual effect and is not intended to rep
 
 ### Planned Improvements
 
-- Synchronization with simulated heart rate values
-- Dynamic heartbeat animation speed
+- Refined synchronization with simulated heart rate values
+- More precise heartbeat animation timing
 - Improved animation state handling
 - Additional visualization settings
 - Enhanced monitoring scenarios
@@ -249,12 +252,12 @@ PulseCore is developed through incremental functional blocks.
 
 ### Phase 4 — Simulation Engine
 
-- [ ] Design the C++20 simulation engine
-- [ ] Implement centralized simulation state management
-- [ ] Generate synthetic vital sign measurements
-- [ ] Synchronize the heart animation with simulated HR
-- [ ] Connect the simulation engine to QML
-- [ ] Implement complete Start, Pause, and Reset behavior
+- [x] Introduce the C++20 simulation controller and synthetic ECG/vital sign updates
+- [x] Connect the simulation controller to QML
+- [x] Implement Start, Pause, and Reset controls
+- [x] Add demonstration Pleth, Respiration, and Capnography curves in QML
+- [ ] Move additional waveform generation into the C++ simulation layer
+- [ ] Refine time-based synchronization and simulation scenarios
 
 ### Phase 5 — Monitoring Scenarios
 
@@ -305,7 +308,7 @@ PulseCore is an educational and portfolio software engineering project.
 
 The application does not connect to medical equipment, acquire real physiological measurements, process real patient data, or provide medical diagnoses.
 
-Displayed vital signs, ECG waveforms, heartbeat animations, and monitoring scenarios are synthetic demonstrations.
+Displayed vital signs, ECG and other waveforms, heartbeat animations, and monitoring scenarios are synthetic demonstrations.
 
 PulseCore is not validated or certified as a medical device and must not be used for clinical monitoring or medical decision-making.
 
