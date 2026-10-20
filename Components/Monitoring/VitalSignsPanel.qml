@@ -13,6 +13,7 @@ Item {
 
     property int cardSpacing: 8
     property int cardHeight: 72
+    property int signalStrength: 0
 
     property real oxygenSaturation: 0.0
     property real respiratoryRate: 0.0
@@ -20,9 +21,13 @@ Item {
     property real endTidalCo2: 0.0
     property real perfusionIndex: 0.0
     property real airwayRespiratoryRate: 0.0
+    property real temperatureT1: 0.0
+    property real temperatureT2: 0.0
+    property real temperatureDelta: 0.0
 
     property bool hasSimulationData: false
     property bool hasCo2Data: false
+    property bool hasSignalData: false
     property bool hasPerfusionIndexData: false
     property bool hasAirwayRespiratoryRateData: false
 
@@ -31,6 +36,7 @@ Item {
 
     ColumnLayout {
         id: cardsLayout
+
         anchors.fill: parent
         spacing: root.cardSpacing
 
@@ -39,7 +45,7 @@ Item {
             Layout.preferredHeight: root.cardHeight
 
             title: "Oxygen Saturation"
-            subtitle: "SpO₂ %"
+            subtitle: "SpO2 %"
             iconName: "lungs"
 
             value: root.oxygenSaturation
@@ -58,6 +64,11 @@ Item {
             detailValue: root.hasPerfusionIndexData
                          ? root.perfusionIndex.toFixed(1)
                          : "--"
+
+            showSignal: root.hasSignalData
+            signalStrength: root.signalStrength
+
+            showTemperatureDetails: false
         }
 
         VitalMonitorCard {
@@ -78,15 +89,18 @@ Item {
             showScale: true
             scaleMaximum: 50
             scaleMinimum: 0
+
             showDetails: false
+            showSignal: false
+            showTemperatureDetails: false
         }
 
         VitalMonitorCard {
             Layout.fillWidth: true
             Layout.preferredHeight: root.cardHeight
 
-            title: "End Tidal CO₂"
-            subtitle: "EtCO₂ mmHg"
+            title: "End Tidal CO2"
+            subtitle: "EtCO2 mmHg"
             iconName: "lungs"
 
             value: root.endTidalCo2
@@ -105,6 +119,9 @@ Item {
             detailValue: root.hasAirwayRespiratoryRateData
                          ? root.airwayRespiratoryRate.toFixed(0)
                          : "--"
+
+            showSignal: false
+            showTemperatureDetails: false
         }
 
         VitalMonitorCard {
@@ -124,6 +141,17 @@ Item {
 
             showScale: false
             showDetails: false
+            showSignal: false
+
+            showTemperatureDetails: true
+
+            temperatureT1: root.temperatureT1
+            temperatureT2: root.temperatureT2
+            temperatureDelta: root.temperatureDelta
+
+            hasTemperatureT1: root.hasTemperatureT1
+            hasTemperatureT2: root.hasTemperatureT2
+            hasTemperatureDelta: root.hasTemperatureDelta
         }
     }
 }
