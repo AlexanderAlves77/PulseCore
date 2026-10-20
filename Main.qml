@@ -93,10 +93,6 @@ Window {
         backgroundColor: "#050B12"
         surfaceColor: "#0B1621"
         borderColor: "#16435A"
-        /*
-        backgroundColor: pulseTheme.backgroundColor
-        surfaceColor: pulseTheme.surfaceColor
-        borderColor: pulseTheme.borderColor */
 
         ColumnLayout {
             id: dashboardLayout
