@@ -18,7 +18,7 @@ PulseCard {
     property string fontFamily: theme.fontFamily
     property string unit: ""
 
-    // Detail information
+    // Additional information
     property string detailTitle: ""
     property string detailValue: ""
     property string detailUnit: ""
@@ -42,20 +42,21 @@ PulseCard {
     property int valueSize: theme.monitorValueSize
     property int iconSize: theme.monitorIconSize
 
-    // Card geometry
+    // Layout
     property int cardHeight: theme.monitorCardHeight
     property int contentSpacing: theme.monitorContentSpacing
 
-    // Signal
-    property int signalStrength: 0
-
     // Measurements
     property real value: 0.0
-    property real scaleMaximum: theme.monitorScaleMaximum
     property real scaleMinimum: theme.monitorScaleMinimum
+    property real scaleMaximum: theme.monitorScaleMaximum
+
     property real temperatureT1: 0.0
     property real temperatureT2: 0.0
     property real temperatureDelta: 0.0
+
+    // Signal
+    property int signalStrength: 0
 
     // Visibility
     property bool showIcon: true
@@ -64,22 +65,29 @@ PulseCard {
     property bool showDetails: false
     property bool hasData: false
     property bool showSignal: false
+    property bool showTemperatureDetails: false
+
+    // Temperature availability
     property bool hasTemperatureT1: false
     property bool hasTemperatureT2: false
     property bool hasTemperatureDelta: false
-    property bool showTemperatureDetails: false
 
-    // Derived properties
-    readonly property int displayedSignalStrength:
-        Math.max(0, Math.min(theme.monitorSignalMaximum, root.signalStrength))
-
+    // Derived state
     readonly property bool compactMode: height < theme.monitorCompactThreshold
 
-    readonly property int effectiveIconSize: compactMode ?
-        theme.monitorCompactIconSize : root.iconSize
+    readonly property int effectiveIconSize: compactMode ? theme.monitorCompactIconSize : iconSize
 
-    readonly property int effectiveValueSize: compactMode ?
-        theme.monitorCompactValueSize : root.valueSize
+    readonly property int effectiveValueSize: compactMode ? theme.monitorCompactValueSize : valueSize
+
+    readonly property int effectiveBadgeHeight: compactMode ? 20 : theme.badgeHeight
+
+    readonly property int effectiveBadgeTextSize: compactMode ? theme.fontTiny : theme.fontLabel
+
+    readonly property int displayedSignalStrength:
+        Math.max(
+            0,
+            Math.min(theme.monitorSignalMaximum, signalStrength)
+        )
 
     preferredWidth: theme.monitorCardWidth
     preferredHeight: cardHeight
@@ -88,8 +96,9 @@ PulseCard {
 
     RowLayout {
         id: contentLayout
+
         anchors.fill: parent
-        spacing: root.contentSpacing
+        spacing: root.compactMode ? theme.spacingCompact : root.contentSpacing
 
         // Medical icon
         PulseIcon {
@@ -109,24 +118,34 @@ PulseCard {
         // Monitor identification
         ColumnLayout {
             id: monitorInformation
+
             Layout.preferredWidth: theme.monitorTitleWidth
-            Layout.minimumWidth: theme.monitorTitleMinimumWidth
+            Layout.minimumWidth: 75
+            Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
+
             spacing: theme.spacingTiny
 
             PulseLabel {
                 text: root.title
+
                 labelColor: root.titleColor
                 labelSize: root.compactMode ? theme.monitorCompactTitleSize : root.titleSize
+
                 fontFamily: root.fontFamily
                 emphasized: true
+
+                Layout.fillWidth: true
             }
 
             PulseLabel {
                 text: root.subtitle
+
                 labelColor: root.secondaryColor
                 labelSize: root.subtitleSize
                 fontFamily: root.fontFamily
+
+                Layout.fillWidth: true
             }
         }
 
@@ -154,12 +173,15 @@ PulseCard {
         // Measurement scale
         RowLayout {
             id: monitorScale
+
             visible: root.showScale
+
             spacing: theme.monitorScaleSpacing
             Layout.alignment: Qt.AlignVCenter
 
             Rectangle {
                 implicitWidth: theme.monitorScaleBarWidth
+
                 implicitHeight: root.compactMode
                                 ? theme.monitorCompactScaleBarHeight
                                 : theme.monitorScaleBarHeight
@@ -185,12 +207,7 @@ PulseCard {
             }
         }
 
-        Item {
-            Layout.fillWidth: true
-            Layout.minimumWidth: 0
-        }
-
-        // Additional monitor information
+        // Status and additional measurements
         ColumnLayout {
             id: detailsLayout
 
@@ -205,12 +222,12 @@ PulseCard {
             Layout.alignment: Qt.AlignVCenter
 
             spacing: root.compactMode
-                     ? theme.monitorCompactDetailSpacing
-                     : theme.monitorDetailSpacing
+                     ? theme.monitorCompactDetailSpacing : theme.monitorDetailSpacing
 
-            // Detail panel
+            // Additional measurement
             Rectangle {
                 id: detailPanel
+
                 visible: root.showDetails
 
                 Layout.fillWidth: true
@@ -258,7 +275,6 @@ PulseCard {
                 Rectangle {
                     implicitWidth: theme.monitorSignalBarWidth
                     implicitHeight: theme.monitorSignalBarHeight1
-
                     radius: theme.monitorSignalBarRadius
 
                     color: root.displayedSignalStrength >= 1
@@ -268,7 +284,6 @@ PulseCard {
                 Rectangle {
                     implicitWidth: theme.monitorSignalBarWidth
                     implicitHeight: theme.monitorSignalBarHeight2
-
                     radius: theme.monitorSignalBarRadius
 
                     color: root.displayedSignalStrength >= 2
@@ -278,7 +293,6 @@ PulseCard {
                 Rectangle {
                     implicitWidth: theme.monitorSignalBarWidth
                     implicitHeight: theme.monitorSignalBarHeight3
-
                     radius: theme.monitorSignalBarRadius
 
                     color: root.displayedSignalStrength >= 3
@@ -288,7 +302,6 @@ PulseCard {
                 Rectangle {
                     implicitWidth: theme.monitorSignalBarWidth
                     implicitHeight: theme.monitorSignalBarHeight4
-
                     radius: theme.monitorSignalBarRadius
 
                     color: root.displayedSignalStrength >= 4
@@ -296,7 +309,7 @@ PulseCard {
                 }
             }
 
-            // Temperature measurements
+            // Temperature details
             RowLayout {
                 id: temperatureDetails
 
@@ -306,7 +319,7 @@ PulseCard {
                 spacing: theme.monitorTemperatureSpacing
 
                 ColumnLayout {
-                    spacing: 1
+                    spacing: 0
 
                     PulseLabel {
                         text: root.temperatureT1Label
@@ -325,11 +338,10 @@ PulseCard {
                 }
 
                 ColumnLayout {
-                    spacing: 1
+                    spacing: 0
 
                     PulseLabel {
                         text: root.temperatureT2Label
-
                         labelColor: root.secondaryColor
                         labelSize: theme.monitorDetailTitleSize
                     }
@@ -345,11 +357,10 @@ PulseCard {
                 }
 
                 ColumnLayout {
-                    spacing: 1
+                    spacing: 0
 
                     PulseLabel {
                         text: root.temperatureDeltaLabel
-
                         labelColor: root.secondaryColor
                         labelSize: theme.monitorDetailTitleSize
                     }
@@ -368,8 +379,14 @@ PulseCard {
             // Clinical status
             PulseBadge {
                 id: monitorStatus
+
                 status: root.hasData ? root.status : theme.monitorNoDataStatus
+
                 visible: root.showStatus
+
+                badgeHeight: root.effectiveBadgeHeight
+                textSize: root.effectiveBadgeTextSize
+
                 Layout.alignment: Qt.AlignHCenter
             }
         }
