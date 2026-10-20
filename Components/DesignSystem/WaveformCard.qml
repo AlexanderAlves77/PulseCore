@@ -12,7 +12,9 @@ PulseCard {
 
     readonly property var waveformItem: waveformLoader.item
 
-    cardSize: "MEDIUM"
+    preferredWidth: 500
+    preferredHeight: 136
+    contentPadding: 12
 
     ColumnLayout {
         anchors.fill: parent
@@ -48,6 +50,7 @@ PulseCard {
 
             Loader {
                 id: waveformLoader
+
                 anchors.fill: parent
                 sourceComponent: root.waveformDelegate
             }
