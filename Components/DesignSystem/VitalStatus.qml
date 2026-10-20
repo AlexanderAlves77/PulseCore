@@ -3,9 +3,8 @@ import QtQuick
 QtObject {
     id: root
 
-    PulseTheme {
-        id: theme
-    }
+    // Theme
+    property PulseTheme theme: PulseTheme {}
 
     // Vital sign data
     property bool hasData: false
@@ -41,17 +40,17 @@ QtObject {
         return "NORMAL"
     }
 
-    // Derived status color
+    // Derived appearance
     readonly property color statusColor: {
         switch (root.status) {
-        case "CRITICAL":
-            return root.criticalColor
+        case "NORMAL":
+            return root.normalColor
 
         case "WARNING":
             return root.warningColor
 
-        case "NORMAL":
-            return root.normalColor
+        case "CRITICAL":
+            return root.criticalColor
 
         default:
             return root.unavailableColor
