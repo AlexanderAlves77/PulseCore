@@ -29,7 +29,7 @@ Item {
 
         onPaint: {
             const context = getContext("2d")
-            context.resedt()
+            context.reset()
 
             context.strokeStyle = root.iconColor
             context.fillStyle = root.iconColor
