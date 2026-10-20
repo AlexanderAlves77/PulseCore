@@ -3,28 +3,34 @@ import QtQuick
 Rectangle {
     id: root
 
-    property color cardColor: "#0B1621"
-    property color borderColor: "#16435A"
+    PulseTheme {
+        id: theme
+    }
 
-    property int borderThickness: 1
-    property int cornerRadius: 14
-    property int contentPadding: 16
+    // Appearance
+    property color cardColor: theme.surface
+    property color borderColor: theme.border
 
+    property int borderThickness: theme.cardBorderWidth
+    property int cornerRadius: theme.cardRadius
+    property int contentPadding: theme.cardPadding
+
+    // Dimensions
     property int preferredWidth: 320
-    property int preferredHeight: 136
+    property int preferredHeight: theme.cardMediumHeight
 
     property bool outlined: true
 
     default property alias content: contentContainer.data
 
-    implicitWidth: preferredWidth
-    implicitHeight: preferredHeight
+    implicitWidth: root.preferredWidth
+    implicitHeight: root.preferredHeight
 
-    radius: cornerRadius
-    color: cardColor
+    radius: root.cornerRadius
+    color: root.cardColor
 
-    border.color: borderColor
-    border.width: outlined ? borderThickness : 0
+    border.color: root.borderColor
+    border.width: root.outlined ? root.borderThickness : 0
 
     Item {
         id: contentContainer
