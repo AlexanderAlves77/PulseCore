@@ -30,9 +30,9 @@ Item {
             hasData: root.hasData
         }
 
-        GridLayout {
+        GridLayout {            
             Layout.fillWidth: true
-            Layout.fillHeight: false
+            Layout.fillHeight: false            
             Layout.preferredHeight: 188
             Layout.minimumHeight: 188
             Layout.maximumHeight: 188
@@ -62,7 +62,7 @@ Item {
             CompactVitalCard {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.preferredHeight: 94
+                Layout.preferredHeight: 89
 
                 title: "RESP"
                 value: root.respiratoryRate
@@ -78,9 +78,10 @@ Item {
             }
 
             CompactVitalCard {
+                Layout.columnSpan: 2
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                Layout.preferredHeight: 94
+                Layout.preferredHeight: 89
 
                 title: "TEMP"
                 value: root.temperature
