@@ -1,64 +1,94 @@
 import QtQuick
 import QtQuick.Layouts
+
 import "../DesignSystem"
 
 RowLayout {
     id: root
 
-    property string title: "Patient"
-    property string patientName: "Adult"
-    property string patientType: "Simulation"
-    property string iconName: "patient"
-    property string separator: " · "
-    property string fontFamily: "Segoe UI"
+    PulseTheme {
+        id: theme
+    }
 
-    property color titleColor: "#9AB6C8"
-    property color valueColor: "#F2F7FC"
-    property color typeColor: "#9AB6C8"
-    property color iconColor: "#00DDF2"
+    // Patient information
+    property string title: theme.patientTitle
+    property string patientName: theme.defaultPatientName
+    property string patientType: theme.defaultPatientType
 
+    // Icon configuration
+    property string iconName: theme.patientIconName
+    property color iconColor: theme.cyan
     property int iconSize: 26
-    property int titleSize: 11
-    property int valueSize: 14
-    property int contentSpacing: 10
-    property int textSpacing: 3
 
-    spacing: contentSpacing
+    // Typography
+    property string fontFamily: theme.fontFamily
+
+    property int titleSize: theme.fontLabel
+    property int valueSize: 14
+
+    // Colors
+    property color titleColor: theme.textSecondary
+    property color valueColor: theme.textPrimary
+    property color typeColor: theme.textSecondary
+
+    // Layout
+    property string separator: " · "
+    property int contentSpacing: theme.spacingCard
+    property int textSpacing: theme.spacingTiny
+
+    spacing: root.contentSpacing
 
     PulseIcon {
+        id: patientIcon
+
         iconName: root.iconName
-        iconColor: root.accentColor
+        iconColor: root.iconColor
         iconSize: root.iconSize
 
         Layout.alignment: Qt.AlignVCenter
     }
 
     ColumnLayout {
+        id: patientContent
+
         spacing: root.textSpacing
 
         PulseLabel {
+            id: patientTitle
+
             text: root.title
+
             labelColor: root.titleColor
             labelSize: root.titleSize
             fontFamily: root.fontFamily
         }
 
         RowLayout {
+            id: patientDetails
+
             spacing: 0
 
             PulseLabel {
-                text: root.primaryName
+                id: patientNameLabel
+
+                text: root.patientName
+
                 labelColor: root.valueColor
                 labelSize: root.valueSize
                 fontFamily: root.fontFamily
+
                 emphasized: true
             }
 
             PulseLabel {
+                id: patientTypeLabel
+
                 text: root.separator + root.patientType
+
                 labelColor: root.typeColor
                 labelSize: root.valueSize
                 fontFamily: root.fontFamily
+
                 visible: root.patientType.length > 0
             }
         }
