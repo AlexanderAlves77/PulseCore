@@ -334,4 +334,17 @@ QtObject {
     readonly property int appHeaderClockInterval: 1000
     readonly property string appHeaderDateFormat: "dd/MM/yyyy"
     readonly property string appHeaderTimeFormat: "HH:mm:ss"
+
+    // Layout - HeaderInfo colors
+    readonly property color headerInfoTitleColor: textSecondary
+    readonly property color headerInfoValueColor: textPrimary
+
+    // Layout - HeaderInfo typography
+    readonly property int headerInfoTitleSize: fontLabel
+    readonly property int headerInfoValueSize: 14
+
+    // Layout - HeaderInfo geometry
+    readonly property int headerInfoWidth: 130
+    readonly property int headerInfoHeight: 44
+    readonly property int headerInfoSpacing: spacingTiny
 }
