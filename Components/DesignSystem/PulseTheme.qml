@@ -376,5 +376,17 @@ QtObject {
     // Layout - AppFooter geometry
     readonly property int appFooterHeight: 60
     readonly property int appFooterHorizontalPadding: paddingLarge
-    readonly property int appFooterVerticalPadding: paddingSmall
+    readonly property int appFooterVerticalPadding: paddingSmall    
+
+    // Monitoring - Right panel geometry
+    readonly property int rightPanelPreferredWidth: 500
+    readonly property int rightPanelPreferredHeight: 620
+
+    readonly property int rightPanelSpacing: spacingCard
+    readonly property int rightPanelVitalCardSpacing: spacingSmall
+
+    readonly property real rightPanelHeartRatio: 0.39
+    readonly property int rightPanelHeartMinimumHeight: 170
+    readonly property int rightPanelVitalMinimumHeight: 64
+    readonly property int rightPanelVitalCardCount: 4
 }
