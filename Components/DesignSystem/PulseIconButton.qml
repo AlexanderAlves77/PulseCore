@@ -3,27 +3,35 @@ import QtQuick
 Item {
     id: root
 
+    PulseTheme {
+        id: theme
+    }
+
+    // Icon
     property string iconName: "settings"
 
-    property color iconColor: "#00DDF2"
-    property color hoverColor: "#102D37"
-    property color pressedColor: "#16435A"
-    property color borderColor: "#16435A"
-    property color backgroundColor: "#0B1621"
+    // Appearance
+    property color iconColor: theme.cyan
+    property color hoverColor: theme.surfaceHover
+    property color pressedColor: theme.surfacePressed
+    property color borderColor: theme.border
+    property color backgroundColor: theme.surface
 
+    // Dimensions
     property int buttonSize: 40
-    property int iconSize: 24
-    property int cornerRadius: 8
-    property int borderThickness: 1
+    property int iconSize: theme.iconMedium
+    property int cornerRadius: theme.radiusMedium
+    property int borderThickness: theme.borderThin
 
+    // Behavior
     property bool outlined: true
 
     signal clicked()
 
-    implicitWidth: buttonSize
-    implicitHeight: buttonSize
+    implicitWidth: root.buttonSize
+    implicitHeight: root.buttonSize
 
-    opacity: enabled ? 1.0 : 0.4
+    opacity: root.enabled ? 1.0 : 0.4
 
     Rectangle {
         id: buttonBackground
