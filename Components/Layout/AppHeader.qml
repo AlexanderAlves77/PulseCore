@@ -7,38 +7,84 @@ import "../DesignSystem"
 Rectangle {
     id: root
 
-    property string patientName: "Adult"
-    property string scenarioName: "Normal"
-    property string simulationTime: "00:00:00"
+    PulseTheme {
+        id: theme
+    }
 
-    property color surfaceColor: "#07121D"
-    property color titleColor: "#F2F7FC"
-    property color secondaryColor: "#9AB6C8"
-    property color accentColor: "#00DDF2"
-    property color borderColor: "#16435A"
+    // Header information
+    property string patientName: theme.appHeaderPatientName
+    property string scenarioName: theme.appHeaderScenarioName
+    property string simulationTime: theme.appHeaderSimulationTime
+    property string simulationLabel: theme.appHeaderSimulationLabel
 
-    property int batteryLevel: 100
-    property int headerHeight: 76
-    property int horizontalPadding: 24
-    property int componentSpacing: 16
-    property int dividerHeight: 38
+    // Colors
+    property color surfaceColor: theme.appHeaderBackground
+    property color titleColor: theme.appHeaderTitleColor
+    property color secondaryColor: theme.appHeaderSecondaryColor
+    property color accentColor: theme.appHeaderAccentColor
+    property color borderColor: theme.appHeaderBorderColor
 
+    // Geometry
+    property int headerHeight: theme.appHeaderHeight
+    property int horizontalPadding: theme.appHeaderHorizontalPadding
+    property int componentSpacing: theme.appHeaderComponentSpacing
+    property int dividerHeight: theme.appHeaderDividerHeight
+
+    // Component widths
+    property int brandMinimumWidth: theme.appHeaderBrandMinimumWidth
+    property int patientWidth: theme.appHeaderPatientWidth
+    property int scenarioWidth: theme.appHeaderScenarioWidth
+    property int clockWidth: theme.appHeaderClockWidth
+
+    // Clock configuration
+    property int clockIconSize: theme.appHeaderClockIconSize
+    property int clockValueSize: theme.appHeaderClockValueSize
+    property int clockSpacing: theme.appHeaderClockSpacing
+    property int clockColumnSpacing: theme.appHeaderClockColumnSpacing
+    property int clockInterval: theme.appHeaderClockInterval
+
+    // Simulation information
+    property int simulationLeftMargin: theme.appHeaderSimulationLeftMargin
+    property int simulationSpacing: theme.appHeaderSimulationSpacing
+    property int simulationLabelSize: theme.appHeaderSimulationLabelSize
+    property int simulationValueSize: theme.appHeaderSimulationValueSize
+
+    // Action configuration
+    property int batteryLevel: theme.headerBatteryLevel
+    property int batteryIconSize: theme.appHeaderBatteryIconSize
+    property int batteryTextSize: theme.appHeaderBatteryTextSize
+    property int batterySpacing: theme.appHeaderBatterySpacing
+    property int settingsButtonSize: theme.appHeaderSettingsButtonSize
+    property int settingsIconSize: theme.appHeaderSettingsIconSize
+    property int actionsSpacing: theme.appHeaderActionsSpacing
+
+    // Clock state
     property date currentDateTime: new Date()
 
-    readonly property string currentDate: Qt.formatDate(root.currentDateTime, "dd/MM/yyyy")
+    readonly property string currentDate:
+        Qt.formatDate(
+            root.currentDateTime,
+            theme.appHeaderDateFormat
+        )
 
-    readonly property string currentTime: Qt.formatTime(root.currentDateTime, "HH:mm:ss")
+    readonly property string currentTime:
+        Qt.formatTime(
+            root.currentDateTime,
+            theme.appHeaderTimeFormat
+        )
 
+    // Events
     signal scenarioRequested()
     signal settingsRequested()
 
-    color: surfaceColor
-    implicitHeight: headerHeight
+    color: root.surfaceColor
+    implicitHeight: root.headerHeight
 
+    // Real-time clock
     Timer {
         id: clockTimer
 
-        interval: 1000
+        interval: root.clockInterval
         repeat: true
         running: true
         triggeredOnStart: true
@@ -48,17 +94,21 @@ Rectangle {
         }
     }
 
+    // Header composition
     RowLayout {
+        id: headerContent
+
         anchors.fill: parent
         anchors.leftMargin: root.horizontalPadding
         anchors.rightMargin: root.horizontalPadding
+
         spacing: root.componentSpacing
 
+        // Brand
         Item {
             Layout.fillWidth: true
-            Layout.minimumWidth: 230
+            Layout.minimumWidth: root.brandMinimumWidth
             Layout.alignment: Qt.AlignVCenter
-
             implicitHeight: brand.implicitHeight
 
             HeaderBrand {
@@ -75,10 +125,11 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
         }
 
+        // Patient
         HeaderPatient {
             patientName: root.patientName
-            patientType: "Simulation"
-            Layout.preferredWidth: 135
+            patientType: theme.defaultPatientType
+            Layout.preferredWidth: root.patientWidth
             Layout.alignment: Qt.AlignVCenter
         }
 
@@ -89,9 +140,10 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
         }
 
+        // Scenario
         HeaderScenario {
             scenarioName: root.scenarioName
-            Layout.preferredWidth: 155
+            Layout.preferredWidth: root.scenarioWidth
             Layout.alignment: Qt.AlignVCenter
 
             onScenarioRequested: {
@@ -106,40 +158,43 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
         }
 
+        // Clock and simulation time
         ColumnLayout {
-            Layout.preferredWidth: 195
+            id: clockSection
+            Layout.preferredWidth: root.clockWidth
             Layout.alignment: Qt.AlignVCenter
-
-            spacing: 3
+            spacing: root.clockColumnSpacing
 
             HeaderClock {
-                title: "Date & Time"
+                title: theme.clockTitle
 
-                showDate: true
-                showTime: true
+                showDate: theme.clockShowDate
+                showTime: theme.clockShowTime
 
                 dateText: root.currentDate
                 timeText: root.currentTime
 
-                iconSize: 23
-                valueSize: 12
-                contentSpacing: 7
+                iconSize: root.clockIconSize
+                valueSize: root.clockValueSize
+                contentSpacing: root.clockSpacing
             }
 
             RowLayout {
-                Layout.leftMargin: 30
-                spacing: 6
+                Layout.leftMargin: root.simulationLeftMargin
+                spacing: root.simulationSpacing
 
                 PulseLabel {
-                    text: "Simulation"
+                    text: root.simulationLabel
                     labelColor: root.secondaryColor
-                    labelSize: 10
+                    labelSize: root.simulationLabelSize
+                    fontFamily: theme.fontFamily
                 }
 
                 PulseLabel {
                     text: root.simulationTime
                     labelColor: root.accentColor
-                    labelSize: 11
+                    labelSize: root.simulationValueSize
+                    fontFamily: theme.fontFamily
                     emphasized: true
                 }
             }
@@ -152,17 +207,18 @@ Rectangle {
             Layout.alignment: Qt.AlignVCenter
         }
 
+        // Battery and settings
         HeaderActions {
             batteryLevel: root.batteryLevel
 
-            batteryIconSize: 28
-            batteryTextSize: 13
-            batterySpacing: 6
+            batteryIconSize: root.batteryIconSize
+            batteryTextSize: root.batteryTextSize
+            batterySpacing: root.batterySpacing
 
-            settingsButtonSize: 42
-            settingsIconSize: 25
+            settingsButtonSize: root.settingsButtonSize
+            settingsIconSize: root.settingsIconSize
 
-            contentSpacing: 12
+            contentSpacing: root.actionsSpacing
 
             Layout.alignment: Qt.AlignVCenter
 
@@ -172,11 +228,12 @@ Rectangle {
         }
     }
 
+    // Bottom separator
     Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        height: 1
+        height: theme.dividerThickness
         color: root.borderColor
     }
 }
