@@ -3,16 +3,24 @@ import QtQuick
 Rectangle {
     id: root
 
-    property color dividerColor: "#16435A"
-    property int dividerThickness: 1
-    property int dividerLength: 32
+    PulseTheme {
+        id: theme
+    }
 
-    property bool vertical: true
+    // Appearance
+    property color dividerColor: theme.border
+    property int dividerThickness: theme.dividerThickness
     property real dividerOpacity: 1.0
 
-    implicitWidth: vertical ? dividerThickness : dividerLength
-    implicitHeight: vertical ? dividerLength : dividerThickness
+    // Dimensions
+    property int dividerLength: 32
 
-    color: dividerColor
-    opacity: dividerOpacity
+    // Orientation
+    property bool vertical: true
+
+    implicitWidth: root.vertical ? root.dividerThickness : root.dividerLength
+    implicitHeight: root.vertical ? root.dividerLength : root.dividerThickness
+
+    color: root.dividerColor
+    opacity: root.dividerOpacity
 }
