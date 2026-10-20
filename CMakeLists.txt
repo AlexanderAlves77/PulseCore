@@ -106,7 +106,10 @@ qt_add_qml_module(appPulseCore
         Components/DesignSystem/PulseDivider.qml
         Components/DesignSystem/PulseStatusIndicator.qml
         Components/DesignSystem/WaveformPlaceholder.qml
+        Components/DesignSystem/PulseIcon.qml
+        Components/DesignSystem/PulseIconButton.qml
         Components/Layout/HeaderInfo.qml
+        Components/Controls/HeaderBrand.qml
 
     RESOURCES
         Heart3D/Imported/meshes/mesh_mesh.mesh
