@@ -3,16 +3,21 @@ import QtQuick
 Item {
     id: root
 
-    property string iconName: "heart"
-    property color iconColor: "#00DDF2"
+    PulseTheme {
+        id: theme
+    }
 
-    property int iconSize: 28
+    // Icon configuration
+    property string iconName: "heart"
+    property color iconColor: theme.cyan
+
+    property int iconSize: theme.iconLarge
     property real strokeWidth: 2.0
 
     property bool filled: false
 
-    implicitWidth: iconSize
-    implicitHeight: iconSize
+    implicitWidth: root.iconSize
+    implicitHeight: root.iconSize
 
     onIconNameChanged: iconCanvas.requestPaint()
     onIconColorChanged: iconCanvas.requestPaint()
@@ -21,7 +26,6 @@ Item {
 
     Canvas {
         id: iconCanvas
-
         anchors.fill: parent
 
         onWidthChanged: requestPaint()
@@ -45,7 +49,7 @@ Item {
             context.translate(centerX, centerY)
             context.scale(scale, scale)
 
-            switch (root.iconName){
+            switch (root.iconName) {
 
             case "heart":
                 context.beginPath()
@@ -139,73 +143,74 @@ Item {
                 break
 
             case "lungs":
-                context.beginPath();
+                context.translate(-14, -14)
 
                 // Trachea
-                context.moveTo(14, 3);
-                context.lineTo(14, 11);
+                context.beginPath()
+                context.moveTo(14, 3)
+                context.lineTo(14, 11)
 
                 // Left bronchus
-                context.moveTo(14, 11);
-                context.lineTo(10, 14);
+                context.moveTo(14, 11)
+                context.lineTo(10, 14)
 
                 // Right bronchus
-                context.moveTo(14, 11);
-                context.lineTo(18, 14);
-
-                context.stroke();
+                context.moveTo(14, 11)
+                context.lineTo(18, 14)
+                context.stroke()
 
                 // Left lung
-                context.beginPath();
-                context.moveTo(11, 7);
-                context.bezierCurveTo(8, 7, 6, 10, 5, 14);
-                context.bezierCurveTo(4, 18, 3, 23, 7, 24);
-                context.bezierCurveTo(10, 25, 12, 22, 12, 19);
-                context.lineTo(12, 12);
-                context.stroke();
+                context.beginPath()
+                context.moveTo(11, 7)
+                context.bezierCurveTo(8, 7, 6, 10, 5, 14)
+                context.bezierCurveTo(4, 18, 3, 23, 7, 24)
+                context.bezierCurveTo(10, 25, 12, 22, 12, 19)
+                context.lineTo(12, 12)
+                context.stroke()
 
                 // Right lung
-                context.beginPath();
-                context.moveTo(17, 7);
-                context.bezierCurveTo(20, 7, 22, 10, 23, 14);
-                context.bezierCurveTo(24, 18, 25, 23, 21, 24);
-                context.bezierCurveTo(18, 25, 16, 22, 16, 19);
-                context.lineTo(16, 12);
-                context.stroke();
-
-                break;
+                context.beginPath()
+                context.moveTo(17, 7)
+                context.bezierCurveTo(20, 7, 22, 10, 23, 14)
+                context.bezierCurveTo(24, 18, 25, 23, 21, 24)
+                context.bezierCurveTo(18, 25, 16, 22, 16, 19)
+                context.lineTo(16, 12)
+                context.stroke()
+                break
 
             case "thermometer":
-                context.beginPath();
+                context.translate(-14, -14)
 
                 // Thermometer body
-                context.moveTo(11, 17);
-                context.lineTo(11, 6);
-                context.bezierCurveTo(11, 2, 17, 2, 17, 6);
-                context.lineTo(17, 17);
+                context.beginPath()
+                context.moveTo(11, 17)
+                context.lineTo(11, 6)
+                context.bezierCurveTo(11, 2, 17, 2, 17, 6)
+                context.lineTo(17, 17)
 
                 // Lower bulb
-                context.bezierCurveTo(20, 19, 20, 23, 17, 25);
-                context.bezierCurveTo(14, 27, 10, 25, 9, 22);
-                context.bezierCurveTo(8, 20, 9, 18, 11, 17);
-
-                context.stroke();
+                context.bezierCurveTo(20, 19, 20, 23, 17, 25)
+                context.bezierCurveTo(14, 27, 10, 25, 9, 22)
+                context.bezierCurveTo(8, 20, 9, 18, 11, 17)
+                context.stroke()
 
                 // Mercury line
-                context.beginPath();
-                context.moveTo(14, 9);
-                context.lineTo(14, 20);
-                context.stroke();
+                context.beginPath()
+                context.moveTo(14, 9)
+                context.lineTo(14, 20)
+                context.stroke()
 
                 // Mercury bulb
-                context.beginPath();
-                context.arc(14, 21, 2, 0, Math.PI * 2);
-                context.fill();
-
-                break;
+                context.beginPath()
+                context.arc(14, 21, 2, 0, Math.PI * 2)
+                context.fill()
+                break
 
             default:
-                console.warn("PulseIcon: unsupported icon:", root.iconName)
+                console.warn(
+                    "PulseIcon: unsupported icon:",
+                    root.iconName
+                )
                 break
             }
 
