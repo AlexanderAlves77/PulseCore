@@ -218,9 +218,8 @@ Item {
     function getSampleX(index, sampleCount, width)
     {
         const stepX = width / Math.max(1, root.maxSamples - 1)
-        const startX = width - (sampleCount - 1) * stepX
 
-        return startX + index * stepX
+        return index * stepX
     }
 
     function getSampleY(sample, height)
