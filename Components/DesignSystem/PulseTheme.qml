@@ -72,6 +72,12 @@ QtObject {
     readonly property color buttonPauseText: amber
     readonly property color buttonResetText: red
 
+    // Header - Patient defaults
+    readonly property string patientTitle: "Patient"
+    readonly property string defaultPatientName: "Adult"
+    readonly property string defaultPatientType: "Simulation"
+    readonly property string patientIconName: "patient"
+
     // Typography family and compact scale
     readonly property string fontFamily: "Segoe UI"
     readonly property int fontTiny: 9
