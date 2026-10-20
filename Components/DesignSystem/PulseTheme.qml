@@ -389,4 +389,37 @@ QtObject {
     readonly property int rightPanelHeartMinimumHeight: 170
     readonly property int rightPanelVitalMinimumHeight: 64
     readonly property int rightPanelVitalCardCount: 4
+
+    // Monitoring - Vital signs panel
+    readonly property int vitalSignsPanelPreferredWidth: 500
+    readonly property int vitalSignsPanelCardHeight: 72
+    readonly property int vitalSignsPanelSpacing: spacingSmall
+
+    // Vital signs - Titles and units
+    readonly property string oxygenMonitorTitle: "Oxygen Saturation"
+    readonly property string oxygenMonitorSubtitle: "SpO2 %"
+    readonly property string respiratoryMonitorTitle: "Respiratory Rate"
+    readonly property string respiratoryMonitorSubtitle: "rpm"
+    readonly property string co2MonitorTitle: "End Tidal CO2"
+    readonly property string co2MonitorSubtitle: "EtCO2 mmHg"
+    readonly property string temperatureMonitorTitle: "Temperature"
+    readonly property string temperatureMonitorSubtitle: "°C"
+
+    // Vital signs - Icons
+    readonly property string oxygenMonitorIcon: "lungs"
+    readonly property string respiratoryMonitorIcon: "lungs"
+    readonly property string co2MonitorIcon: "lungs"
+    readonly property string temperatureMonitorIcon: "thermometer"
+
+    // Vital signs - Additional measurements
+    readonly property string perfusionIndexLabel: "PI"
+    readonly property string airwayRespiratoryRateLabel: "awRR"
+
+    // Vital signs - Scale limits
+    readonly property real oxygenScaleMinimum: 85
+    readonly property real oxygenScaleMaximum: 100
+    readonly property real respiratoryScaleMinimum: 0
+    readonly property real respiratoryScaleMaximum: 50
+    readonly property real co2ScaleMinimum: 0
+    readonly property real co2ScaleMaximum: 50
 }
