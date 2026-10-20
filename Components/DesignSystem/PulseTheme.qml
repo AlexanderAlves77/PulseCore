@@ -361,4 +361,20 @@ QtObject {
 
     // Layout - DashboardPanel behavior
     readonly property bool dashboardClipContent: true
+
+    // Layout - AppFooter content
+    readonly property string appFooterDisclaimerText: "SIMULATION ONLY — NOT FOR CLINICAL USE"
+
+    // Layout - AppFooter colors
+    readonly property color appFooterBackgroundColor: dashboardSurfaceColor
+    readonly property color appFooterWarningColor: "#F0B75E"
+
+    // Layout - AppFooter typography
+    readonly property int appFooterFontSize: fontBody
+    readonly property bool appFooterFontBold: true
+
+    // Layout - AppFooter geometry
+    readonly property int appFooterHeight: 60
+    readonly property int appFooterHorizontalPadding: paddingLarge
+    readonly property int appFooterVerticalPadding: paddingSmall
 }
