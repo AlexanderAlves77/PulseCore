@@ -14,7 +14,9 @@ PulseCard {
     readonly property string status: heartRateStatus.status
     readonly property color statusColor: heartRateStatus.statusColor
 
-    cardSize: "LARGE"
+    preferredWidth: 500
+    preferredHeight: 210
+    contentPadding: 16
 
     VitalStatus {
         id: heartRateStatus
@@ -45,6 +47,7 @@ PulseCard {
 
             PulseNumber {
                 value: root.heartRate
+                hasData: root.hasData
                 unit: "bpm"
                 valueSize: 72
                 valueColor: root.statusColor
