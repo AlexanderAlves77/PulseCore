@@ -113,6 +113,7 @@ qt_add_qml_module(appPulseCore
         Components/Controls/HeaderPatient.qml
         Components/Controls/HeaderScenario.qml
         Components/Controls/HeaderClock.qml
+        Components/Controls/HeaderActions.qml
 
     RESOURCES
         Heart3D/Imported/meshes/mesh_mesh.mesh
