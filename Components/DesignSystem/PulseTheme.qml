@@ -173,4 +173,37 @@ QtObject {
     // Header - Clock visibility
     readonly property bool clockShowDate: true
     readonly property bool clockShowTime: true
+
+    // Header - Actions defaults
+    readonly property string headerBatteryIconName: "battery"
+    readonly property string headerSettingsIconName: "settings"
+    readonly property string headerBatteryUnit: "%"
+
+    // Header - Battery configuration
+    readonly property int headerBatteryLevel: 100
+    readonly property int headerBatteryMinimum: 0
+    readonly property int headerBatteryMaximum: 100
+    readonly property int headerBatteryLowThreshold: 20
+
+    // Header - Actions colors
+    readonly property color headerBatteryNormalColor: green
+    readonly property color headerBatteryLowColor: red
+    readonly property color headerSettingsIconColor: cyan
+    readonly property color headerActionsDividerColor: border
+
+    // Header - Actions dimensions
+    readonly property int headerBatteryIconSize: 26
+    readonly property int headerBatteryTextSize: fontBody
+    readonly property int headerSettingsButtonSize: 40
+    readonly property int headerSettingsIconSize: 22
+    readonly property int headerActionsDividerLength: 30
+
+    // Header - Actions spacing
+    readonly property int headerActionsContentSpacing: 12
+    readonly property int headerBatterySpacing: spacingCompact
+
+    // Header - Actions visibility
+    readonly property bool headerShowBattery: true
+    readonly property bool headerShowSettings: true
+    readonly property bool headerSettingsEnabled: true
 }
