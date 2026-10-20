@@ -16,7 +16,6 @@ Item {
     property int cornerRadius: 8
     property int borderThickness: 1
 
-    property bool enabled: true
     property bool outlined: true
 
     signal clicked()
@@ -34,7 +33,7 @@ Item {
         color: mouseArea.pressed ? root.pressedColor : mouseArea.containsMouse
             ? root.hoverColor : root.backgroundColor
 
-        border.width: mouseArea.outlined ? root.borderThickness : 0
+        border.width: root.outlined ? root.borderThickness : 0
         border.color: root.borderColor
     }
 
