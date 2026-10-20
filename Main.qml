@@ -6,36 +6,58 @@ import "Components/Layout"
 import "Components/Monitoring"
 
 Window {
-    id: window    
+    id: window
+
+    PulseTheme {
+        id: theme
+    }
+
+    // Window configuration
     width: 1280
     height: 800
     minimumWidth: 1100
     minimumHeight: 700
+
     visible: true
     title: "PulseCore - Medical Device Monitoring Simulator"
+    color: theme.background
 
+    // Simulation state
     property bool hasSimulationData: false
-    readonly property string simulationState: simulationController.state
     property int simulationElapsedSeconds: 0
 
-    readonly property string formattedSimulationTime: {
-        const hours = Math.floor(simulationElapsedSeconds / 3600)
-        const minutes = Math.floor((simulationElapsedSeconds % 3600) / 60)
-        const seconds = simulationElapsedSeconds % 60
+    readonly property string simulationState:
+        simulationController.state
+
+    readonly property string formattedSimulationTime:
+    {
+        const hours = Math.floor(window.simulationElapsedSeconds / 3600)
+
+        const minutes = Math.floor((window.simulationElapsedSeconds % 3600) / 60)
+
+        const seconds = window.simulationElapsedSeconds % 60
 
         return String(hours).padStart(2, "0") + ":"
              + String(minutes).padStart(2, "0") + ":"
              + String(seconds).padStart(2, "0")
     }
 
-    PulseTheme {
-        id: pulseTheme
-    }
+    // Main layout configuration
+    readonly property int layoutMargin: theme.spacingTiny
+    readonly property int layoutSpacing: theme.spacingSmall
 
-    color: pulseTheme.background
+    readonly property int headerHeight: theme.appHeaderHeight
+    readonly property int footerHeight: theme.appFooterHeight
 
+    readonly property int controlsHeight: 60
+
+    readonly property real leftPanelRatio: 0.62
+    readonly property real rightPanelRatio: 0.38
+
+    // Simulation clock
     Timer {
-        interval: 1000
+        id: simulationTimer
+        interval: theme.appHeaderClockInterval
         repeat: true
         running: window.simulationState === "RUNNING"
 
@@ -44,22 +66,21 @@ Window {
         }
     }
 
-    // Header
+    // Application header
     AppHeader {
-        id: header
-        height: 64
+        id: appHeader
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
 
-        patientName: "Adult"
-        scenarioName: "Normal"
-        simulationTime: window.formattedSimulationTime
-        batteryLevel: 100
+        height: window.headerHeight
 
-        surfaceColor: "#07121D"
-        titleColor: "#F2F7FC"
-        accentColor: "#21F58B"
+        patientName: theme.defaultPatientName
+        scenarioName: theme.defaultScenarioName
+        simulationTime: window.formattedSimulationTime
+
+        batteryLevel: theme.headerBatteryLevel
 
         onScenarioRequested: {
             console.log("Scenario selection is not implemented yet")
@@ -70,77 +91,96 @@ Window {
         }
     }
 
-    AppFooter {
-        id: footer
-        height: 30
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        surfaceColor: "#0B1621"
-     /*   surfaceColor: pulseTheme.surfaceColor */
-    }
-
-    // Main content
+    // Main dashboard
     DashboardPanel {
         id: dashboardPanel
-        anchors.fill: parent
 
-        anchors.topMargin: header.height + 2
-        anchors.bottomMargin: footer.height + 2
-        anchors.leftMargin: 2
-        anchors.rightMargin: 2
+        anchors.top: appHeader.bottom
+        anchors.bottom: appFooter.top
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-        backgroundColor: "#050B12"
-        surfaceColor: "#0B1621"
-        borderColor: "#16435A"
+        anchors.topMargin: window.layoutMargin
+        anchors.bottomMargin: window.layoutMargin
+        anchors.leftMargin: window.layoutMargin
+        anchors.rightMargin: window.layoutMargin
+
+        backgroundColor: theme.background
+        surfaceColor: theme.dashboardSurfaceColor
+        borderColor: theme.dashboardBorderColor
 
         ColumnLayout {
             id: dashboardLayout
-            anchors.fill: parent
-            spacing: 5
 
+            anchors.fill: parent
+            spacing: window.layoutSpacing
+
+            // Monitoring area
             RowLayout {
                 id: monitoringLayout
 
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                spacing: 10
 
+                Layout.minimumHeight: 0
+
+                spacing: window.layoutSpacing
+
+                // Left monitoring panel
                 LeftMonitoringPanel {
                     id: leftMonitoringPanel
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    Layout.preferredWidth: 62
+
                     Layout.minimumWidth: 350
+                    Layout.minimumHeight: 0
+
+                    Layout.preferredWidth:
+                        window.leftPanelRatio * 1000
                 }
 
+                // Right monitoring panel
                 RightMonitoringPanel {
                     id: rightMonitoringPanel
 
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    Layout.preferredWidth: 38
+
                     Layout.minimumWidth: 280
+                    Layout.minimumHeight: 0
+
+                    Layout.preferredWidth:
+                        window.rightPanelRatio * 1000
 
                     heartRate: simulationController.heartRate
-                    oxygenSaturation: simulationController.oxygenSaturation
-                    respiratoryRate: simulationController.respiratoryRate
-                    temperature: simulationController.temperature
 
-                    running: window.simulationState === "RUNNING"
+                    oxygenSaturation:
+                        simulationController.oxygenSaturation
+
+                    respiratoryRate:
+                        simulationController.respiratoryRate
+
+                    temperature:
+                        simulationController.temperature
+
+                    running:
+                        window.simulationState === "RUNNING"
+
                     hasData: window.hasSimulationData
                 }
             }
 
-            // Controls
+            // Simulation controls
             SimulationControls {
                 id: simulationControls
+
                 Layout.fillWidth: true
                 Layout.fillHeight: false
-                Layout.preferredHeight: 60
-                Layout.minimumHeight: 60
-                Layout.maximumHeight: 60
+
+                Layout.preferredHeight: window.controlsHeight
+                Layout.minimumHeight: window.controlsHeight
+                Layout.maximumHeight: window.controlsHeight
 
                 simulationState: window.simulationState
 
@@ -154,8 +194,10 @@ Window {
 
                 onResetRequested: {
                     simulationController.Reset()
+
                     window.hasSimulationData = false
                     window.simulationElapsedSeconds = 0
+
                     leftMonitoringPanel.clearEcgSamples()
                     rightMonitoringPanel.resetHeartbeat()
                 }
@@ -163,10 +205,22 @@ Window {
         }
     }
 
+    // Application footer
+    AppFooter {
+        id: appFooter
+
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        height: window.footerHeight
+    }
+
+    // Simulation events
     Connections {
         target: simulationController
 
-        function onEcgSampleGenerated(sample) {            
+        function onEcgSampleGenerated(sample) {
             leftMonitoringPanel.addEcgSample(sample)
             window.hasSimulationData = true
         }
@@ -177,9 +231,16 @@ Window {
     }
 
     Component.onCompleted: {
-        console.log("Dashboard:", dashboardPanel.width, dashboardPanel.height)
-        console.log("Monitoring:", monitoringLayout.width, monitoringLayout.height)
-        console.log("Left:", leftMonitoringPanel.width, leftMonitoringPanel.height)
-        console.log("Right:", rightMonitoringPanel.width, rightMonitoringPanel.height)
+        console.log(
+            "Dashboard:",
+            dashboardPanel.width,
+            dashboardPanel.height
+        )
+
+        console.log(
+            "Monitoring:",
+            monitoringLayout.width,
+            monitoringLayout.height
+        )
     }
 }
