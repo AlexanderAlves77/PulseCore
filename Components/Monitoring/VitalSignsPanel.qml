@@ -1,53 +1,118 @@
 import QtQuick
-import PulseCore
+import QtQuick.Layouts
+import "../Controls"
 
-Row {
+Item {
     id: root
-    height: 145
-    spacing: 16
 
-    property int heartRate: 0
-    property int oxygenSaturation: 0
-    property int respiratoryRate: 0
+    property string oxygenStatus: "NORMAL"
+    property string respiratoryStatus: "NORMAL"
+    property string co2Status: "NORMAL"
+    property string temperatureStatus: "NORMAL"
+
+    property int cardSpacing: 8
+    property int cardHeight: 72
+
+    property real endTidalCo2: 0.0
+    property real oxygenSaturation: 0.0
+    property real respiratoryRate: 0.0
     property real temperature: 0.0
 
-    VitalCard {
-        width: (root.width - root.spacing * 3) / 4
-        height: root.height
+    property bool hasSimulationData: false
+    property bool hasCo2Data: false
 
-        label: "HR"
-        value: root.heartRate.toString()
-        unit: "bpm"
-        accentColor: "#40DCA5"
-    }
+    implicitWidth: 500
+    implicitHeight: cardsLayout.implicitHeight
 
-    VitalCard {
-        width: (root.width - root.spacing * 3) / 4
-        height: root.height
+    ColumnLayout {
+        id: cardsLayout
 
-        label: "SpO₂"
-        value: root.oxygenSaturation.toString()
-        unit: "%"
-        accentColor: "#61B8FA"
-    }
+        anchors.fill: parent
+        spacing: root.cardSpacing
 
-    VitalCard {
-        width: (root.width - root.spacing * 3) / 4
-        height: root.height
+        VitalMonitorCard {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.cardHeight
 
-        label: "RESP"
-        value: root.respiratoryRate.toString()
-        unit: "rpm"
-        accentColor: "#F0B75E"
-    }
+            title: "Oxygen Saturation"
+            subtitle: "SpO₂ %"
+            iconName: "heart"
 
-    VitalCard {
-        width: (root.width - root.spacing * 3) / 4
-        height: root.height
+            value: root.oxygenSaturation
+            decimals: 0
+            hasData: root.hasSimulationData
 
-        label: "TEMP"
-        value: root.temperature.toFixed(1)
-        unit: "°C"
-        accentColor: "#E9A6F4"
+            accentColor: "#00DDF2"
+            status: root.oxygenStatus
+
+            showScale: true
+            scaleMaximum: 100
+            scaleMinimum: 85
+
+            showDetails: false
+        }
+
+        VitalMonitorCard {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.cardHeight
+
+            title: "Respiratory Rate"
+            subtitle: "rpm"
+            iconName: "ecg"
+
+            value: root.respiratoryRate
+            decimals: 0
+            hasData: root.hasSimulationData
+
+            accentColor: "#FF405D"
+            status: root.respiratoryStatus
+
+            showScale: true
+            scaleMaximum: 50
+            scaleMinimum: 0
+
+            showDetails: false
+        }
+
+        VitalMonitorCard {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.cardHeight
+
+            title: "End Tidal CO₂"
+            subtitle: "EtCO₂ mmHg"
+            iconName: "ecg"
+
+            value: root.endTidalCo2
+            decimals: 0
+            hasData: root.hasCo2Data
+
+            accentColor: "#FFB020"
+            status: root.co2Status
+
+            showScale: true
+            scaleMaximum: 50
+            scaleMinimum: 0
+
+            showDetails: false
+        }
+
+        VitalMonitorCard {
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.cardHeight
+
+            title: "Temperature"
+            subtitle: "°C"
+            iconName: "heart"
+
+            value: root.temperature
+            decimals: 1
+            hasData: root.hasSimulationData
+
+            accentColor: "#FFE34A"
+            status: root.temperatureStatus
+
+            showScale: false
+            showDetails: false
+        }
     }
 }
