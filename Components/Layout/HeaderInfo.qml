@@ -1,32 +1,57 @@
 import QtQuick
 import QtQuick.Layouts
 
+import "../DesignSystem"
+
 Item {
     id: root
 
+    PulseTheme {
+        id: theme
+    }
+
+    // Header information
     property string title: ""
     property string value: ""
-    property color valueColor: "#F2F7FC"
 
-    implicitWidth: 130
-    implicitHeight: 44
+    // Colors
+    property color titleColor: theme.headerInfoTitleColor
+    property color valueColor: theme.headerInfoValueColor
+
+    // Typography
+    property string fontFamily: theme.fontFamily
+    property int titleSize: theme.headerInfoTitleSize
+    property int valueSize: theme.headerInfoValueSize
+
+    // Geometry
+    property int contentWidth: theme.headerInfoWidth
+    property int contentHeight: theme.headerInfoHeight
+    property int contentSpacing: theme.headerInfoSpacing
+
+    implicitWidth: root.contentWidth
+    implicitHeight: root.contentHeight
 
     ColumnLayout {
+        id: contentLayout
         anchors.fill: parent
-        spacing: 3
+        spacing: root.contentSpacing
 
-        Text {
+        PulseLabel {
+            id: titleLabel
             text: root.title
-            color: "#9AB6C8"
-            font.pixelSize: 11
+            labelColor: root.titleColor
+            labelSize: root.titleSize
+            fontFamily: root.fontFamily
+            Layout.fillWidth: true
         }
 
-        Text {
+        PulseLabel {
+            id: valueLabel
             text: root.value
-            color: root.valueColor
-            font.pixelSize: 14
-            font.bold: true
-            elide: Text.ElideRight
+            labelColor: root.valueColor
+            labelSize: root.valueSize
+            fontFamily: root.fontFamily
+            emphasized: true
             Layout.fillWidth: true
         }
     }
