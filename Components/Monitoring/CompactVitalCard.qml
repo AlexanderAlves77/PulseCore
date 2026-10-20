@@ -7,31 +7,36 @@ PulseCard {
     id: root
 
     property string title: ""
-    property real value: 0
     property string unit: ""
+
+    property color accentColor: "#21F58B"
+
     property int decimals: 0
 
-    property bool hasData: false
-
+    property real value: 0
     property real minimumCritical: 40
     property real minimumNormal: 60
     property real maximumNormal: 100
     property real maximumCritical: 140
 
-    property color accentColor: "#21F58B"
+    property bool hasData: false
 
     readonly property string status: vitalStatus.status
-    readonly property color displayColor: {
-        if (!hasData)
+
+    readonly property color displayColor:
+    {
+        if (!root.hasData)
             return "#648398"
 
-        if (status === "NORMAL")
-            return accentColor
+        if (root.status === "NORMAL")
+            return root.accentColor
 
         return vitalStatus.statusColor
     }
 
-    cardSize: "SMALL"
+    preferredWidth: 220
+    preferredHeight: 89
+    contentPadding: 12
 
     VitalStatus {
         id: vitalStatus
@@ -70,6 +75,7 @@ PulseCard {
                 valueSize: 38
                 unitSize: 12
                 valueColor: root.displayColor
+                hasData: root.hasData
             }
 
             PulseLabel {
