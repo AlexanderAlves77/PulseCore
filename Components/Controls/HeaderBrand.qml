@@ -1,38 +1,55 @@
 import QtQuick
 import QtQuick.Layouts
+
 import "../DesignSystem"
 
 RowLayout {
     id: root
 
+    PulseTheme {
+        id: theme
+    }
+
+    // Brand identity
     property string primaryName: "Pulse"
     property string accentName: "Core"
     property string iconName: "ecg"
-    property string fontFamily: "Segoe UI"
     property string description: "MEDICAL DEVICE MONITORING SIMULATOR"
 
-    property color primaryColor: "#F2F7FC"
-    property color accentColor: "#00DDF2"
-    property color descriptionColor: "#9AB6C8"
+    // Typography
+    property string fontFamily: theme.fontFamily
 
-    property int iconSize: 40
     property int titleSize: 24
-    property int descriptionSize: 10
-    property int contentSpacing: 12
+    property int descriptionSize: theme.fontCaption
+
+    // Colors
+    property color primaryColor: theme.textPrimary
+    property color accentColor: theme.cyan
+    property color descriptionColor: theme.textSecondary
+
+    // Icon
+    property int iconSize: 40
+
+    // Layout
+    property int contentSpacing: theme.paddingMedium
     property int textSpacing: 2
 
-    spacing: contentSpacing
+    spacing: root.contentSpacing
 
     PulseIcon {
+        id: brandIcon
         iconName: root.iconName
         iconColor: root.accentColor
         iconSize: root.iconSize
+        Layout.alignment: Qt.AlignVCenter
     }
 
     ColumnLayout {
+        id: brandContent
         spacing: root.textSpacing
 
         RowLayout {
+            id: brandTitle
             spacing: 0
 
             PulseLabel {
