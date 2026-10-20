@@ -35,21 +35,19 @@ ColumnLayout {
     property int contentSpacing: 8
     property int verticalSpacing: 4
 
-    property bool enabled: true
-
-    readonly property string normalizedStatus: scenarioName.trim().toUpperCase()
+    readonly property string normalizedStatus: scenarioName.trim().toLowerCase()
 
     readonly property color scenarioColor:
     {
-        switch (normalizedStatus)
+        switch (root.normalizedStatus)
         {
-        case normalScenario.toLowerCase():
+        case root.normalScenario.trim().toLowerCase():
             return normalColor
 
-        case warningScenario.toLowerCase():
+        case root.warningScenario.trim().toLowerCase():
             return warningColor
 
-        case criticalScenario.toLowerCase():
+        case root.criticalScenario.trim().toLowerCase():
             return criticalColor
 
         default:
@@ -78,6 +76,8 @@ ColumnLayout {
 
         color: selectorMouseArea.containsMouse && root.enabled
                ? root.hoverColor : root.backgroundColor
+
+        opacity: root.enabled ? 1.0 : 0.5
 
         border.width: 1
         border.color: root.borderColor
@@ -116,13 +116,10 @@ ColumnLayout {
 
         MouseArea {
             id: selectorMouseArea
-
             anchors.fill: parent
-
             enabled: root.enabled
             hoverEnabled: true
-            cursorShape: Qt.PointingHandCursor
-
+            cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
             onClicked: root.scenarioRequested()
         }
     }
