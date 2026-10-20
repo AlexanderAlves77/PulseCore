@@ -4,37 +4,63 @@ import QtQuick.Layouts
 PulseCard {
     id: root
 
+    PulseTheme {
+        id: theme
+    }
+
+    // Monitoring information
     property string title: "ECG"
     property string unit: "mV"
-    property color waveformColor: "#21F58B"
 
+    // Waveform appearance
+    property color waveformColor: theme.heartRateColor
+
+    // Waveform component
     property Component waveformDelegate: null
 
+    // Loaded waveform access
     readonly property var waveformItem: waveformLoader.item
 
+    // Layout configuration
+    property int waveformPadding: theme.paddingMedium
+    property int waveformSpacing: theme.spacingSmall
+    property int headerSpacing: theme.spacingCard
+    property int headerHeight: 24
+    property int minimumWaveformHeight: 24
+
+    // Typography
+    property int titleSize: theme.fontHeading
+    property int unitSize: theme.fontSmall
+
+    // Default dimensions
     preferredWidth: 500
-    preferredHeight: 136
-    contentPadding: 12
+    preferredHeight: theme.cardMediumHeight
+    contentPadding: root.waveformPadding
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 8
+
+        spacing: root.waveformSpacing
 
         RowLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: 24
-            spacing: 10
+            Layout.preferredHeight: root.headerHeight
+
+            spacing: root.headerSpacing
 
             PulseLabel {
                 text: root.title
+
                 labelColor: root.waveformColor
-                labelSize: 16
+                labelSize: root.titleSize
                 emphasized: true
             }
 
             PulseLabel {
                 text: root.unit
-                labelSize: 12
+
+                labelColor: theme.textPrimary
+                labelSize: root.unitSize
             }
 
             Item {
@@ -45,7 +71,8 @@ PulseCard {
         Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.minimumHeight: 24
+            Layout.minimumHeight: root.minimumWaveformHeight
+
             clip: true
 
             Loader {
