@@ -1,45 +1,62 @@
 import QtQuick
 import QtQuick.Layouts
+
 import "../DesignSystem"
 
 RowLayout {
     id: root
 
-    property string title: "Date & Time"
-    property string iconName: "clock"
-    property string fontFamily: "Segoe UI"
-    property string dateTimeSeparator: "  "
-    property string dateText: "--/--/----"
-    property string timeText: "--:--:--"
+    PulseTheme {
+        id: theme
+    }
 
-    property color titleColor: "#9AB6C8"
-    property color dateColor: "#F2F7FC"
-    property color timeColor: "#00DDF2"
-    property color iconColor: "#00DDF2"
+    // Clock information
+    property string title: theme.clockTitle
+    property string iconName: theme.clockIconName
 
-    property int iconSize: 26
-    property int titleSize: 11
-    property int valueSize: 13
-    property int contentSpacing: 10
-    property int textSpacing: 3
+    property string dateText: theme.clockDatePlaceholder
+    property string timeText: theme.clockTimePlaceholder
+    property string dateTimeSeparator: theme.clockDateTimeSeparator
 
-    property bool showDate: true
-    property bool showTime: true
+    // Typography
+    property string fontFamily: theme.fontFamily
 
-    spacing: contentSpacing
+    property int titleSize: theme.clockTitleSize
+    property int valueSize: theme.clockValueSize
+
+    // Colors
+    property color titleColor: theme.clockTitleColor
+    property color dateColor: theme.clockDateColor
+    property color timeColor: theme.clockTimeColor
+    property color iconColor: theme.clockIconColor
+
+    // Icon
+    property int iconSize: theme.clockIconSize
+
+    // Layout
+    property int contentSpacing: theme.clockContentSpacing
+    property int textSpacing: theme.clockTextSpacing
+
+    // Visibility
+    property bool showDate: theme.clockShowDate
+    property bool showTime: theme.clockShowTime
+
+    spacing: root.contentSpacing
 
     PulseIcon {
+        id: clockIcon
         iconName: root.iconName
         iconColor: root.iconColor
         iconSize: root.iconSize
-
         Layout.alignment: Qt.AlignVCenter
     }
 
     ColumnLayout {
+        id: clockContent
         spacing: root.textSpacing
 
         PulseLabel {
+            id: clockTitle
             text: root.title
             labelColor: root.titleColor
             labelSize: root.titleSize
@@ -47,9 +64,11 @@ RowLayout {
         }
 
         RowLayout {
+            id: clockValues
             spacing: 0
 
             PulseLabel {
+                id: dateLabel
                 text: root.dateText
                 labelColor: root.dateColor
                 labelSize: root.valueSize
@@ -59,21 +78,21 @@ RowLayout {
             }
 
             PulseLabel {
+                id: separatorLabel
                 text: root.dateTimeSeparator
                 labelColor: root.titleColor
                 labelSize: root.valueSize
                 fontFamily: root.fontFamily
-
                 visible: root.showDate && root.showTime
             }
 
             PulseLabel {
+                id: timeLabel
                 text: root.timeText
                 labelColor: root.timeColor
                 labelSize: root.valueSize
                 fontFamily: root.fontFamily
                 emphasized: true
-
                 visible: root.showTime
             }
         }
