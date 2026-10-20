@@ -347,4 +347,18 @@ QtObject {
     readonly property int headerInfoWidth: 130
     readonly property int headerInfoHeight: 44
     readonly property int headerInfoSpacing: spacingTiny
+
+    // Layout - DashboardPanel colors
+    readonly property color dashboardBackgroundColor: "#0B111B"
+    readonly property color dashboardSurfaceColor: "#141F2E"
+    readonly property color dashboardBorderColor: "#263548"
+
+    // Layout - DashboardPanel geometry
+    readonly property int dashboardContentMargin: 4
+    readonly property int dashboardPanelPadding: 0
+    readonly property int dashboardCornerRadius: 0
+    readonly property int dashboardBorderWidth: 0
+
+    // Layout - DashboardPanel behavior
+    readonly property bool dashboardClipContent: true
 }
