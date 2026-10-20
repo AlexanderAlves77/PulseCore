@@ -111,6 +111,7 @@ qt_add_qml_module(appPulseCore
         Components/Layout/HeaderInfo.qml
         Components/Controls/HeaderBrand.qml
         Components/Controls/HeaderPatient.qml
+        Components/Controls/HeaderScenario.qml
 
     RESOURCES
         Heart3D/Imported/meshes/mesh_mesh.mesh
@@ -154,7 +155,7 @@ if(BUILD_TESTING)
     add_executable(PulseCore.Tests
         Tests/SimulationClockTests.cpp
         Core/Simulation/SimulationClock.h
-        Core/Simulation/SimulationClock.cpp        
+        Core/Simulation/SimulationClock.cpp
     )
 
     set_target_properties(PulseCore.Tests PROPERTIES
