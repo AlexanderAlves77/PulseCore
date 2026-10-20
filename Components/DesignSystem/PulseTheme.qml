@@ -147,4 +147,30 @@ QtObject {
 
     // Header - Scenario interaction
     readonly property real scenarioDisabledOpacity: 0.5
+
+    // Header - Clock defaults
+    readonly property string clockTitle: "Date & Time"
+    readonly property string clockIconName: "clock"
+    readonly property string clockDatePlaceholder: "--/--/----"
+    readonly property string clockTimePlaceholder: "--:--:--"
+    readonly property string clockDateTimeSeparator: "  "
+
+    // Header - Clock colors
+    readonly property color clockTitleColor: textSecondary
+    readonly property color clockDateColor: textPrimary
+    readonly property color clockTimeColor: cyan
+    readonly property color clockIconColor: cyan
+
+    // Header - Clock typography
+    readonly property int clockTitleSize: fontLabel
+    readonly property int clockValueSize: fontBody
+
+    // Header - Clock geometry
+    readonly property int clockIconSize: 26
+    readonly property int clockContentSpacing: spacingCard
+    readonly property int clockTextSpacing: spacingTiny
+
+    // Header - Clock visibility
+    readonly property bool clockShowDate: true
+    readonly property bool clockShowTime: true
 }
