@@ -1,3 +1,4 @@
+
 import QtQuick
 import QtQuick.Layouts
 import "../Controls"
@@ -13,20 +14,23 @@ Item {
     property int cardSpacing: 8
     property int cardHeight: 72
 
-    property real endTidalCo2: 0.0
     property real oxygenSaturation: 0.0
     property real respiratoryRate: 0.0
     property real temperature: 0.0
+    property real endTidalCo2: 0.0
+    property real perfusionIndex: 0.0
+    property real airwayRespiratoryRate: 0.0
 
     property bool hasSimulationData: false
     property bool hasCo2Data: false
+    property bool hasPerfusionIndexData: false
+    property bool hasAirwayRespiratoryRateData: false
 
     implicitWidth: 500
     implicitHeight: cardsLayout.implicitHeight
 
     ColumnLayout {
         id: cardsLayout
-
         anchors.fill: parent
         spacing: root.cardSpacing
 
@@ -36,7 +40,7 @@ Item {
 
             title: "Oxygen Saturation"
             subtitle: "SpO₂ %"
-            iconName: "heart"
+            iconName: "lungs"
 
             value: root.oxygenSaturation
             decimals: 0
@@ -49,7 +53,11 @@ Item {
             scaleMaximum: 100
             scaleMinimum: 85
 
-            showDetails: false
+            showDetails: root.hasPerfusionIndexData
+            detailTitle: "PI"
+            detailValue: root.hasPerfusionIndexData
+                         ? root.perfusionIndex.toFixed(1)
+                         : "--"
         }
 
         VitalMonitorCard {
@@ -58,7 +66,7 @@ Item {
 
             title: "Respiratory Rate"
             subtitle: "rpm"
-            iconName: "ecg"
+            iconName: "lungs"
 
             value: root.respiratoryRate
             decimals: 0
@@ -70,7 +78,6 @@ Item {
             showScale: true
             scaleMaximum: 50
             scaleMinimum: 0
-
             showDetails: false
         }
 
@@ -80,7 +87,7 @@ Item {
 
             title: "End Tidal CO₂"
             subtitle: "EtCO₂ mmHg"
-            iconName: "ecg"
+            iconName: "lungs"
 
             value: root.endTidalCo2
             decimals: 0
@@ -93,7 +100,11 @@ Item {
             scaleMaximum: 50
             scaleMinimum: 0
 
-            showDetails: false
+            showDetails: root.hasAirwayRespiratoryRateData
+            detailTitle: "awRR"
+            detailValue: root.hasAirwayRespiratoryRateData
+                         ? root.airwayRespiratoryRate.toFixed(0)
+                         : "--"
         }
 
         VitalMonitorCard {
@@ -102,7 +113,7 @@ Item {
 
             title: "Temperature"
             subtitle: "°C"
-            iconName: "heart"
+            iconName: "thermometer"
 
             value: root.temperature
             decimals: 1
