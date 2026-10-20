@@ -1,35 +1,56 @@
 import QtQuick
 
+import "../DesignSystem"
+
 Rectangle {
     id: root
 
-    property color backgroundColor: "#0B111B"
-    property color surfaceColor: "#141F2E"
-    property color borderColor: "#263548"
+    PulseTheme {
+        id: theme
+    }
 
-    property int contentMargin: 4
-    property int panelPadding: 0
-    property int cornerRadius: 0
+    // Dashboard colors
+    property color backgroundColor: theme.dashboardBackgroundColor
+    property color surfaceColor: theme.dashboardSurfaceColor
+    property color borderColor: theme.dashboardBorderColor
 
+    // Dashboard geometry
+    property int contentMargin: theme.dashboardContentMargin
+    property int panelPadding: theme.dashboardPanelPadding
+    property int cornerRadius: theme.dashboardCornerRadius
+    property int borderThickness: theme.dashboardBorderWidth
+
+    // Dashboard behavior
+    property bool clipContent: theme.dashboardClipContent
+
+    // Public content container
     default property alias content: dashboardContent.data
 
     color: root.backgroundColor
+
     border.width: 0
 
+    // Main monitoring surface
     Rectangle {
         id: monitorPanel
+
         anchors.fill: parent
         anchors.margins: root.contentMargin
+
         color: root.surfaceColor
         radius: root.cornerRadius
-        border.width: 0
 
+        border.width: root.borderThickness
+        border.color: root.borderColor
+
+        // Dashboard content area
         Item {
             id: dashboardContent
+
             anchors.fill: parent
             anchors.margins: root.panelPadding
-            clip: true
+
+            clip: root.clipContent
         }
     }
 }
-
