@@ -5,18 +5,28 @@ import QtQuick.Layouts
 RowLayout {
     id: root
 
+    PulseTheme {
+        id: theme
+    }
+
+    // Data
     property real value: 0
     property int decimals: 0
     property string unit: ""
 
-    property color valueColor: "#F2F7FC"
-    property color unitColor: "#9AB6C8"
+    // Appearance
+    property color valueColor: theme.textPrimary
+    property color unitColor: theme.textSecondary
 
-    property int valueSize: 64
+    // Typography
+    property int valueSize: theme.fontVital
     property int unitSize: 14
-    property int numberSpacing: 6
+    property string fontFamily: theme.fontFamily
 
-    property string fontFamily: "Segoe UI"
+    // Layout
+    property int numberSpacing: theme.spacingCompact
+
+    // State
     property bool emphasized: true
     property bool hasData: false
 
@@ -42,7 +52,7 @@ RowLayout {
         labelSize: root.unitSize
         fontFamily: root.fontFamily
 
-        Layout.alignment: Qt.AlignBaseline
         visible: root.unit.length > 0
+        Layout.alignment: Qt.AlignBaseline        
     }
 }
