@@ -1,4 +1,3 @@
-
 import QtQuick
 import QtQuick.Layouts
 import "../DesignSystem"
@@ -7,7 +6,7 @@ PulseCard {
     id: root
 
     property string title: "Oxygen Saturation"
-    property string subtitle: "SpO₂ %"
+    property string subtitle: "SpO2 %"
     property string iconName: "lungs"
     property string status: "NORMAL"
     property string fontFamily: "Segoe UI"
@@ -24,10 +23,10 @@ PulseCard {
     property int decimals: 0
     property int titleSize: 12
     property int subtitleSize: 10
-    property int valueSize: 42
-    property int iconSize: 34
-    property int cardHeight: 86
-    property int contentSpacing: 10
+    property int valueSize: 38
+    property int iconSize: 28
+    property int cardHeight: 72
+    property int contentSpacing: 8
     property int signalStrength: 0
 
     property real value: 0.0
@@ -37,45 +36,58 @@ PulseCard {
     property real temperatureT2: 0.0
     property real temperatureDelta: 0.0
 
-    property bool hasData: false
     property bool showIcon: true
     property bool showStatus: true
     property bool showScale: true
     property bool showDetails: false
+    property bool hasData: false
     property bool showSignal: false
     property bool hasTemperatureT1: false
     property bool hasTemperatureT2: false
     property bool hasTemperatureDelta: false
     property bool showTemperatureDetails: false
 
-    readonly property int displayedSignalStrength:
-        Math.max(0, Math.min(4, signalStrength))
+    readonly property int displayedSignalStrength: Math.max(0, Math.min(4, signalStrength))
+
+    readonly property bool compactMode: height < 76
+
+    readonly property int effectiveIconSize: compactMode ? 25 : iconSize
+
+    readonly property int effectiveValueSize: compactMode ? 34 : valueSize
 
     preferredWidth: 500
     preferredHeight: cardHeight
-    contentPadding: 10
+
+    contentPadding: compactMode ? 8 : 10
 
     RowLayout {
+        id: contentLayout
         anchors.fill: parent
         spacing: root.contentSpacing
 
         PulseIcon {
             iconName: root.iconName
             iconColor: root.accentColor
-            iconSize: root.iconSize
+            iconSize: root.effectiveIconSize
+
             visible: root.showIcon
+
+            Layout.preferredWidth: root.effectiveIconSize
+            Layout.preferredHeight: root.effectiveIconSize
             Layout.alignment: Qt.AlignVCenter
         }
 
         ColumnLayout {
             Layout.preferredWidth: 125
+            Layout.minimumWidth: 95
             Layout.alignment: Qt.AlignVCenter
+
             spacing: 3
 
             PulseLabel {
                 text: root.title
                 labelColor: root.titleColor
-                labelSize: root.titleSize
+                labelSize: root.compactMode ? 11 : root.titleSize
                 fontFamily: root.fontFamily
                 emphasized: true
             }
@@ -96,11 +108,13 @@ PulseCard {
 
             valueColor: root.accentColor
             unitColor: root.secondaryColor
-            valueSize: root.valueSize
+
+            valueSize: root.effectiveValueSize
             unitSize: 11
             fontFamily: root.fontFamily
 
             Layout.preferredWidth: 85
+            Layout.minimumWidth: 65
             Layout.alignment: Qt.AlignVCenter
         }
 
@@ -111,13 +125,13 @@ PulseCard {
 
             Rectangle {
                 implicitWidth: 3
-                implicitHeight: 36
+                implicitHeight: root.compactMode ? 28 : 36
                 radius: 2
                 color: root.accentColor
             }
 
             ColumnLayout {
-                spacing: 8
+                spacing: root.compactMode ? 3 : 8
 
                 PulseLabel {
                     text: root.scaleMaximum.toString()
@@ -135,29 +149,35 @@ PulseCard {
 
         Item {
             Layout.fillWidth: true
+            Layout.minimumWidth: 0
         }
 
         ColumnLayout {
-            Layout.preferredWidth:
-                root.showTemperatureDetails ? 138 : 90
+            id: detailsLayout
+
+            Layout.preferredWidth: root.showTemperatureDetails ? 120 : 84
+
+            Layout.minimumWidth: root.showTemperatureDetails ? 105 : 75
 
             Layout.alignment: Qt.AlignVCenter
-            spacing: 5
+
+            spacing: root.compactMode ? 2 : 4
 
             Rectangle {
                 visible: root.showDetails
 
                 Layout.fillWidth: true
-                Layout.preferredHeight: 35
+                Layout.preferredHeight: root.compactMode ? 27 : 34
 
                 radius: 5
                 color: root.detailBackgroundColor
+
                 border.color: root.borderColor
                 border.width: 1
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 4
+                    anchors.margins: 3
                     spacing: 0
 
                     PulseLabel {
@@ -168,12 +188,10 @@ PulseCard {
 
                     PulseLabel {
                         text: root.detailValue
-                              + (root.detailUnit.length > 0
-                                 ? " " + root.detailUnit
-                                 : "")
+                              + (root.detailUnit.length > 0 ? " " + root.detailUnit : "")
 
                         labelColor: root.accentColor
-                        labelSize: 12
+                        labelSize: 11
                         emphasized: true
                     }
                 }
@@ -181,36 +199,42 @@ PulseCard {
 
             RowLayout {
                 visible: root.showSignal
+
+                Layout.alignment: Qt.AlignHCenter
                 spacing: 3
 
                 Rectangle {
                     implicitWidth: 4
-                    implicitHeight: 8
+                    implicitHeight: 7
                     radius: 2
+
                     color: root.displayedSignalStrength >= 1
                            ? root.accentColor : root.secondaryColor
                 }
 
                 Rectangle {
                     implicitWidth: 4
-                    implicitHeight: 13
+                    implicitHeight: 11
                     radius: 2
+
                     color: root.displayedSignalStrength >= 2
                            ? root.accentColor : root.secondaryColor
                 }
 
                 Rectangle {
                     implicitWidth: 4
-                    implicitHeight: 18
+                    implicitHeight: 15
                     radius: 2
+
                     color: root.displayedSignalStrength >= 3
                            ? root.accentColor : root.secondaryColor
                 }
 
                 Rectangle {
                     implicitWidth: 4
-                    implicitHeight: 23
+                    implicitHeight: 19
                     radius: 2
+
                     color: root.displayedSignalStrength >= 4
                            ? root.accentColor : root.secondaryColor
                 }
@@ -218,10 +242,12 @@ PulseCard {
 
             RowLayout {
                 visible: root.showTemperatureDetails
-                spacing: 8
+
+                Layout.alignment: Qt.AlignHCenter
+                spacing: 7
 
                 ColumnLayout {
-                    spacing: 2
+                    spacing: 1
 
                     PulseLabel {
                         text: "T1"
@@ -230,9 +256,7 @@ PulseCard {
                     }
 
                     PulseLabel {
-                        text: root.hasTemperatureT1
-                              ? root.temperatureT1.toFixed(1) : "--"
-
+                        text: root.hasTemperatureT1 ? root.temperatureT1.toFixed(1) : "--"
                         labelColor: root.accentColor
                         labelSize: 11
                         emphasized: true
@@ -240,7 +264,7 @@ PulseCard {
                 }
 
                 ColumnLayout {
-                    spacing: 2
+                    spacing: 1
 
                     PulseLabel {
                         text: "T2"
@@ -249,9 +273,7 @@ PulseCard {
                     }
 
                     PulseLabel {
-                        text: root.hasTemperatureT2
-                              ? root.temperatureT2.toFixed(1) : "--"
-
+                        text: root.hasTemperatureT2 ? root.temperatureT2.toFixed(1) : "--"
                         labelColor: root.accentColor
                         labelSize: 11
                         emphasized: true
@@ -259,18 +281,16 @@ PulseCard {
                 }
 
                 ColumnLayout {
-                    spacing: 2
+                    spacing: 1
 
                     PulseLabel {
-                        text: "ΔT"
+                        text: "?T"
                         labelColor: root.secondaryColor
                         labelSize: 9
                     }
 
                     PulseLabel {
-                        text: root.hasTemperatureDelta
-                              ? root.temperatureDelta.toFixed(1) : "--"
-
+                        text: root.hasTemperatureDelta ? root.temperatureDelta.toFixed(1) : "--"
                         labelColor: root.accentColor
                         labelSize: 11
                         emphasized: true
