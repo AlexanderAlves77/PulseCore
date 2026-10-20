@@ -3,23 +3,34 @@ import QtQuick
 Rectangle {
     id: root
 
+    PulseTheme {
+        id: theme
+    }
+
+    // Data
     property string status: "NORMAL"
-    property string fontFamily: "Segoe UI"
 
-    property color normalColor: "#21F58B"
-    property color warningColor: "#FFB020"
-    property color criticalColor: "#FF405D"
-    property color runningColor: "#00DDF2"
-    property color pausedColor: "#FFE34A"
-    property color defaultColor: "#9AB6C8"
-    property color backgroundColor: "#02070C"
+    // Typography
+    property string fontFamily: theme.fontFamily
+    property int textSize: theme.fontLabel
 
-    property int badgeHeight: 28
-    property int horizontalPadding: 12
-    property int borderThickness: 1
-    property int cornerRadius: 6
-    property int textSize: 11
+    // Status colors
+    property color normalColor: theme.normal
+    property color warningColor: theme.warning
+    property color criticalColor: theme.critical
+    property color runningColor: theme.cyan
+    property color pausedColor: theme.paused
+    property color defaultColor: theme.textSecondary
 
+    // Appearance
+    property color backgroundColor: theme.background
+
+    property int badgeHeight: theme.badgeHeight
+    property int horizontalPadding: theme.badgeHorizontalPadding
+    property int borderThickness: theme.borderThin
+    property int cornerRadius: theme.badgeRadius
+
+    // Behavior
     property bool emphasized: true
     property bool outlined: true
 
@@ -49,14 +60,14 @@ Rectangle {
         }
     }
 
-    implicitWidth: statusLabel.implicitWidth + horizontalPadding * 2
-    implicitHeight: badgeHeight
+    implicitWidth: statusLabel.implicitWidth + root.horizontalPadding * 2
+    implicitHeight: root.badgeHeight
 
-    radius: cornerRadius
-    color: backgroundColor
+    radius: root.cornerRadius
+    color: root.backgroundColor
 
-    border.color: statusColor
-    border.width: outlined ? borderThickness : 0
+    border.color: root.statusColor
+    border.width: root.outlined ? root.borderThickness : 0
 
     PulseLabel {
         id: statusLabel
