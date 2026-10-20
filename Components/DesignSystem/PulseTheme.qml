@@ -206,4 +206,82 @@ QtObject {
     readonly property bool headerShowBattery: true
     readonly property bool headerShowSettings: true
     readonly property bool headerSettingsEnabled: true
+
+
+    // Vital Monitor - Defaults
+    readonly property string monitorDefaultTitle: "Oxygen Saturation"
+    readonly property string monitorDefaultSubtitle: "SpO2 %"
+    readonly property string monitorDefaultIconName: "lungs"
+    readonly property string monitorDefaultStatus: "NORMAL"
+    readonly property string monitorNoDataStatus: "NO DATA"
+    readonly property string monitorTemperatureT1Label: "T1"
+    readonly property string monitorTemperatureT2Label: "T2"
+    readonly property string monitorTemperatureDeltaLabel: "ΔT"
+    readonly property string monitorUnavailableValue: "--"
+
+    // Vital Monitor - Colors
+    readonly property color monitorAccentColor: oxygenColor
+    readonly property color monitorTitleColor: textPrimary
+    readonly property color monitorSecondaryColor: textSecondary
+    readonly property color monitorDetailBackgroundColor: surfaceInset
+
+    // Vital Monitor - Typography
+    readonly property int monitorTitleSize: fontSmall
+    readonly property int monitorCompactTitleSize: fontLabel
+    readonly property int monitorSubtitleSize: fontCaption
+    readonly property int monitorValueSize: fontVitalCompact
+    readonly property int monitorCompactValueSize: 34
+    readonly property int monitorUnitSize: fontLabel
+    readonly property int monitorScaleSize: fontTiny
+    readonly property int monitorDetailTitleSize: fontTiny
+    readonly property int monitorDetailValueSize: fontLabel
+
+    // Vital Monitor - Card geometry
+    readonly property int monitorCardWidth: 500
+    readonly property int monitorCardHeight: 72
+    readonly property int monitorCompactThreshold: 76
+    readonly property int monitorCompactPadding: paddingSmall
+    readonly property int monitorRegularPadding: spacingCard
+    readonly property int monitorContentSpacing: spacingSmall
+
+    // Vital Monitor - Icon
+    readonly property int monitorIconSize: iconMedical
+    readonly property int monitorCompactIconSize: 25
+
+    // Vital Monitor - Columns
+    readonly property int monitorTitleWidth: 125
+    readonly property int monitorTitleMinimumWidth: 95
+    readonly property int monitorValueWidth: 85
+    readonly property int monitorValueMinimumWidth: 65
+    readonly property int monitorDetailWidth: 84
+    readonly property int monitorDetailMinimumWidth: 75
+    readonly property int monitorTemperatureWidth: 120
+    readonly property int monitorTemperatureMinimumWidth: 105
+
+    // Vital Monitor - Scale
+    readonly property real monitorScaleMinimum: 85
+    readonly property real monitorScaleMaximum: 100
+    readonly property int monitorScaleBarWidth: 3
+    readonly property int monitorScaleBarHeight: 36
+    readonly property int monitorCompactScaleBarHeight: 28
+    readonly property int monitorScaleSpacing: 5
+
+    // Vital Monitor - Details
+    readonly property int monitorDetailHeight: 34
+    readonly property int monitorCompactDetailHeight: 27
+    readonly property int monitorDetailRadius: radiusSmall
+    readonly property int monitorDetailPadding: spacingTiny
+    readonly property int monitorDetailSpacing: 4
+    readonly property int monitorCompactDetailSpacing: 2
+    readonly property int monitorTemperatureSpacing: 7
+
+    // Vital Monitor - Signal indicator
+    readonly property int monitorSignalMaximum: 4
+    readonly property int monitorSignalBarWidth: 4
+    readonly property int monitorSignalBarSpacing: spacingTiny
+    readonly property int monitorSignalBarRadius: 2
+    readonly property int monitorSignalBarHeight1: 7
+    readonly property int monitorSignalBarHeight2: 11
+    readonly property int monitorSignalBarHeight3: 15
+    readonly property int monitorSignalBarHeight4: 19
 }
