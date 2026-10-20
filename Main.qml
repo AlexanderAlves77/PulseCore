@@ -136,8 +136,11 @@ Window {
                     Layout.minimumWidth: 350
                     Layout.minimumHeight: 0
 
-                    Layout.preferredWidth:
-                        window.leftPanelRatio * 1000
+                    Layout.preferredWidth: window.leftPanelRatio * 1000
+
+                    // Synchronize waveforms with the simulation controller
+                    heartRate: simulationController.heartRate
+                    respiratoryRate: simulationController.respiratoryRate
                 }
 
                 // Right monitoring panel
