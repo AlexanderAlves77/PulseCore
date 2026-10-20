@@ -1,89 +1,107 @@
 import QtQuick
 import QtQuick.Layouts
+
 import "../DesignSystem"
 
 RowLayout {
     id: root
 
-    property string batteryIconName: "battery"
-    property string settingsIconName: "settings"
-    property string batteryUnit: "%"
-    property string fontFamily: "Segoe UI"
+    PulseTheme {
+        id: theme
+    }
 
-    property color normalBatteryColor: "#21F58B"
-    property color lowBatteryColor: "#FF405D"
-    property color settingsIconColor: "#00DDF2"
-    property color dividerColor: "#16435A"
+    // Icon configuration
+    property string batteryIconName: theme.headerBatteryIconName
+    property string settingsIconName: theme.headerSettingsIconName
+    property string batteryUnit: theme.headerBatteryUnit
 
-    property int batteryLevel: 100
-    property int minimumBatteryLevel: 0
-    property int maximumBatteryLevel: 100
-    property int lowBatteryLevel: 20
-    property int batteryIconSize: 26
-    property int batteryTextSize: 13
-    property int settingsButtonSize: 40
-    property int settingsIconSize: 22
-    property int dividerLength: 30
-    property int contentSpacing: 12
-    property int batterySpacing: 6
+    // Typography
+    property string fontFamily: theme.fontFamily
 
-    property bool showBattery: true
-    property bool showSettings: true
-    property bool settingsEnabled: true
+    // Colors
+    property color normalBatteryColor: theme.headerBatteryNormalColor
+    property color lowBatteryColor: theme.headerBatteryLowColor
+    property color settingsIconColor: theme.headerSettingsIconColor
+    property color dividerColor: theme.headerActionsDividerColor
 
+    // Battery configuration
+    property int batteryLevel: theme.headerBatteryLevel
+    property int minimumBatteryLevel: theme.headerBatteryMinimum
+    property int maximumBatteryLevel: theme.headerBatteryMaximum
+    property int lowBatteryLevel: theme.headerBatteryLowThreshold
+
+    // Dimensions
+    property int batteryIconSize: theme.headerBatteryIconSize
+    property int batteryTextSize: theme.headerBatteryTextSize
+    property int settingsButtonSize: theme.headerSettingsButtonSize
+    property int settingsIconSize: theme.headerSettingsIconSize
+    property int dividerLength: theme.headerActionsDividerLength
+
+    // Spacing
+    property int contentSpacing: theme.headerActionsContentSpacing
+    property int batterySpacing: theme.headerBatterySpacing
+
+    // Visibility and interaction
+    property bool showBattery: theme.headerShowBattery
+    property bool showSettings: theme.headerShowSettings
+    property bool settingsEnabled: theme.headerSettingsEnabled
+
+    // Derived battery state
     readonly property int displayedBatteryLevel:
         Math.max(
-            minimumBatteryLevel,
-            Math.min(maximumBatteryLevel, batteryLevel)
+            root.minimumBatteryLevel,
+            Math.min(root.maximumBatteryLevel, root.batteryLevel)
         )
 
-    readonly property bool isBatteryLow:
-        displayedBatteryLevel <= lowBatteryLevel
+    readonly property bool isBatteryLow: root.displayedBatteryLevel <= root.lowBatteryLevel
 
-    readonly property color batteryColor:
-        isBatteryLow ? lowBatteryColor : normalBatteryColor
+    readonly property color batteryColor: root.isBatteryLow ?
+        root.lowBatteryColor : root.normalBatteryColor
 
     signal settingsRequested()
 
-    spacing: contentSpacing
+    spacing: root.contentSpacing
 
+    // Battery information
     RowLayout {
         id: batteryContent
-
         visible: root.showBattery
         spacing: root.batterySpacing
 
         PulseIcon {
+            id: batteryIcon
             iconName: root.batteryIconName
             iconColor: root.batteryColor
             iconSize: root.batteryIconSize
-
             Layout.alignment: Qt.AlignVCenter
         }
 
         PulseLabel {
+            id: batteryLabel
             text: root.displayedBatteryLevel + root.batteryUnit
-
             labelColor: root.batteryColor
             labelSize: root.batteryTextSize
             fontFamily: root.fontFamily
             emphasized: true
-
             Layout.alignment: Qt.AlignVCenter
         }
     }
 
+    // Separator
     PulseDivider {
+        id: actionsDivider
         vertical: true
         dividerLength: root.dividerLength
         dividerColor: root.dividerColor
-
+        dividerThickness: theme.dividerThickness
         visible: root.showBattery && root.showSettings
-
         Layout.alignment: Qt.AlignVCenter
     }
 
+    // Settings action
     PulseIconButton {
+        id: settingsButton
+
         iconName: root.settingsIconName
         iconColor: root.settingsIconColor
 
@@ -91,12 +109,12 @@ RowLayout {
         iconSize: root.settingsIconSize
 
         enabled: root.settingsEnabled
-
         visible: root.showSettings
 
         Layout.alignment: Qt.AlignVCenter
 
-        onClicked: root.settingsRequested()
+        onClicked: {
+            root.settingsRequested()
+        }
     }
 }
-
