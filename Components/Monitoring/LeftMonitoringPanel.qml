@@ -49,14 +49,16 @@ Item {
         return (timeSeconds * frequency) % 1.0
     }
 
-    function gaussianPulse(phase, center, width) {
+    function gaussianPulse(phase, center, width)
+    {
         const distance = (phase - center) / width
 
         return Math.exp(-(distance * distance))
     }
 
     // Plethysmography generation
-    function generatePlethSample(timeSeconds) {
+    function generatePlethSample(timeSeconds)
+    {
         const frequency = getFrequency(root.heartRate, 30)
         const phase = getCyclePhase(timeSeconds, frequency)
 
@@ -68,7 +70,8 @@ Item {
     }
 
     // Respiratory waveform generation
-    function generateRespirationSample(timeSeconds) {
+    function generateRespirationSample(timeSeconds)
+    {
         const frequency = getFrequency(root.respiratoryRate, 4)
         const phase = timeSeconds * frequency * 2.0 * Math.PI
 
@@ -79,7 +82,8 @@ Item {
     }
 
     // Capnography generation
-    function generateCapnographySample(timeSeconds) {
+    function generateCapnographySample(timeSeconds)
+    {
         const frequency = getFrequency(root.respiratoryRate, 4)
         const phase = getCyclePhase(timeSeconds, frequency)
 
@@ -98,26 +102,30 @@ Item {
         return 0.04
     }
 
-    function generateCo2Rise(phase) {
+    function generateCo2Rise(phase)
+    {
         const progress = (phase - 0.12) / 0.11
 
         return 0.04 + 0.82 * progress
     }
 
-    function generateCo2Plateau(phase) {
+    function generateCo2Plateau(phase)
+    {
         const progress = (phase - 0.23) / 0.42
 
         return 0.86 + 0.08 * progress
     }
 
-    function generateCo2Fall(phase) {
+    function generateCo2Fall(phase)
+    {
         const progress = (phase - 0.65) / 0.11
 
         return 0.94 * (1.0 - progress)
     }
 
     // Sample management
-    function appendSample(samples, value) {
+    function appendSample(samples, value)
+    {
         const updatedSamples = samples.slice()
 
         updatedSamples.push(value)
@@ -128,7 +136,8 @@ Item {
         return updatedSamples
     }
 
-    function appendGeneratedSamples(timeSeconds) {
+    function appendGeneratedSamples(timeSeconds)
+    {
         root.plethSamples = appendSample(
             root.plethSamples,
             generatePlethSample(timeSeconds)
@@ -145,7 +154,8 @@ Item {
         )
     }
 
-    function clearGeneratedSamples() {
+    function clearGeneratedSamples()
+    {
         root.plethSamples = []
         root.respirationSamples = []
         root.capnographySamples = []
@@ -153,7 +163,8 @@ Item {
     }
 
     // Canvas rendering
-    function prepareCanvas(canvas) {
+    function prepareCanvas(canvas)
+    {
         const context = canvas.getContext("2d")
 
         context.reset()
@@ -162,13 +173,16 @@ Item {
         return context
     }
 
-    function drawBackground(context, width, height) {
+    function drawBackground(context, width, height)
+    {
         context.fillStyle = root.waveformBackground
         context.fillRect(0, 0, width, height)
     }
 
-    function drawVerticalGrid(context, width, height) {
-        for (let x = 0; x < width; x += root.gridSize) {
+    function drawVerticalGrid(context, width, height)
+    {
+        for (let x = 0; x < width; x += root.gridSize)
+        {
             context.beginPath()
             context.moveTo(x, 0)
             context.lineTo(x, height)
@@ -176,8 +190,10 @@ Item {
         }
     }
 
-    function drawHorizontalGrid(context, width, height) {
-        for (let y = 0; y < height; y += root.gridSize) {
+    function drawHorizontalGrid(context, width, height)
+    {
+        for (let y = 0; y < height; y += root.gridSize)
+        {
             context.beginPath()
             context.moveTo(0, y)
             context.lineTo(width, y)
@@ -185,7 +201,8 @@ Item {
         }
     }
 
-    function drawGrid(context, width, height) {
+    function drawGrid(context, width, height)
+    {
         context.save()
 
         context.strokeStyle = root.waveformGrid
@@ -198,14 +215,16 @@ Item {
         context.restore()
     }
 
-    function getSampleX(index, sampleCount, width) {
+    function getSampleX(index, sampleCount, width)
+    {
         const stepX = width / Math.max(1, root.maxSamples - 1)
         const startX = width - (sampleCount - 1) * stepX
 
         return startX + index * stepX
     }
 
-    function getSampleY(sample, height) {
+    function getSampleY(sample, height)
+    {
         const normalized = clamp(sample, 0, 1)
         const topMargin = height * 0.12
         const usableHeight = height * 0.76
@@ -213,17 +232,20 @@ Item {
         return height - topMargin - normalized * usableHeight
     }
 
-    function configureWaveformPen(context, lineColor) {
+    function configureWaveformPen(context, lineColor)
+    {
         context.strokeStyle = lineColor
         context.lineWidth = root.waveformLineWidth
         context.lineJoin = "round"
         context.lineCap = "round"
     }
 
-    function drawSamplePath(context, samples, width, height) {
+    function drawSamplePath(context, samples, width, height)
+    {
         context.beginPath()
 
-        for (let index = 0; index < samples.length; ++index) {
+        for (let index = 0; index < samples.length; ++index)
+        {
             const x = getSampleX(index, samples.length, width)
             const y = getSampleY(samples[index], height)
 
@@ -236,7 +258,8 @@ Item {
         context.stroke()
     }
 
-    function drawWaveform(canvas, samples, lineColor) {
+    function drawWaveform(canvas, samples, lineColor)
+    {
         const width = canvas.width
         const height = canvas.height
 
