@@ -1,65 +1,92 @@
 import QtQuick
 import QtQuick.Layouts
+
 import "../DesignSystem"
 
 ColumnLayout {
     id: root
 
-    property string title: "Scenario"
-    property string scenarioName: "Normal"
-    property string normalScenario: "Normal"
-    property string warningScenario: "Warning"
-    property string criticalScenario: "Critical"
-    property string indicatorIcon: "chevron-down"
-    property string fontFamily: "Segoe UI"
+    PulseTheme {
+        id: theme
+    }
 
-    property color titleColor: "#9AB6C8"
-    property color textColor: "#F2F7FC"
-    property color iconColor: "#00DDF2"
-    property color normalColor: "#21F58B"
-    property color warningColor: "#FFB020"
-    property color criticalColor: "#FF405D"
-    property color defaultColor: "#9AB6C8"
-    property color backgroundColor: "#0B1621"
-    property color hoverColor: "#102D37"
-    property color borderColor: "#16435A"
+    // Scenario information
+    property string title: theme.scenarioTitle
+    property string scenarioName: theme.defaultScenarioName
 
-    property int titleSize: 11
-    property int valueSize: 13
-    property int selectorHeight: 30
-    property int selectorWidth: 150
-    property int cornerRadius: 6
-    property int horizontalPadding: 10
-    property int indicatorSize: 7
-    property int iconSize: 16
-    property int contentSpacing: 8
-    property int verticalSpacing: 4
+    // Scenario names
+    property string normalScenario: theme.normalScenarioName
+    property string warningScenario: theme.warningScenarioName
+    property string criticalScenario: theme.criticalScenarioName
 
-    readonly property string normalizedStatus: scenarioName.trim().toLowerCase()
+    // Icon configuration
+    property string indicatorIcon: theme.scenarioIndicatorIcon
 
-    readonly property color scenarioColor:
-    {
-        switch (root.normalizedStatus)
-        {
+    // Typography
+    property string fontFamily: theme.fontFamily
+
+    property int titleSize: theme.scenarioTitleSize
+    property int valueSize: theme.scenarioValueSize
+
+    // Colors
+    property color titleColor: theme.textSecondary
+    property color textColor: theme.textPrimary
+    property color iconColor: theme.cyan
+
+    // Status colors
+    property color normalColor: theme.normal
+    property color warningColor: theme.warning
+    property color criticalColor: theme.critical
+    property color defaultColor: theme.textSecondary
+
+    // Surface colors
+    property color backgroundColor: theme.surface
+    property color hoverColor: theme.surfaceHover
+    property color borderColor: theme.border
+
+    // Selector dimensions
+    property int selectorHeight: theme.scenarioSelectorHeight
+    property int selectorWidth: theme.scenarioSelectorWidth
+    property int cornerRadius: theme.scenarioCornerRadius
+
+    // Content geometry
+    property int horizontalPadding: theme.scenarioHorizontalPadding
+    property int indicatorSize: theme.scenarioIndicatorSize
+    property int iconSize: theme.scenarioIconSize
+
+    // Spacing
+    property int contentSpacing: theme.scenarioContentSpacing
+    property int verticalSpacing: theme.scenarioVerticalSpacing
+
+    // Interaction
+    property real disabledOpacity: theme.scenarioDisabledOpacity
+
+    // Derived state
+    readonly property string normalizedStatus:
+        root.scenarioName.trim().toLowerCase()
+
+    readonly property color scenarioColor: {
+        switch (root.normalizedStatus) {
         case root.normalScenario.trim().toLowerCase():
-            return normalColor
+            return root.normalColor
 
         case root.warningScenario.trim().toLowerCase():
-            return warningColor
+            return root.warningColor
 
         case root.criticalScenario.trim().toLowerCase():
-            return criticalColor
+            return root.criticalColor
 
         default:
-            return defaultColor
+            return root.defaultColor
         }
     }
 
     signal scenarioRequested()
 
-    spacing: verticalSpacing
+    spacing: root.verticalSpacing
 
     PulseLabel {
+        id: scenarioTitle
         text: root.title
         labelColor: root.titleColor
         labelSize: root.titleSize
@@ -68,7 +95,6 @@ ColumnLayout {
 
     Rectangle {
         id: selectorBackground
-
         Layout.preferredWidth: root.selectorWidth
         Layout.preferredHeight: root.selectorHeight
 
@@ -77,37 +103,45 @@ ColumnLayout {
         color: selectorMouseArea.containsMouse && root.enabled
                ? root.hoverColor : root.backgroundColor
 
-        opacity: root.enabled ? 1.0 : 0.5
+        opacity: root.enabled ? 1.0 : root.disabledOpacity
 
-        border.width: 1
+        border.width: theme.borderThin
         border.color: root.borderColor
 
         RowLayout {
             anchors.fill: parent
+
             anchors.leftMargin: root.horizontalPadding
             anchors.rightMargin: root.horizontalPadding
 
             spacing: root.contentSpacing
 
             Rectangle {
+                id: scenarioIndicator
+
                 implicitWidth: root.indicatorSize
                 implicitHeight: root.indicatorSize
 
-                radius: root.indicatorSize / 2
+                radius: width / 2
                 color: root.scenarioColor
             }
 
             PulseLabel {
+                id: scenarioValue
+
                 text: root.scenarioName
+
                 labelColor: root.textColor
                 labelSize: root.valueSize
                 fontFamily: root.fontFamily
+
                 emphasized: true
 
                 Layout.fillWidth: true
             }
 
             PulseIcon {
+                id: scenarioIcon
                 iconName: root.indicatorIcon
                 iconColor: root.iconColor
                 iconSize: root.iconSize
@@ -117,10 +151,15 @@ ColumnLayout {
         MouseArea {
             id: selectorMouseArea
             anchors.fill: parent
+
             enabled: root.enabled
             hoverEnabled: true
+
             cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
-            onClicked: root.scenarioRequested()
+
+            onClicked: {
+                root.scenarioRequested()
+            }
         }
     }
 }
