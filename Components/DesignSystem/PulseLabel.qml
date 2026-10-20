@@ -3,17 +3,28 @@ import QtQuick
 Text {
     id: root
 
-    property color labelColor: "#F2F7FC"
-    property color mutedColor: "#9AB6C8"
+    PulseTheme {
+        id: theme
+    }
+
+    // Appearance
+    property color labelColor: theme.textPrimary
+    property color mutedColor: theme.textSecondary
+
+    // Typography
     property int labelSize: 14
-    property string fontFamily: "Segoe UI"
+    property string fontFamily: theme.fontFamily
+
+    // States
     property bool emphasized: false
     property bool muted: false
 
-    color: muted ? mutedColor : labelColor
-    font.pixelSize: labelSize
-    font.bold: emphasized
-    font.family: fontFamily
+    color: root.muted ? root.mutedColor : root.labelColor
+
+    font.family: root.fontFamily
+    font.pixelSize: root.labelSize
+    font.bold: root.emphasized
+
     elide: Text.ElideRight
     verticalAlignment: Text.AlignVCenter
 }
