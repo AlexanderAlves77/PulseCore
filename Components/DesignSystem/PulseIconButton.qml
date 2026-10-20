@@ -4,44 +4,53 @@ Item {
     id: root
 
     property string iconName: "settings"
-    property color iconColor: "#9AB6C8"
-    property color hoverColor: "#00DDF2"
-    property color backgroundColor: "transparent"
+
+    property color iconColor: "#00DDF2"
+    property color hoverColor: "#102D37"
+    property color pressedColor: "#16435A"
+    property color borderColor: "#16435A"
+    property color backgroundColor: "#0B1621"
+
+    property int buttonSize: 40
+    property int iconSize: 24
+    property int cornerRadius: 8
+    property int borderThickness: 1
+
+    property bool enabled: true
+    property bool outlined: true
 
     signal clicked()
 
-    implicitWidth: 36
-    implicitHeight: 36
+    implicitWidth: buttonSize
+    implicitHeight: buttonSize
+
+    opacity: enabled ? 1.0 : 0.4
 
     Rectangle {
         id: buttonBackground
         anchors.fill: parent
-        radius: 8
+        radius: root.cornerRadius
 
-        color: mouseArea.containsMouse
-            ? "#10202B"
-            : root.backgroundColor
+        color: mouseArea.pressed ? root.pressedColor : mouseArea.containsMouse
+            ? root.hoverColor : root.backgroundColor
 
-        border.width: mouseArea.containsMouse ? 1 : 0
-        border.color: "#16435A"
+        border.width: mouseArea.outlined ? root.borderThickness : 0
+        border.color: root.borderColor
     }
 
     PulseIcon {
+        id: buttonIcon
         anchors.centerIn: parent
-        width: 26
-        height: 26
         iconName: root.iconName
-
-        iconColor: mouseArea.containsMouse
-            ? root.hoverColor
-            : root.iconColor
+        iconColor: root.iconColor
+        iconSize: root.iconSize
     }
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
-        hoverEnabled: true
-        cursorShape: Qt.PointingHandCursor
+        enabled: root.enabled
+        cursorShape: root.enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
         onClicked: root.clicked()
     }
 }
