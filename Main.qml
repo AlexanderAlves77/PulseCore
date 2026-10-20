@@ -16,6 +16,17 @@ Window {
 
     property bool hasSimulationData: false
     readonly property string simulationState: simulationController.state
+    property int simulationElapsedSeconds: 0
+
+    readonly property string formattedSimulationTime: {
+        const hours = Math.floor(simulationElapsedSeconds / 3600)
+        const minutes = Math.floor((simulationElapsedSeconds % 3600) / 60)
+        const seconds = simulationElapsedSeconds % 60
+
+        return String(hours).padStart(2, "0") + ":"
+             + String(minutes).padStart(2, "0") + ":"
+             + String(seconds).padStart(2, "0")
+    }
 
     PulseTheme {
         id: pulseTheme
@@ -23,21 +34,40 @@ Window {
 
     color: pulseTheme.background
 
+    Timer {
+        interval: 1000
+        repeat: true
+        running: window.simulationState === "RUNNING"
+
+        onTriggered: {
+            window.simulationElapsedSeconds++
+        }
+    }
+
     // Header
     AppHeader {
         id: header
-        height: 60
+        height: 64
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
 
         patientName: "Adult"
         scenarioName: "Normal"
-        simulationTime: "00:00:00"
+        simulationTime: window.formattedSimulationTime
+        batteryLevel: 100
 
-        surfaceColor: pulseTheme.surfaceColor
-        titleColor: pulseTheme.textColor
-        accentColor: pulseTheme.primaryColor
+        surfaceColor: "#07121D"
+        titleColor: "#F2F7FC"
+        accentColor: "#21F58B"
+
+        onScenarioRequested: {
+            console.log("Scenario selection is not implemented yet")
+        }
+
+        onSettingsRequested: {
+            console.log("Settings panel is not implemented yet")
+        }
     }
 
     AppFooter {
@@ -129,6 +159,7 @@ Window {
                 onResetRequested: {
                     simulationController.Reset()
                     window.hasSimulationData = false
+                    window.simulationElapsedSeconds = 0
                     leftMonitoringPanel.clearEcgSamples()
                     rightMonitoringPanel.resetHeartbeat()
                 }
